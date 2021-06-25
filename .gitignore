@@ -1,0 +1,15 @@
+.RData
+.Rhistory
+.Rprofile
+packrat
+packrat/lib*/
+.Rproj.user
+.keepdir
+*.tar.gz
+.DS_Store
+.idea
+*.Rproj
+tests/artifacts/*
+!tests/artifacts/.keepdir
+*.o
+*.dll

@@ -1,0 +1,21 @@
+[tool.rip]
+
+[[tool.rip.source]]
+name = "CRAN"
+url = "https://cloud.r-project.org/"
+
+[tool.rip.dependencies]
+assertthat = "0.2.1"
+R6 = "2.4.1"
+
+[tool.rip.dev-dependencies]
+testthat = "3.0.1"
+lintr = "2.0.1"
+devtools = "2.2.2"
+tibble = "3.0.3"
+here = "0.1"
+covr = "3.5.1"
+
+[tool.rip.doc-dependencies]
+knitr = "1.28"
+pkgdown = "1.5.1"

@@ -1,0 +1,13 @@
+Makefile
+^packrat/
+^\.Rprofile$
+\.keepdir
+\.RData
+^.*\.Rproj$
+^\.Rproj\.user$
+docs
+.lintr
+.*\.tar\.gz$
+files
+rproject.toml
+.idea

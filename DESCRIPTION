@@ -1,0 +1,16 @@
+Package: qscheck
+Type: Package
+Title: qscheck
+Version: 0.11.0
+Authors@R: c(
+    as.person(c("Stefano Borini <stefano.borini@astrazeneca.com> [aut, cre]"))
+    )
+License: file LICENSE
+Description: Performs checks on parameters and values, as well as assertions with the help of assertthat.
+URL: https://github.com/astrazeneca/qscheck
+Depends: R (>= 3.5.0)
+Imports: assertthat (>= 0.2.0), R6 (>= 2.4)
+Suggests: testthat, knitr, rmarkdown, lintr
+Encoding: UTF-8
+VignetteBuilder: knitr
+RoxygenNote: 7.1.1
