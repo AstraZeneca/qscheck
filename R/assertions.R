@@ -350,7 +350,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
 
 #' Check if the passed entity is a list.
 #'
-#' @param value The value to check
+#' @param l the value to check
 #' @param required_names vector of strings. If passed, checks if the list
 #'                   contains *at least* the specified elements.
 #' @param exact_length integer value. If passed, the list must have the
@@ -1015,6 +1015,8 @@ assertthat::on_failure(is_s3_instance) <- function(call, env) {
 #'        If FALSE, the min value will be checked exclusive.
 #' @param inclusive_max if TRUE (default) the max value is checked inclusive.
 #'        If FALSE, the max value will be checked exclusive
+#' @param allow_na if true, accept a value that is NA.
+#' @param allow_null if true, accept a value that is NULL.
 #'
 #' @examples
 #' \dontrun{
@@ -1329,7 +1331,7 @@ assertthat::on_failure(vector_allowed_values) <- function(call, env) {
 #' Checks if a vector contains only binary values (0 or 1)
 #'
 #' @param v the vector
-#' @param allow_na_values: if the vector can contain NA values. Default FALSE
+#' @param allow_na_values if the vector can contain NA values. Default FALSE
 #'
 #' @examples
 #' \dontrun{
