@@ -7,6 +7,8 @@
 is_list(l, required_names = NULL, exact_length = NULL, allow_null = FALSE)
 }
 \arguments{
+\item{l}{the value to check}
+
 \item{required_names}{vector of strings. If passed, checks if the list
 contains *at least* the specified elements.}
 
@@ -15,8 +17,6 @@ contains *at least* the specified elements.}
 
 \item{allow_null}{if TRUE, NULL is accepted as a valid value.
 If FALSE (default) do not accept it.}
-
-\item{value}{The value to check}
 }
 \description{
 Check if the passed entity is a list.

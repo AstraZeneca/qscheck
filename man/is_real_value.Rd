@@ -28,6 +28,10 @@ If FALSE, the min value will be checked exclusive.}
 
 \item{inclusive_max}{if TRUE (default) the max value is checked inclusive.
 If FALSE, the max value will be checked exclusive}
+
+\item{allow_na}{if true, accept a value that is NA.}
+
+\item{allow_null}{if true, accept a value that is NULL.}
 }
 \description{
 Check if the passed entity is a single floating point value.

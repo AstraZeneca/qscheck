@@ -9,7 +9,7 @@ is_binary_vector(v, allow_na_values = FALSE)
 \arguments{
 \item{v}{the vector}
 
-\item{allow_na_values:}{if the vector can contain NA values. Default FALSE}
+\item{allow_na_values}{if the vector can contain NA values. Default FALSE}
 }
 \description{
 Checks if a vector contains only binary values (0 or 1)
