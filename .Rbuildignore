@@ -11,3 +11,6 @@ docs
 files
 rproject.toml
 .idea
+.here
+.pre-commit-config.yaml
+.github
