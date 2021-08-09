@@ -5,7 +5,7 @@ Version: 0.12.0
 Authors@R: c(
     as.person(c("Stefano Borini <stefano.borini@astrazeneca.com> [aut, cre]"))
     )
-License: file LICENSE
+License: file LICENSE.md
 Description: Performs checks on parameters and values, as well as assertions with the help of assertthat.
 URL: https://github.com/astrazeneca/qscheck
 Depends: R (>= 3.5.0)
