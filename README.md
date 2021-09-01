@@ -2,7 +2,7 @@
 
 
 ![Status](https://github.com/AstraZeneca/qscheck/actions/workflows/r.yml/badge.svg)
-[![Maturity Level](https://img.shields.io/badge/Maturity%20Level-ML--1-orange)](https://img.shields.io/badge/Maturity%20Level-ML--1-orange)
+[![Maturity Level](https://img.shields.io/badge/Maturity%20Level-Under%20Development-orange)](https://img.shields.io/badge/Maturity%20Level-Under%20Development-orange)
 
 QSCheck is a library to perform checks on values, data, and content. It's built on top of assertthat
 and each routine can be used as assertions to stop execution. They can also be used to
