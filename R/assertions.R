@@ -291,13 +291,13 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
     }
   }
 
-  base_msg <- paste0(deparse(call$df), " must be a data frame ")
+  base_msg <- paste0(deparse(call$df), " must be a data frame")
   exact_colnames_msg <- NULL
   exact_rownames_msg <- NULL
   required_rownames_msg <- NULL
   required_colnames_msg <- NULL
   if (!is.null(call$exact_colnames)) {
-    exact_colnames_msg <- paste0("with exact colnames '",
+    exact_colnames_msg <- paste0(" with exact colnames '",
                   paste0(
                     eval(call$exact_colnames, env),
                     collapse = "', '"
@@ -305,7 +305,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
                   "'"
                   )
   } else if (!is.null(call$required_colnames)) {
-    required_colnames_msg <- paste0("with required colnames '",
+    required_colnames_msg <- paste0(" with required colnames '",
                   paste0(
                     eval(call$required_colnames, env),
                     collapse = "', '"
@@ -315,7 +315,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
   }
 
   if (!is.null(call$exact_rownames)) {
-    exact_rownames_msg <- paste0("with exact rownames '",
+    exact_rownames_msg <- paste0(" with exact rownames '",
                   paste0(
                     eval(call$exact_rownames, env),
                     collapse = "', '"
@@ -323,7 +323,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
                   "'"
                   )
   } else if (!is.null(call$required_rownames)) {
-    required_rownames_msg <- paste0("with required rownames '",
+    required_rownames_msg <- paste0(" with required rownames '",
                   paste0(
                     eval(call$required_rownames, env),
                     collapse = "', '"
