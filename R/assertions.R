@@ -1356,10 +1356,16 @@ is_binary_vector <- function(v, allow_na_values = FALSE) {
   return(TRUE)
 }
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
+  allow_na_values_msg <- ""
+  if (!is.null(call$allow_na_values)) {
+    allow_na_values_msg <- " or NA"
+  }
+
   return(
     paste0(
       deparse(call$v),
-      " must be a vector of binary values (0 or 1)"
+      " must be a vector of binary values (0 or 1",
+      allow_na_values_msg, ")"
     )
   )
 }
