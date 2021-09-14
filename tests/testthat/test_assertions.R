@@ -426,6 +426,28 @@ test_that("any_satisfied", {
       is_logical_value(list())
     )
   )
+  err <- tryCatch({
+    assertthat::assert_that(
+      any_satisfied(
+        is_string_value(list()),
+        is_logical_value(list())
+      )
+    )
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(
+    as.character(err),
+    paste(
+      "Error: any_satisfied(is_string_value(list()),",
+      "is_logical_value(list())): none of the possible",
+      "options could be satisfied.\n"
+    )
+  )
+
 })
 
 test_that("is_na_value", {
