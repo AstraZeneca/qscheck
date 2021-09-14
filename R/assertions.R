@@ -1866,7 +1866,8 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
 #'
 #' @export
 is_factor <- function(
-  value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE) {
+  value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE
+  allow_na_values = FALSE) {
 
   if (is.null(value) && allow_null) {
     return(TRUE)
@@ -1882,6 +1883,9 @@ is_factor <- function(
     if (!all(exact_levels == levels(value))) {
       return(FALSE)
     }
+  }
+  if (any(is.na(value)) && allow_na_values == FALSE) {
+    return(FALSE)
   }
 
   return(TRUE)
