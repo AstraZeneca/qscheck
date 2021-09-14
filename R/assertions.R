@@ -339,7 +339,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
       c(exact_rownames_msg,
         exact_colnames_msg,
         required_rownames_msg,
-        required_colnames_msg), collapse = " and "
+        required_colnames_msg), collapse = " and"
       ),
     allow_na_msg,
     allow_null_msg,
