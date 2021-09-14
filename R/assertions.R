@@ -339,7 +339,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
       c(exact_rownames_msg,
         exact_colnames_msg,
         required_rownames_msg,
-        required_colnames_msg), collapse = " and "
+        required_colnames_msg), collapse = " and"
       ),
     allow_na_msg,
     allow_null_msg,
@@ -1849,10 +1849,10 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
 #' Check if the passed entity is a factor.
 #'
 #' @param value the value to check
-#' @param exact_levels vector of strings.
-#'                   contains *eat least* the specified elements.
+#' @param exact_levels vector of strings of the expected levels of the factor.
+#'                   The factor must contain *exactly* the specified elements.
 #' @param exact_length integer value. If passed, the factor must have the
-#'                    *exact* specified length
+#'                    *exact* specified length.
 #' @param allow_null if TRUE, NULL is accepted as a valid value.
 #'                   If FALSE (default) do not accept it.
 #' @examples
