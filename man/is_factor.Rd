@@ -4,7 +4,13 @@
 \alias{is_factor}
 \title{Check if the passed entity is a factor.}
 \usage{
-is_factor(value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE)
+is_factor(
+  value,
+  exact_levels = NULL,
+  exact_length = NULL,
+  allow_null = FALSE,
+  allow_na_values = FALSE
+)
 }
 \arguments{
 \item{value}{the value to check}
@@ -15,8 +21,12 @@ The factor must contain *exactly* the specified elements.}
 \item{exact_length}{integer value. If passed, the factor must have the
 *exact* specified length.}
 
-\item{allow_null}{if TRUE, NULL is accepted as a valid value.
+\item{allow_null}{boolean. if TRUE, NULL is accepted as a valid value.
 If FALSE (default) do not accept it.}
+
+\item{allow_na_values}{boolean. If passed allows factors containing
+NAs. The length check is performed including
+the NA values. Default FALSE.}
 }
 \description{
 Check if the passed entity is a factor.
