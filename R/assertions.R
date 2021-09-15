@@ -1853,8 +1853,11 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
 #'                   The factor must contain *exactly* the specified elements.
 #' @param exact_length integer value. If passed, the factor must have the
 #'                    *exact* specified length.
-#' @param allow_null if TRUE, NULL is accepted as a valid value.
+#' @param allow_null boolean. if TRUE, NULL is accepted as a valid value.
 #'                   If FALSE (default) do not accept it.
+#' @param allow_na_values boolean. If passed allows factors containing
+#'                        NAs. The length check is performed including
+#'                        the NA values. Default FALSE.
 #' @examples
 #' \dontrun{
 #' # For assertion
@@ -1866,8 +1869,8 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
 #'
 #' @export
 is_factor <- function(
-  value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE) {
-
+  value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE,
+  allow_na_values = FALSE) {
   if (is.null(value) && allow_null) {
     return(TRUE)
   }
@@ -1875,13 +1878,16 @@ is_factor <- function(
   if (!is.factor(value)) {
     return(FALSE)
   }
-  if (!is.null(exact_length)) {
-    return(assertthat::are_equal(length(value), exact_length))
+  if (!is.null(exact_length) && length(value) != exact_length) {
+    return(FALSE)
   }
   if (!is.null(exact_levels)) {
     if (!all(exact_levels == levels(value))) {
       return(FALSE)
     }
+  }
+  if (any(is.na(value)) && !allow_na_values) {
+    return(FALSE)
   }
 
   return(TRUE)

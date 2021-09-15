@@ -1067,6 +1067,7 @@ test_that("is_factor", {
   expect_true(is_factor(factor(c("foo", "bar", "bar")), exact_levels = c("bar", "foo")))
   expect_true(is_factor(factor(c("foo", "bar", "bar")), exact_length = 3))
   expect_false(is_factor(factor(c("foo", "bar")), exact_length = 3))
+  expect_false(is_factor(factor(c("foo", "bar", NA_character_)), exact_length = 3))
 
   err <- tryCatch({
     assertthat::assert_that(is_factor(3, exact_levels = c("bar", "foo"), allow_null = TRUE))
