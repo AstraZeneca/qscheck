@@ -921,8 +921,8 @@ any_satisfied <- function(...) {
 }
 assertthat::on_failure(any_satisfied) <- function(call, env) {
   msg <- paste0(
-    deparse(call),
-    ": none one of possible options were satisfied.")
+    paste(deparse(call), collapse = ""),
+    ": none of the possible options could be satisfied.")
   return(msg)
 }
 
