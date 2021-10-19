@@ -738,6 +738,31 @@ test_that("is_binary_vector with NA", {
 
 })
 
+test_that("is_binary_vector allow_degenerate", {
+  v1 <- c(1, 1, 1, 1, 1, NA)
+  v2 <- c(0, 0, 0, 0)
+
+  expect_true(is_binary_vector(v1, allow_na_values = TRUE))
+  expect_false(is_binary_vector(
+    v1, allow_na_values = TRUE, allow_degenerate = FALSE))
+
+  expect_true(is_binary_vector(v2))
+  expect_false(is_binary_vector(v2, allow_degenerate = FALSE))
+
+  err <- tryCatch({
+      assertthat::assert_that(is_binary_vector(v1, allow_degenerate = FALSE))
+    },
+    error = function(e) {
+      return(e)
+    }
+  )
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: v1 must be a non-degenerate vector of binary values (0 or 1)\n"
+     ))
+})
+
 test_that("is_real_vector", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c("hello", "hi")
