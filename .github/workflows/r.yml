@@ -21,7 +21,7 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install platform dependencies
         run: |
-           apt-get install -y libcurl4-openssl-dev
+           /usr/bin/sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libcurl4-openssl-dev
       - name: Install dependencies
         run: |
           install.packages(c("remotes", "rcmdcheck"))
