@@ -1,3 +1,8 @@
+# qscheck 0.15.0
+
+- #18 Improve error messages for allow_na_values
+- #17 Allow or disallow for degenerate content in is_binary_vector
+
 # qscheck 0.14.0
 
 - #15 Added allow_na_values in is_factor
