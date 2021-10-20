@@ -426,6 +426,28 @@ test_that("any_satisfied", {
       is_logical_value(list())
     )
   )
+  err <- tryCatch({
+    assertthat::assert_that(
+      any_satisfied(
+        is_string_value(list()),
+        is_logical_value(list())
+      )
+    )
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(
+    as.character(err),
+    paste(
+      "Error: any_satisfied(is_string_value(list()),",
+      "is_logical_value(list())): none of the possible",
+      "options could be satisfied.\n"
+    )
+  )
+
 })
 
 test_that("is_na_value", {
@@ -714,6 +736,31 @@ test_that("is_binary_vector with NA", {
   expect_false(is_binary_vector(v1))
   expect_true(is_binary_vector(v1, allow_na_values = TRUE))
 
+})
+
+test_that("is_binary_vector allow_degenerate", {
+  v1 <- c(1, 1, 1, 1, 1, NA)
+  v2 <- c(0, 0, 0, 0)
+
+  expect_true(is_binary_vector(v1, allow_na_values = TRUE))
+  expect_false(is_binary_vector(
+    v1, allow_na_values = TRUE, allow_degenerate = FALSE))
+
+  expect_true(is_binary_vector(v2))
+  expect_false(is_binary_vector(v2, allow_degenerate = FALSE))
+
+  err <- tryCatch({
+      assertthat::assert_that(is_binary_vector(v1, allow_degenerate = FALSE))
+    },
+    error = function(e) {
+      return(e)
+    }
+  )
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: v1 must be a non-degenerate vector of binary values (0 or 1)\n"
+     ))
 })
 
 test_that("is_real_vector", {
@@ -1067,6 +1114,7 @@ test_that("is_factor", {
   expect_true(is_factor(factor(c("foo", "bar", "bar")), exact_levels = c("bar", "foo")))
   expect_true(is_factor(factor(c("foo", "bar", "bar")), exact_length = 3))
   expect_false(is_factor(factor(c("foo", "bar")), exact_length = 3))
+  expect_false(is_factor(factor(c("foo", "bar", NA_character_)), exact_length = 3))
 
   err <- tryCatch({
     assertthat::assert_that(is_factor(3, exact_levels = c("bar", "foo"), allow_null = TRUE))

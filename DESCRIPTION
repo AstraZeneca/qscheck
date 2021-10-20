@@ -1,7 +1,7 @@
 Package: qscheck
 Type: Package
 Title: qscheck
-Version: 0.12.0
+Version: 0.14.0
 Authors@R: c(
     as.person(c("Stefano Borini <stefano.borini@astrazeneca.com> [aut, cre]"))
     )
@@ -13,4 +13,4 @@ Imports: assertthat (>= 0.2.0), R6 (>= 2.4)
 Suggests: testthat, knitr, rmarkdown
 Encoding: UTF-8
 VignetteBuilder: knitr
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
