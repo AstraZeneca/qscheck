@@ -774,7 +774,7 @@ test_that("is_real_vector", {
 
   err <- tryCatch({
     assertthat::assert_that(is_real_vector(v,
-      min_length = 4, max_length = 8))
+      min_length = 4, max_length = 8, allow_na_values = FALSE))
     NULL
   },
   error = function(e) {

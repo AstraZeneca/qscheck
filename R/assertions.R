@@ -598,6 +598,10 @@ assertthat::on_failure(is_string_vector) <- function(call, env) {
       eval(call$min_length, env)
     )
   }
+  if (is.null(call$allow_na_values) ||
+      eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
+  }
   msg <- paste0(
     msg,
     ". Got: ",
@@ -1356,9 +1360,14 @@ is_binary_vector <- function(v, allow_na_values = FALSE) {
   return(TRUE)
 }
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
-  allow_na_values_msg <- ""
-  if (!is.null(call$allow_na_values)) {
-    allow_na_values_msg <- " or NA"
+  na_msg <- ""
+  degenerate_msg <- ""
+  if (!is.null(call$allow_na_values) && eval(call$allow_na_values, env) == TRUE) {
+    na_msg <- " or NA"
+  }
+
+  if (!is.null(call$allow_degenerate) && eval(call$allow_degenerate, env) == FALSE) {
+    degenerate_msg <- " non-degenerate"
   }
 
   return(
@@ -1452,6 +1461,10 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
       " of length not less than ",
       eval(call$min_length, env)
     )
+  }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
   }
   msg <- paste0(
     msg,
@@ -1556,6 +1569,10 @@ assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
       eval(call$min_length, env)
     )
   }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
+  }
   msg <- paste0(
     msg,
     ". Got: ",
@@ -1659,6 +1676,10 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
       " of length not less than ",
       eval(call$min_length, env)
     )
+  }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
   }
   msg <- paste0(
     msg,
@@ -1911,6 +1932,10 @@ assertthat::on_failure(is_factor) <- function(call, env) {
     if (eval(call$allow_null, env)) {
       msg <- paste0(msg, " or NULL")
     }
+  }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
   }
   msg <- paste0(
    msg,
