@@ -568,15 +568,9 @@ assertthat::on_failure(is_string_vector) <- function(call, env) {
   if (!is.null(call$exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env),
-      ". Got: ",
-      deparse(eval(call$value, env))
-
+      " of exact length ", eval(call$exact_length, env)
     )
-    return(msg)
-  }
-
-  if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
@@ -598,6 +592,11 @@ assertthat::on_failure(is_string_vector) <- function(call, env) {
       eval(call$min_length, env)
     )
   }
+  if (is.null(call$allow_na_values) ||
+      eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
+  }
+
   msg <- paste0(
     msg,
     ". Got: ",
@@ -1372,11 +1371,13 @@ is_binary_vector <- function(
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
   na_msg <- ""
   degenerate_msg <- ""
-  if (!is.null(call$allow_na_values)) {
+  if (!is.null(call$allow_na_values)
+      && eval(call$allow_na_values, env) == TRUE) {
     na_msg <- " or NA"
   }
 
-  if (!is.null(call$allow_degenerate)) {
+  if (!is.null(call$allow_degenerate)
+      && eval(call$allow_degenerate, env) == FALSE) {
     degenerate_msg <- " non-degenerate"
   }
 
@@ -1443,15 +1444,9 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
   if (!is.null(call$exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env),
-      ". Got: ",
-      deparse(eval(call$value, env))
-
+      " of exact length ", eval(call$exact_length, env)
     )
-    return(msg)
-  }
-
-  if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
@@ -1473,6 +1468,11 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
       eval(call$min_length, env)
     )
   }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
+  }
+
   msg <- paste0(
     msg,
     ". Got: ",
@@ -1546,15 +1546,9 @@ assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
   if (!is.null(call$exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env),
-      ". Got: ",
-      deparse(eval(call$value, env))
-
+      " of exact length ", eval(call$exact_length, env)
     )
-    return(msg)
-  }
-
-  if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
@@ -1575,6 +1569,11 @@ assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
       " of length not less than ",
       eval(call$min_length, env)
     )
+  }
+
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
   }
   msg <- paste0(
     msg,
@@ -1650,15 +1649,8 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
   if (!is.null(call$exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env),
-      ". Got: ",
-      deparse(eval(call$value, env))
-
-    )
-    return(msg)
-  }
-
-  if (!is.null(call$min_length) && !is.null(call$max_length)) {
+      " of exact length ", eval(call$exact_length, env))
+  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
@@ -1679,6 +1671,10 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
       " of length not less than ",
       eval(call$min_length, env)
     )
+  }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
   }
   msg <- paste0(
     msg,
@@ -1925,17 +1921,22 @@ assertthat::on_failure(is_factor) <- function(call, env) {
   }
 
   if (!is.null(call$exact_levels)) {
-    msg <- paste0(msg, " with exact levels '",
+    msg <- paste0(msg, " with exact levels ('",
                   paste0(
                     eval(call$exact_levels, env),
                     collapse = "', '"
                     ),
-                  "'"
+                  "')"
                   )
   }
+  if (is.null(call$allow_na_values)
+      || eval(call$allow_na_values, env) == FALSE) {
+    msg <- paste0(msg, " with no NAs")
+  }
+
   if (!is.null(call$allow_null)) {
     if (eval(call$allow_null, env)) {
-      msg <- paste0(msg, " or NULL")
+      msg <- paste0(msg, "; or NULL")
     }
   }
   msg <- paste0(

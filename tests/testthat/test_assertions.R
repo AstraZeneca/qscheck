@@ -1,5 +1,3 @@
-context("assertions")
-
 test_that("is_string_value", {
   expect_true(is_string_value("ada"))
   expect_true(is_string_value(""))
@@ -105,7 +103,7 @@ test_that("is_string_vector", {
   })
 
   expect_equal(as.character(err),
-    paste0("Error: v must be a string vector of exact length 4. ",
+    paste0("Error: v must be a string vector of exact length 4 with no NAs. ",
     "Got: c(\"foo\", \"bar\", \"baz\")\n"))
 
   err <- tryCatch({
@@ -118,8 +116,10 @@ test_that("is_string_vector", {
 
   expect_equal(
     as.character(err),
-    paste0("Error: v must be a string vector of length not less than 4. ",
-    "Got: c(\"foo\", \"bar\", \"baz\")\n"))
+    paste0(
+      "Error: v must be a string vector of length not less than 4",
+      " with no NAs.",
+      " Got: c(\"foo\", \"bar\", \"baz\")\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_string_vector(v, max_length = 2))
@@ -131,8 +131,10 @@ test_that("is_string_vector", {
 
   expect_equal(
     as.character(err),
-    paste0("Error: v must be a string vector of length not greater than 2. ",
-    "Got: c(\"foo\", \"bar\", \"baz\")\n"))
+    paste0(
+    "Error: v must be a string vector of length not greater than 2",
+    " with no NAs.",
+    " Got: c(\"foo\", \"bar\", \"baz\")\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_string_vector(v,
@@ -146,8 +148,9 @@ test_that("is_string_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a string vector of length between 4 and 8 inclusive. ",
-      "Got: c(\"foo\", \"bar\", \"baz\")\n"))
+      "Error: v must be a string vector of length between 4 and 8 inclusive",
+      " with no NAs.",
+      " Got: c(\"foo\", \"bar\", \"baz\")\n"))
 })
 
 test_that("vectors_disjoint", {
@@ -787,7 +790,8 @@ test_that("is_real_vector", {
   })
 
   expect_equal(as.character(err),
-    paste0("Error: v must be a vector of real numbers of exact length 4. ",
+    paste0("Error: v must be a vector of real numbers of exact length 4",
+    " with no NAs. ",
     "Got: c(1.2, 1.3, 3)\n"))
 
   err <- tryCatch({
@@ -801,7 +805,8 @@ test_that("is_real_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of real numbers of length not less than 4. ",
+      "Error: v must be a vector of real numbers of length not less than 4",
+      " with no NAs. ",
       "Got: c(1.2, 1.3, 3)\n"))
 
   err <- tryCatch({
@@ -816,12 +821,12 @@ test_that("is_real_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of real numbers of length not ",
-      "greater than 2. ",
+      "greater than 2 with no NAs. ",
       "Got: c(1.2, 1.3, 3)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_real_vector(v,
-      min_length = 4, max_length = 8))
+      min_length = 4, max_length = 8, allow_na_values = FALSE))
     NULL
   },
   error = function(e) {
@@ -832,7 +837,7 @@ test_that("is_real_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of real numbers of length ",
-      "between 4 and 8 inclusive. ",
+      "between 4 and 8 inclusive with no NAs. ",
       "Got: c(1.2, 1.3, 3)\n"))
 })
 
@@ -842,7 +847,7 @@ test_that("is_real_vector with NA", {
   expect_true(is_real_vector(v, allow_na_values = TRUE))
 })
 
-test_that("is_nonnegative_integer_vector", {
+test_that("is_non_negative_integer_vector", {
   v <- c(1, 13, 0)
   v2 <- c(1, 5.2, 3)
   v3 <- c(3, -4, 3)
@@ -871,7 +876,7 @@ test_that("is_nonnegative_integer_vector", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of non negative integer numbers of exact ",
-      "length 4. Got: c(1, 13, 0)\n"))
+      "length 4 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_non_negative_integer_vector(v, min_length = 4))
@@ -885,7 +890,7 @@ test_that("is_nonnegative_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of non negative integer numbers of length ",
-      "not less than 4. Got: c(1, 13, 0)\n"))
+      "not less than 4 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_non_negative_integer_vector(v, max_length = 2))
@@ -899,7 +904,7 @@ test_that("is_nonnegative_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of non negative integer numbers of ",
-      "length not greater than 2. Got: c(1, 13, 0)\n"))
+      "length not greater than 2 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_non_negative_integer_vector(v,
@@ -914,7 +919,7 @@ test_that("is_nonnegative_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of non negative integer numbers of length ",
-      "between 4 and 8 inclusive. ",
+      "between 4 and 8 inclusive with no NAs. ",
       "Got: c(1, 13, 0)\n"))
 })
 
@@ -955,7 +960,7 @@ test_that("is_integer_vector", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of integer values of exact ",
-      "length 4. Got: c(1, 13, 0)\n"))
+      "length 4 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_integer_vector(v, min_length = 4))
@@ -969,7 +974,7 @@ test_that("is_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of integer values of length ",
-      "not less than 4. Got: c(1, 13, 0)\n"))
+      "not less than 4 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_integer_vector(v, max_length = 2))
@@ -983,7 +988,7 @@ test_that("is_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of integer values of ",
-      "length not greater than 2. Got: c(1, 13, 0)\n"))
+      "length not greater than 2 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_integer_vector(v,
@@ -998,7 +1003,7 @@ test_that("is_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of integer values of length ",
-      "between 4 and 8 inclusive. ",
+      "between 4 and 8 inclusive with no NAs. ",
       "Got: c(1, 13, 0)\n"))
 })
 
@@ -1126,6 +1131,6 @@ test_that("is_factor", {
   )
   expect_equal(
     as.character(err),
-    "Error: 3 must be a factor with exact levels 'bar', 'foo' or NULL. Got: 3\n"
+    "Error: 3 must be a factor with exact levels ('bar', 'foo') with no NAs; or NULL. Got: 3\n"
   )
 })
