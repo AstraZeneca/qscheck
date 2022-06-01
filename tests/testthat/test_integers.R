@@ -99,7 +99,7 @@ test_that("is_non_negative_integer_vector", {
 
   expect_equal(as.character(err),
     paste0(
-      "Error: v must be a vector of non negative integer numbers of exact ",
+      "Error: v must be a vector of non negative integer values of exact ",
       "length 4 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
@@ -113,7 +113,7 @@ test_that("is_non_negative_integer_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of non negative integer numbers of length ",
+      "Error: v must be a vector of non negative integer values of length ",
       "not less than 4 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
@@ -127,7 +127,7 @@ test_that("is_non_negative_integer_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of non negative integer numbers of ",
+      "Error: v must be a vector of non negative integer values of ",
       "length not greater than 2 with no NAs. Got: c(1, 13, 0)\n"))
 
   err <- tryCatch({
@@ -142,7 +142,7 @@ test_that("is_non_negative_integer_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of non negative integer numbers of length ",
+      "Error: v must be a vector of non negative integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Got: c(1, 13, 0)\n"))
 })
@@ -151,7 +151,7 @@ test_that("is_non_negative_integer_vector with NA", {
   v <- c(1, NA, 0)
 
   expect_false(is_non_negative_integer_vector(v))
-  expect_true(is_non_negative_integer_vector(v, allow_na_values=TRUE))
+  expect_true(is_non_negative_integer_vector(v, allow_na_values = TRUE))
 
 })
 
@@ -185,8 +185,8 @@ test_that("is_positive_integer_vector", {
 
   expect_equal(as.character(err),
     paste0(
-      "Error: v must be a vector of positive integer numbers of exact ",
-      "length 4 with no NAs. Got: c(1, 13, 0)\n"))
+      "Error: v must be a vector of positive integer values of exact ",
+      "length 4 with no NAs. Got: c(1, 13, 1)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_positive_integer_vector(v, min_length = 4))
@@ -199,8 +199,8 @@ test_that("is_positive_integer_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of positive integer numbers of length ",
-      "not less than 4 with no NAs. Got: c(1, 13, 0)\n"))
+      "Error: v must be a vector of positive integer values of length ",
+      "not less than 4 with no NAs. Got: c(1, 13, 1)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_positive_integer_vector(v, max_length = 2))
@@ -213,8 +213,8 @@ test_that("is_positive_integer_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of positive integer numbers of ",
-      "length not greater than 2 with no NAs. Got: c(1, 13, 0)\n"))
+      "Error: v must be a vector of positive integer values of ",
+      "length not greater than 2 with no NAs. Got: c(1, 13, 1)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_positive_integer_vector(v,
@@ -228,16 +228,16 @@ test_that("is_positive_integer_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v must be a vector of positive integer numbers of length ",
+      "Error: v must be a vector of positive integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Got: c(1, 13, 1)\n"))
 })
 
 test_that("is_positive_integer_vector with NA", {
-  v <- c(1, NA, 0)
+  v <- c(1, NA, 20)
 
   expect_false(is_positive_integer_vector(v))
-  expect_true(is_positive_integer_vector(v, allow_na_values=TRUE))
+  expect_true(is_positive_integer_vector(v, allow_na_values = TRUE))
 
 })
 
@@ -324,4 +324,3 @@ test_that("is_integer_vector with NA", {
   expect_true(is_integer_vector(v, allow_na_values = TRUE))
 
 })
-

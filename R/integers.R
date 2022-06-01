@@ -384,7 +384,7 @@ is_non_negative_integer_vector <- function(
 }
 assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
   msg <- paste0(deparse(call$value),
-    " must be a vector of non negative integer numbers")
+    " must be a vector of non negative integer values")
 
   if (!is.null(call$exact_length)) {
     msg <- paste0(
