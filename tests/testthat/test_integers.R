@@ -1,14 +1,3 @@
-test_that("is_positive_integer_value", {
-  expect_true(is_positive_integer_value(3))
-  expect_true(is_positive_integer_value(3.0))
-  expect_false(is_positive_integer_value(3.5))
-  expect_false(is_positive_integer_value(c(3, 4)))
-  expect_false(is_positive_integer_value(-3))
-  expect_false(is_positive_integer_value("hello"))
-  expect_false(is_positive_integer_value(NULL))
-  expect_true(is_positive_integer_value(NULL, allow_null = TRUE))
-})
-
 test_that("is_integer_value", {
   expect_true(is_integer_value(1))
   expect_false(is_integer_value(1.01))
@@ -70,6 +59,31 @@ test_that("is_integer_value", {
       "integer(0), class = \"data.frame\")\n"))
 
 })
+
+test_that("is_positive_integer_value", {
+  expect_true(is_positive_integer_value(3))
+  expect_true(is_positive_integer_value(3.0))
+  expect_false(is_positive_integer_value(3.5))
+  expect_false(is_positive_integer_value(0))
+  expect_false(is_positive_integer_value(c(3, 4)))
+  expect_false(is_positive_integer_value(-3))
+  expect_false(is_positive_integer_value("hello"))
+  expect_false(is_positive_integer_value(NULL))
+  expect_true(is_positive_integer_value(NULL, allow_null = TRUE))
+})
+
+test_that("is_non_negative_integer_value", {
+  expect_true(is_non_negative_integer_value(3))
+  expect_true(is_non_negative_integer_value(3.0))
+  expect_true(is_non_negative_integer_value(0))
+  expect_false(is_non_negative_integer_value(3.5))
+  expect_false(is_non_negative_integer_value(c(3, 4)))
+  expect_false(is_non_negative_integer_value(-3))
+  expect_false(is_non_negative_integer_value("hello"))
+  expect_false(is_non_negative_integer_value(NULL))
+  expect_true(is_non_negative_integer_value(NULL, allow_null = TRUE))
+})
+
 
 test_that("is_non_negative_integer_vector", {
   v <- c(1, 13, 0)
