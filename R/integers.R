@@ -117,6 +117,45 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
   )
 }
 
+#' Checks if the value is a single non negative integer value (not type)
+#'
+#' @param value the value to verify
+#' @param allow_null accepts a null value
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_non_negative_integer_value(my_parameter))
+#' # For check
+#' if (qscheck::is_non_negative_integer_value(my_parameter)) {}
+#' }
+#'
+#' @concept integers
+#' @export
+is_non_negative_integer_value <- function(value, allow_null = FALSE) {
+  if (is.null(value) && allow_null) {
+    return(TRUE)
+  }
+  return(is_integer_value(value) && (value >= 0))
+}
+assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
+  allow_null_msg <- ""
+  if (!is.null(call$allow_null)) {
+    if (eval(call$allow_null, env)) {
+      allow_null_msg <- " or NULL"
+    }
+  }
+  return(
+    paste0(
+      deparse(call$value),
+      " must be a non negative integer value",
+      allow_null_msg,
+      ". Got: ",
+      deparse(eval(call$value, env))
+    )
+  )
+}
+
 #' Checks if the passed entity is a vector of integers. NOTE:  NOT of integer
 #' type. Numerics that are whole numbers.
 #' Note that in R single values are also vectors.
