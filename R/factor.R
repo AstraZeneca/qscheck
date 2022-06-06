@@ -19,6 +19,7 @@
 #' }
 #'
 #'
+#' @concept factor
 #' @export
 is_factor <- function(
   value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE,

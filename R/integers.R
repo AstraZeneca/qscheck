@@ -13,7 +13,7 @@
 #' if (qscheck::is_integer_value(my_parameter)) {}
 #' }
 #'
-#' @concept integers
+#' @concept integer
 #' @export
 is_integer_value <- function(value,
     min = NULL, max = NULL, allow_null = FALSE) {
@@ -91,7 +91,7 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
 #' if (qscheck::is_positive_integer_value(my_parameter)) {}
 #' }
 #'
-#' @concept integers
+#' @concept integer
 #' @export
 is_positive_integer_value <- function(value, allow_null = FALSE) {
   if (is.null(value) && allow_null) {
@@ -130,7 +130,7 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 #' if (qscheck::is_non_negative_integer_value(my_parameter)) {}
 #' }
 #'
-#' @concept integers
+#' @concept integer
 #' @export
 is_non_negative_integer_value <- function(value, allow_null = FALSE) {
   if (is.null(value) && allow_null) {
@@ -185,7 +185,7 @@ assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
 #' if (qscheck::is_integer_vector(my_parameter)) {}
 #' }
 #'
-#' @concept integers
+#' @concept integer
 #' @export
 is_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
@@ -286,7 +286,7 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
 #' if (qscheck::is_positive_integer_vector(my_parameter)) {}
 #' }
 #'
-#' @concept integers
+#' @concept integer
 #' @export
 is_positive_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
@@ -390,7 +390,7 @@ assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
 #' if (qscheck::is_non_negative_integer_vector(my_parameter)) {}
 #' }
 #'
-#' @concept integers
+#' @concept integer
 #' @export
 is_non_negative_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,

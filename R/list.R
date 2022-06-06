@@ -20,6 +20,7 @@
 #' }
 #'
 #'
+#' @concept list
 #' @export
 is_list <- function(
     l,

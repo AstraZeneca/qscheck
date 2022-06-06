@@ -13,6 +13,7 @@
 #' )
 #' }
 #'
+#' @concept na
 #' @export
 is_na_value <- function(value) {
   return(is.vector(value) && length(value) == 1 && is.na(value))

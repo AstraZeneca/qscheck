@@ -14,6 +14,7 @@
 #' if (qscheck::is_one_of(value, c("foo", "bar"))) {}
 #' }
 #'
+#' @concept set
 #' @export
 is_one_of <- function(value, options, allow_null = NULL) {
   if (is.null(value) && allow_null) {
@@ -77,6 +78,7 @@ assertthat::on_failure(is_one_of) <- function(call, env) {
 #' ) {}
 #' }
 #'
+#' @concept set
 #' @export
 mutually_exclusive <- function(...) {
   dots <- list(...)

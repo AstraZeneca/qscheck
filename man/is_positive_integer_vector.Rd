@@ -48,4 +48,4 @@ if (qscheck::is_positive_integer_vector(my_parameter)) {}
 }
 
 }
-\concept{integers}
+\concept{integer}

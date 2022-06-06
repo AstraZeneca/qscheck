@@ -11,6 +11,7 @@
 #' if (qscheck::is_r6_class(value, "MyClass")) {}
 #' }
 #'
+#' @concept oop
 #' @export
 is_r6_class <- function(value, class_name) {
   if (is.null(class_name) || is.null(value)) {
@@ -46,7 +47,7 @@ assertthat::on_failure(is_r6_class) <- function(call, env) {
 #' if (qscheck::is_r6_instance(value, "MyClass")) {}
 #' }
 #'
-#'
+#' @concept oop
 #' @export
 is_r6_instance <- function(value, class_name, allow_null = FALSE) {
   if (is.null(value) && allow_null) {

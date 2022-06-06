@@ -21,6 +21,7 @@
 #' if (qscheck::is_vector(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL) {
@@ -114,6 +115,7 @@ assertthat::on_failure(is_vector) <- function(call, env) {
 #' if (qscheck::is_string_vector(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_string_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
@@ -189,6 +191,7 @@ assertthat::on_failure(is_string_vector) <- function(call, env) {
 #' if (qscheck::vectors_same_length(v1, v2)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 vectors_same_length <- function(v1, v2) {
   if (! (is_vector(v1) && is_vector(v2))) {
@@ -218,14 +221,12 @@ assertthat::on_failure(vectors_same_length) <- function(call, env) {
 #' assertthat::assert_that(
 #'   qscheck::vectors_disjoint(v1, v2)
 #'   )
-#' )
 #' # For check
-#' if (
-#'   qscheck::vectors_disjoint(v1, v2)
-#'   )
-#' ) {}
+#' if (qscheck::vectors_disjoint(v1, v2)) {
+#' }
 #' }
 #'
+#' @concept vector
 #' @export
 vectors_disjoint <- function(v1, v2) {
   if (!(is_vector(v1) && is_vector(v2))) {
@@ -269,9 +270,11 @@ assertthat::on_failure(vectors_disjoint) <- function(call, env) {
 #' # Will fail if v contains any value that is not either 1, 2 or 3
 #' assertthat::assert_that(qscheck::vector_allowed_values(v, c(1, 2, 3)))
 #' # For check
-#' if (qscheck::vector_allowed_values(v, c(1, 2, 3)) {}
+#' if (qscheck::vector_allowed_values(v, c(1, 2, 3))) {
+#' }
 #' }
 #'
+#' @concept vector
 #' @export
 vector_allowed_values <- function(v, allowed_values) {
   if (!is_vector(v) || !is_vector(allowed_values)) {
@@ -312,6 +315,7 @@ assertthat::on_failure(vector_allowed_values) <- function(call, env) {
 #' if (qscheck::is_binary_vector(v)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_binary_vector <- function(
     v, allow_na_values = FALSE, allow_degenerate = TRUE
@@ -373,6 +377,7 @@ assertthat::on_failure(is_binary_vector) <- function(call, env) {
 #' if (qscheck::is_vector_without_na(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_vector_without_na <- function(value) {
   if (!is_vector(value)) {
@@ -405,6 +410,7 @@ assertthat::on_failure(is_vector_without_na) <- function(call, env) {
 #' if (qscheck::is_vector_all_na(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_vector_all_na <- function(value) {
   if (!is_vector(value)) {
@@ -447,12 +453,13 @@ assertthat::on_failure(is_vector_all_na) <- function(call, env) {
 #'   )
 #' )
 #' # For check
-#' if (
-#'   qscheck::vector_value_occurrences(
+#' if (qscheck::vector_value_occurrences(
 #'     vec, value, min_occurrences = 2, max_occurrences = 3
-#'   )
+#'    )) {
+#' }
 #' }
 #'
+#' @concept vector
 #' @export
 vector_value_occurrences <- function(
       vec,

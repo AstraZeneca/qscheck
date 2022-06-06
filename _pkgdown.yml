@@ -1,1 +1,67 @@
 destination: site
+
+reference:
+- title: Integers
+  desc: Functions checking integer values (NOT integer types)
+  contents:
+  - has_concept("integer")
+
+- title: Reals
+  desc: Functions checking real values
+  contents:
+  - has_concept("real")
+
+- title: Vectors
+  desc: Functions checking real values
+  contents:
+  - has_concept("vector")
+
+- title: Data Frames
+  desc: Functions checking real values
+  contents:
+  - has_concept("data_frame")
+
+- title: Logicals
+  desc: Functions to check logicals
+  contents:
+  - has_concept("logical")
+
+- title: Factors
+  desc: Functions to check for factors
+  contents:
+  - has_concept("factor")
+
+- title: Lists
+  desc: Functions to check for lists
+  contents:
+  - has_concept("list")
+
+- title: NAs
+  desc: Functions checking NAs
+  contents:
+  - has_concept("na")
+
+- title: Functions
+  desc: Functions to check function properties
+  contents:
+  - has_concept("function")
+
+- title: Object Oriented
+  desc: Functions to check object oriented features
+  contents:
+  - has_concept("oop")
+
+- title: Multiple Combined Conditions
+  desc: Functions to check combined conditions
+  contents:
+  - has_concept("combined")
+
+- title: Sets
+  desc: Functions to check for sets and belonging to sets
+  contents:
+  - has_concept("set")
+
+- title: Other
+  desc: Other functions
+  contents:
+  - lacks_concepts(c("integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "na"))

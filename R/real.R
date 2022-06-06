@@ -20,6 +20,7 @@
 #' if (qscheck::is_real_value(value)) {}
 #' }
 #'
+#' @concept real
 #' @export
 is_real_value <- function(value,
     min = NULL, max = NULL,
@@ -122,6 +123,7 @@ assertthat::on_failure(is_real_value) <- function(call, env) {
 #' if (qscheck::is_positive_real_value(value)) {}
 #' }
 #'
+#' @concept real
 #' @export
 is_positive_real_value <- function(value) {
   return(is_real_value(value, min = 0.0, inclusive_min = FALSE))
@@ -145,6 +147,7 @@ assertthat::on_failure(is_positive_real_value) <- function(call, env) {
 #' if (qscheck::is_probability_value(value)) {}
 #' }
 #'
+#' @concept real
 #' @export
 is_probability_value <- function(value) {
   return(is_real_value(value, min = 0.0, max = 1.0))
@@ -182,6 +185,7 @@ assertthat::on_failure(is_probability_value) <- function(call, env) {
 #' if (qscheck::is_real_vector(my_parameter)) {}
 #' }
 #'
+#' @concept real
 #' @export
 is_real_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,

@@ -25,6 +25,7 @@
 #' if (qscheck::is_data_frame()) {}
 #' }
 #'
+#' @concept data_frame
 #' @export
 is_data_frame <- function(df,
                           exact_rownames = NULL,
@@ -167,6 +168,7 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
 #' if (qscheck::data_frames_same_colnames(df1, df2)) {}
 #' }
 #'
+#' @concept data_frame
 #' @export
 data_frames_same_colnames <- function(df1, df2) {
   if (!is_data_frame(df1)) {

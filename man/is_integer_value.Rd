@@ -27,4 +27,4 @@ if (qscheck::is_integer_value(my_parameter)) {}
 }
 
 }
-\concept{integers}
+\concept{integer}

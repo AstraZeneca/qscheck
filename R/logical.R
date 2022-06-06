@@ -10,6 +10,7 @@
 #' if (qscheck::is_logical_value(value)) {}
 #' }
 #'
+#' @concept logical
 #' @export
 is_logical_value <- function(value) {
   return(is.logical(value) && length(value) == 1)
