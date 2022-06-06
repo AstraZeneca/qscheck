@@ -461,31 +461,6 @@ test_that("is_list", {
   expect_equal(as.character(err), "Error: 3 must be a list or NULL. Got: 3\n")
 })
 
-test_that("is_function", {
-  foo <- function(x, y, z) {
-  }
-
-  expect_true(is_function(foo))
-  expect_false(is_function(foo, args = c("x", "z", "y")))
-  expect_false(is_function(foo, args = c("x", "y")))
-  expect_true(is_function(foo, args = c("x", "y", "z")))
-  expect_false(is_function(""))
-
-  expect_false(is_function(tibble::tibble()))
-
-  err <- tryCatch({
-    assertthat::assert_that(is_function(foo, args = c("x", "z", "y")))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
-    "Error: foo must be a function with arguments x, z, y. Got: foo\n")
-})
-
 test_that("is_real_value", {
   expect_true(is_real_value(10.0))
   expect_true(is_real_value(-0.1))
