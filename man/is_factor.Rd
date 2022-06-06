@@ -41,3 +41,4 @@ if (qscheck::is_factor(my_parameter)) {}
 
 
 }
+\concept{factor}

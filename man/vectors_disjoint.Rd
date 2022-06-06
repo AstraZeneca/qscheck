@@ -22,12 +22,10 @@ present in one can be found in the other.
 assertthat::assert_that(
   qscheck::vectors_disjoint(v1, v2)
   )
-)
 # For check
-if (
-  qscheck::vectors_disjoint(v1, v2)
-  ) {
+if (qscheck::vectors_disjoint(v1, v2)) {
 }
 }
 
 }
+\concept{vector}

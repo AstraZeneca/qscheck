@@ -50,3 +50,4 @@ if (qscheck::is_data_frame()) {}
 }
 
 }
+\concept{data_frame}

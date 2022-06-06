@@ -16,6 +16,7 @@
 #' }
 #'
 #'
+#' @concept function
 #' @export
 is_function <- function(
     value, num_args = NULL, args = NULL, allow_null = FALSE) {

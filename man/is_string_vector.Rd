@@ -46,3 +46,4 @@ if (qscheck::is_string_vector(my_parameter)) {}
 }
 
 }
+\concept{vector}

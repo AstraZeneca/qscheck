@@ -21,3 +21,4 @@ if (qscheck::is_logical_value(value)) {}
 }
 
 }
+\concept{logical}

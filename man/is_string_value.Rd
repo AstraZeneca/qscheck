@@ -33,3 +33,4 @@ if (qscheck::is_string_value(my_parameter)) {}
 }
 
 }
+\concept{string}

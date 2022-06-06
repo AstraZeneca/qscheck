@@ -47,3 +47,4 @@ if (qscheck::is_real_value(value)) {}
 }
 
 }
+\concept{real}

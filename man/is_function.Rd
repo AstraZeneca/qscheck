@@ -31,3 +31,4 @@ if (qscheck::is_function(f)) {}
 
 
 }
+\concept{function}

@@ -14,6 +14,7 @@
 #' if (qscheck::is_string_value(my_parameter)) {}
 #' }
 #'
+#' @concept string
 #' @export
 is_string_value <- function(value, allow_empty = TRUE,
                       allow_na = FALSE, allow_null = FALSE) {

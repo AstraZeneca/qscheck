@@ -23,3 +23,4 @@ if (qscheck::is_r6_class(value, "MyClass")) {}
 }
 
 }
+\concept{oop}

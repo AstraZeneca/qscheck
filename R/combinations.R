@@ -24,6 +24,7 @@
 #' ) {}
 #' }
 #'
+#' @concept combined
 #' @export
 any_satisfied <- function(...) {
   dots <- list(...)

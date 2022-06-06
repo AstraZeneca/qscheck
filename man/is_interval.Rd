@@ -26,3 +26,4 @@ if (qscheck::is_interval(low, high)) {}
 }
 
 }
+\concept{real}

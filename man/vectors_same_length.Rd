@@ -23,3 +23,4 @@ if (qscheck::vectors_same_length(v1, v2)) {}
 }
 
 }
+\concept{vector}

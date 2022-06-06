@@ -45,3 +45,4 @@ if (qscheck::vector_value_occurrences(
 }
 
 }
+\concept{vector}

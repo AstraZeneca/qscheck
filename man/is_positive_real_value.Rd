@@ -21,3 +21,4 @@ if (qscheck::is_positive_real_value(value)) {}
 }
 
 }
+\concept{real}

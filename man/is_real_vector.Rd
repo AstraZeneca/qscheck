@@ -46,3 +46,4 @@ if (qscheck::is_real_vector(my_parameter)) {}
 }
 
 }
+\concept{real}

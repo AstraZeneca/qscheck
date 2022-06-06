@@ -21,3 +21,4 @@ assertthat::assert_that(
 }
 
 }
+\concept{na}

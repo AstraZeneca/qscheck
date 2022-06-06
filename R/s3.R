@@ -14,6 +14,7 @@
 #' if (qscheck::is_s3_instance(value, "MyClass")) {}
 #' }
 #'
+#' @concept oop
 #' @export
 is_s3_instance <- function(value, class_name, allow_null=FALSE) {
   if (is.null(value) && allow_null) {

@@ -23,3 +23,4 @@ if (qscheck::is_vector_without_na(my_parameter)) {}
 }
 
 }
+\concept{vector}

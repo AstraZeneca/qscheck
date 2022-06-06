@@ -25,3 +25,4 @@ if (qscheck::vector_allowed_values(v, c(1, 2, 3))) {
 }
 
 }
+\concept{vector}

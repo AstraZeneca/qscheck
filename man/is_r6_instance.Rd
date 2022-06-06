@@ -25,5 +25,5 @@ assertthat::assert_that(qscheck::is_r6_instance(value, "MyClass"))
 if (qscheck::is_r6_instance(value, "MyClass")) {}
 }
 
-
 }
+\concept{oop}

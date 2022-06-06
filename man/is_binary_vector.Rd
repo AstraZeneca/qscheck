@@ -28,3 +28,4 @@ if (qscheck::is_binary_vector(v)) {}
 }
 
 }
+\concept{vector}

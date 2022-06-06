@@ -36,3 +36,4 @@ if (qscheck::is_vector(my_parameter)) {}
 }
 
 }
+\concept{vector}

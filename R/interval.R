@@ -15,6 +15,7 @@
 #' if (qscheck::is_interval(low, high)) {}
 #' }
 #'
+#' @concept real
 #' @export
 is_interval <- function(low, high, allow_degenerate = TRUE) {
   res <- .inspect_interval(low, high, allow_degenerate)

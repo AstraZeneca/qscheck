@@ -27,3 +27,4 @@ if (qscheck::is_s3_instance(value, "MyClass")) {}
 }
 
 }
+\concept{oop}

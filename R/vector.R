@@ -21,6 +21,7 @@
 #' if (qscheck::is_vector(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL) {
@@ -114,6 +115,7 @@ assertthat::on_failure(is_vector) <- function(call, env) {
 #' if (qscheck::is_string_vector(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_string_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
@@ -189,6 +191,7 @@ assertthat::on_failure(is_string_vector) <- function(call, env) {
 #' if (qscheck::vectors_same_length(v1, v2)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 vectors_same_length <- function(v1, v2) {
   if (! (is_vector(v1) && is_vector(v2))) {
@@ -218,14 +221,12 @@ assertthat::on_failure(vectors_same_length) <- function(call, env) {
 #' assertthat::assert_that(
 #'   qscheck::vectors_disjoint(v1, v2)
 #'   )
-#' )
 #' # For check
-#' if (
-#'   qscheck::vectors_disjoint(v1, v2)
-#'   ) {
+#' if (qscheck::vectors_disjoint(v1, v2)) {
 #' }
 #' }
 #'
+#' @concept vector
 #' @export
 vectors_disjoint <- function(v1, v2) {
   if (!(is_vector(v1) && is_vector(v2))) {
@@ -273,6 +274,7 @@ assertthat::on_failure(vectors_disjoint) <- function(call, env) {
 #' }
 #' }
 #'
+#' @concept vector
 #' @export
 vector_allowed_values <- function(v, allowed_values) {
   if (!is_vector(v) || !is_vector(allowed_values)) {
@@ -313,6 +315,7 @@ assertthat::on_failure(vector_allowed_values) <- function(call, env) {
 #' if (qscheck::is_binary_vector(v)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_binary_vector <- function(
     v, allow_na_values = FALSE, allow_degenerate = TRUE
@@ -374,6 +377,7 @@ assertthat::on_failure(is_binary_vector) <- function(call, env) {
 #' if (qscheck::is_vector_without_na(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_vector_without_na <- function(value) {
   if (!is_vector(value)) {
@@ -406,6 +410,7 @@ assertthat::on_failure(is_vector_without_na) <- function(call, env) {
 #' if (qscheck::is_vector_all_na(my_parameter)) {}
 #' }
 #'
+#' @concept vector
 #' @export
 is_vector_all_na <- function(value) {
   if (!is_vector(value)) {
@@ -454,6 +459,7 @@ assertthat::on_failure(is_vector_all_na) <- function(call, env) {
 #' }
 #' }
 #'
+#' @concept vector
 #' @export
 vector_value_occurrences <- function(
       vec,

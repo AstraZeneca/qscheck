@@ -23,3 +23,4 @@ if (qscheck::is_probability_value(value)) {}
 }
 
 }
+\concept{real}

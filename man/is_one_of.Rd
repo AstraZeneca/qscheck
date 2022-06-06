@@ -27,3 +27,4 @@ if (qscheck::is_one_of(value, c("foo", "bar"))) {}
 }
 
 }
+\concept{set}
