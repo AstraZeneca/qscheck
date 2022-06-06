@@ -26,8 +26,8 @@ assertthat::assert_that(
 # For check
 if (
   qscheck::vectors_disjoint(v1, v2)
-  )
-) {}
+  ) {
+}
 }
 
 }

@@ -20,7 +20,8 @@ Checks if a vector contains values only out of a set of available options.
 # Will fail if v contains any value that is not either 1, 2 or 3
 assertthat::assert_that(qscheck::vector_allowed_values(v, c(1, 2, 3)))
 # For check
-if (qscheck::vector_allowed_values(v, c(1, 2, 3)) {}
+if (qscheck::vector_allowed_values(v, c(1, 2, 3))) {
+}
 }
 
 }

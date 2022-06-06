@@ -222,8 +222,8 @@ assertthat::on_failure(vectors_same_length) <- function(call, env) {
 #' # For check
 #' if (
 #'   qscheck::vectors_disjoint(v1, v2)
-#'   )
-#' ) {}
+#'   ) {
+#' }
 #' }
 #'
 #' @export
@@ -269,7 +269,8 @@ assertthat::on_failure(vectors_disjoint) <- function(call, env) {
 #' # Will fail if v contains any value that is not either 1, 2 or 3
 #' assertthat::assert_that(qscheck::vector_allowed_values(v, c(1, 2, 3)))
 #' # For check
-#' if (qscheck::vector_allowed_values(v, c(1, 2, 3)) {}
+#' if (qscheck::vector_allowed_values(v, c(1, 2, 3))) {
+#' }
 #' }
 #'
 #' @export
@@ -447,10 +448,10 @@ assertthat::on_failure(is_vector_all_na) <- function(call, env) {
 #'   )
 #' )
 #' # For check
-#' if (
-#'   qscheck::vector_value_occurrences(
+#' if (qscheck::vector_value_occurrences(
 #'     vec, value, min_occurrences = 2, max_occurrences = 3
-#'   )
+#'    )) {
+#' }
 #' }
 #'
 #' @export

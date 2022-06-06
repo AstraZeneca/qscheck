@@ -38,10 +38,10 @@ assertthat::assert_that(
   )
 )
 # For check
-if (
-  qscheck::vector_value_occurrences(
+if (qscheck::vector_value_occurrences(
     vec, value, min_occurrences = 2, max_occurrences = 3
-  )
+   )) {
+}
 }
 
 }
