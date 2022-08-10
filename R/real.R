@@ -114,6 +114,8 @@ assertthat::on_failure(is_real_value) <- function(call, env) {
 #' Check if the passed entity is a single floating point positive value.
 #'
 #' @param value the value to check
+#' @param allow_na if true, accept a value that is NA.
+#' @param allow_null if true, accept a value that is NULL.
 #'
 #' @examples
 #' \dontrun{
@@ -125,12 +127,31 @@ assertthat::on_failure(is_real_value) <- function(call, env) {
 #'
 #' @concept real
 #' @export
-is_positive_real_value <- function(value) {
-  return(is_real_value(value, min = 0.0, inclusive_min = FALSE))
+is_positive_real_value <- function(
+    value, allow_na = FALSE, allow_null = FALSE) {
+  return(is_real_value(value, min = 0.0, inclusive_min = FALSE,
+          allow_na = allow_na, allow_null = allow_null))
 }
 assertthat::on_failure(is_positive_real_value) <- function(call, env) {
+  allow_na_msg <- ""
+  if (!is.null(call$allow_na)) {
+    if (eval(call$allow_na, env)) {
+      allow_na_msg <- " or NA"
+    }
+  }
+
+  allow_null_msg <- ""
+  if (!is.null(call$allow_null)) {
+    if (eval(call$allow_null, env)) {
+      allow_null_msg <- " or NULL"
+    }
+  }
+
   return(paste0(deparse(call$value),
-                 " must be a positive real value. Got: ",
+                 " must be a positive real value",
+                 allow_na_msg,
+                 allow_null_msg,
+                 ". Got: ",
                  deparse(eval(call$value, env))))
 }
 
