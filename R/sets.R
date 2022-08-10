@@ -91,7 +91,7 @@ mutually_exclusive <- function(..., allow_all_null = TRUE) {
     return(FALSE)
   }
   not_null <- dots[!sapply(dots, is.null)]
-  print(dots)
+
   if (allow_all_null) {
     return(length(not_null) < 2)
   } else {
