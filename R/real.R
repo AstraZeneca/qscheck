@@ -138,6 +138,7 @@ assertthat::on_failure(is_positive_real_value) <- function(call, env) {
 #' floating point value in the interval [0.0, 1.0].
 #'
 #' @param value the value to check
+#' @param allow_null if true, accept a value that is NULL.
 #'
 #' @examples
 #' \dontrun{
