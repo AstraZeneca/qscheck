@@ -5,10 +5,12 @@
 \title{Check if the passed entity is a single probability value, that is, a
 floating point value in the interval [0.0, 1.0].}
 \usage{
-is_probability_value(value)
+is_probability_value(value, allow_null = FALSE)
 }
 \arguments{
 \item{value}{the value to check}
+
+\item{allow_null}{if true, accept a value that is NULL.}
 }
 \description{
 Check if the passed entity is a single probability value, that is, a
