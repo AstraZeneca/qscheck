@@ -4,10 +4,14 @@
 \alias{is_positive_real_value}
 \title{Check if the passed entity is a single floating point positive value.}
 \usage{
-is_positive_real_value(value)
+is_positive_real_value(value, allow_na = FALSE, allow_null = FALSE)
 }
 \arguments{
 \item{value}{the value to check}
+
+\item{allow_na}{if true, accept a value that is NA.}
+
+\item{allow_null}{if true, accept a value that is NULL.}
 }
 \description{
 Check if the passed entity is a single floating point positive value.
