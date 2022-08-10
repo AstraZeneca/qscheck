@@ -33,6 +33,7 @@ test_that("any_satisfied", {
 
 test_that("mutually_exclusive", {
   expect_true(mutually_exclusive(NULL, NULL, NULL))
+  expect_false(mutually_exclusive(NULL, NULL, NULL, allow_all_null = FALSE))
   expect_true(mutually_exclusive(1, NULL, NULL))
   expect_true(mutually_exclusive(TRUE, NULL, NULL))
   expect_true(mutually_exclusive(NULL, TRUE, NULL))
@@ -53,7 +54,11 @@ test_that("mutually_exclusive", {
   )
   expect_equal(
     as.character(err),
-    "Error: 'foo', 'baz' must be mutually exclusive. Got -0.3, 5\n")
+    paste(
+      "Error: 'foo', 'baz' must be mutually exclusive",
+      "(all NULL allowed). Got -0.3, 5\n"
+    )
+  )
 })
 
 test_that("is_one_of", {

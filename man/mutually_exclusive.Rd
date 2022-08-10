@@ -4,18 +4,22 @@
 \alias{mutually_exclusive}
 \title{Checks if the passed values are mutually exclusive.}
 \usage{
-mutually_exclusive(...)
+mutually_exclusive(..., allow_all_null = TRUE)
 }
 \arguments{
 \item{...}{the various values}
+
+\item{allow_all_null}{If TRUE, then the test will succeed if all values
+are NULL. If FALSE, it will fail.}
 }
 \description{
 Checks if the passed values are mutually exclusive, that is, if
 one of the passed values has a non-NULL value, all the others
 _must_ be NULL.
-If all options are NULL, this test passes.
-Allows to check for multiple cases, and pass the test if any of the cases
-is satisfied.
+If all options are NULL, by default this test passes. Setting
+allow_all_null = FALSE changes this behavior to failure. Setting it to
+FALSE basically ensures that exactly one of the values is not NULL.
+
 This test is generally useful if two or more parameters in a routine are
 technically incompatible with each other, and you want the user to know
 the passed parameters in that combination don't make any sense.

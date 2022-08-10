@@ -17,5 +17,5 @@ here = "0.1"
 covr = "3.5.1"
 
 [tool.roo.doc-dependencies]
-knitr = "1.28"
+knitr = "1.39"
 pkgdown = "1.5.1"
