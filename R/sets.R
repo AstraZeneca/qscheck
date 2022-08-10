@@ -57,14 +57,17 @@ assertthat::on_failure(is_one_of) <- function(call, env) {
 #' Checks if the passed values are mutually exclusive, that is, if
 #' one of the passed values has a non-NULL value, all the others
 #' _must_ be NULL.
-#' If all options are NULL, this test passes.
-#' Allows to check for multiple cases, and pass the test if any of the cases
-#' is satisfied.
+#' If all options are NULL, by default this test passes. Setting
+#' allow_all_null = FALSE changes this behavior to failure. Setting it to
+#' FALSE basically ensures that exactly one of the values is not NULL.
+#'
 #' This test is generally useful if two or more parameters in a routine are
 #' technically incompatible with each other, and you want the user to know
 #' the passed parameters in that combination don't make any sense.
 #'
 #' @param ... the various values
+#' @param allow_all_null If TRUE, then the test will succeed if all values
+#'                       are NULL. If FALSE, it will fail.
 #'
 #' @examples
 #' \dontrun{
@@ -80,16 +83,20 @@ assertthat::on_failure(is_one_of) <- function(call, env) {
 #'
 #' @concept set
 #' @export
-mutually_exclusive <- function(...) {
+mutually_exclusive <- function(..., allow_all_null = TRUE) {
   dots <- list(...)
 
   # Prevent empty call
   if (length(dots) == 0) {
     return(FALSE)
   }
-
   not_null <- dots[!sapply(dots, is.null)]
-  return(length(not_null) < 2)
+  print(dots)
+  if (allow_all_null) {
+    return(length(not_null) < 2)
+  } else {
+    return(length(not_null) == 1)
+  }
 }
 assertthat::on_failure(mutually_exclusive) <- function(call, env) {
   args <- as.list(call)
@@ -103,13 +110,20 @@ assertthat::on_failure(mutually_exclusive) <- function(call, env) {
     not_nulls[[arg]] <- eval(call[[i]], env)
   }
 
+  allow_all_null_msg <- " (all NULL allowed)"
+  if (!is.null(call$allow_all_null)) {
+    if (eval(call$allow_all_null, env)) {
+      allow_all_null_msg <- " with exactly one non-NULL element"
+    }
+  }
+
   msg <- paste0(
     "'",
     paste0(
       names(not_nulls),
       collapse = "', '"
       ),
-    "' must be mutually exclusive. Got ",
+    "' must be mutually exclusive", allow_all_null_msg, ". Got ",
     paste0(not_nulls, collapse = ", ")
     )
   return(msg)
