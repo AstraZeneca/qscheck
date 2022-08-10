@@ -34,6 +34,8 @@ test_that("is_probability_value", {
   expect_false(is_probability_value(1.1))
   expect_false(is_probability_value("hello"))
   expect_false(is_probability_value(c(0.0, 0.1)))
+  expect_false(is_probability_value(NULL))
+  expect_true(is_probability_value(NULL, allow_null = TRUE))
 
   foo <- -0.3
   err <- tryCatch({

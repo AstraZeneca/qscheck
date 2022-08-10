@@ -149,13 +149,19 @@ assertthat::on_failure(is_positive_real_value) <- function(call, env) {
 #'
 #' @concept real
 #' @export
-is_probability_value <- function(value) {
-  return(is_real_value(value, min = 0.0, max = 1.0))
+is_probability_value <- function(value, allow_null = FALSE) {
+  return(is_real_value(value, min = 0.0, max = 1.0, allow_null = allow_null))
 }
 assertthat::on_failure(is_probability_value) <- function(call, env) {
+  allow_null_msg <- ""
+  if (!is.null(call$allow_null)) {
+    if (eval(call$allow_null, env)) {
+      allow_null_msg <- " or NULL"
+    }
+  }
   return(paste0(deparse(call$value),
                  " must be a single probability value in ",
-                 "the interval [0.0, 1.0]. Got: ",
+                 "the interval [0.0, 1.0]", allow_null_msg, ". Got: ",
                  deparse(eval(call$value, env))))
 }
 
