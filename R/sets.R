@@ -101,30 +101,48 @@ mutually_exclusive <- function(..., allow_all_null = TRUE) {
 assertthat::on_failure(mutually_exclusive) <- function(call, env) {
   args <- as.list(call)
 
-  not_nulls <- list()
+  # Remove the keyword argument, leaving only the matched by ...
+  args[["allow_all_null"]] <- NULL
+
+  not_null_val <- list()
+  not_null_idx <- numeric()
   for (i in seq_along(args)) {
     if (i == 1) {
       next
     }
-    arg <- args[[i]]
-    not_nulls[[arg]] <- eval(call[[i]], env)
+    value <- eval(call[[i]], env)
+    if (!is.null(value)) {
+      not_null_val[[i]] <- value
+      not_null_idx <- c(not_null_idx, i)
+    }
   }
 
-  allow_all_null_msg <- " (all NULL allowed)"
+  allow_all_null <- TRUE
   if (!is.null(call$allow_all_null)) {
-    if (eval(call$allow_all_null, env)) {
-      allow_all_null_msg <- " with exactly one non-NULL element"
-    }
+    allow_all_null <- eval(call$allow_all_null, env)
+  }
+
+  allow_all_null_msg <- " or all NULL"
+  if (!allow_all_null) {
+    allow_all_null_msg <- " with exactly one non-NULL element"
+  }
+
+  if (length(not_null_idx) == 0 && !allow_all_null) {
+    msg <- paste0("'",
+      paste0(tail(args, -1), collapse = "', '"),
+      "' must be mutually exclusive", allow_all_null_msg, ". Got all NULLs"
+    )
+    return(msg)
   }
 
   msg <- paste0(
     "'",
     paste0(
-      names(not_nulls),
+      args[not_null_idx],
       collapse = "', '"
       ),
     "' must be mutually exclusive", allow_all_null_msg, ". Got ",
-    paste0(not_nulls, collapse = ", ")
+    paste0(not_null_val[not_null_idx], collapse = ", ")
     )
   return(msg)
 }
