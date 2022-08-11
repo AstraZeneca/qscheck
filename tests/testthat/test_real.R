@@ -220,3 +220,81 @@ test_that("is_real_vector with NA", {
   expect_false(is_real_vector(v))
   expect_true(is_real_vector(v, allow_na_values = TRUE))
 })
+
+test_that("is_increasing_vector", {
+  v <- c(1.2, 3.0)
+  expect_true(is_increasing_vector(v))
+
+  v <- c(3.0, 1.2)
+  expect_false(is_increasing_vector(v))
+
+  v <- c(1.2, NA, 3.0)
+  expect_false(is_increasing_vector(v))
+
+  v <- c(1.2, NA, 3.0)
+  expect_true(is_increasing_vector(v, allow_na_values = TRUE))
+
+  v <- c(1.2, 1.2, 3.0)
+  expect_true(is_increasing_vector(v))
+
+  v <- c(1.2, 1.2, 3.0)
+  expect_false(is_increasing_vector(v, strictly = TRUE))
+
+  expect_error({
+    v <- c(1.2, 1.2, 3.0)
+    assertthat::assert_that(is_increasing_vector(v, strictly = TRUE))
+  }, regexp = "v must be a vector of strictly increasing numbers with no NAs."
+  )
+
+  expect_error({
+    v <- c(3.2, 1.2, 3.0)
+    assertthat::assert_that(is_increasing_vector(v))
+  }, regexp = "v must be a vector of increasing numbers with no NAs."
+  )
+
+  expect_error({
+    v <- c(3.2, 1.2, 3.0)
+    assertthat::assert_that(is_increasing_vector(v, allow_na_values = TRUE))
+  }, regexp = "v must be a vector of increasing numbers or NAs."
+  )
+
+})
+
+test_that("is_decreasing_vector", {
+  v <- c(3.0, 1.2)
+  expect_true(is_decreasing_vector(v))
+
+  v <- c(1.2, 3.0)
+  expect_false(is_decreasing_vector(v))
+
+  v <- c(3.0, NA, 1.2)
+  expect_false(is_decreasing_vector(v))
+
+  v <- c(3.0, NA, 1.2)
+  expect_true(is_decreasing_vector(v, allow_na_values = TRUE))
+
+  v <- c(3.0, 1.2, 1.2)
+  expect_true(is_decreasing_vector(v))
+
+  v <- c(3.0, 1.2, 1.2)
+  expect_false(is_decreasing_vector(v, strictly = TRUE))
+
+  expect_error({
+    v <- c(3.0, 1.2, 1.2)
+    assertthat::assert_that(is_decreasing_vector(v, strictly = TRUE))
+  }, regexp = "v must be a vector of strictly decreasing numbers with no NAs."
+  )
+
+  expect_error({
+    v <- c(3.2, 1.2, 3.0)
+    assertthat::assert_that(is_decreasing_vector(v))
+  }, regexp = "v must be a vector of decreasing numbers with no NAs."
+  )
+
+  expect_error({
+    v <- c(3.2, 1.2, 3.0)
+    assertthat::assert_that(is_decreasing_vector(v, allow_na_values = TRUE))
+  }, regexp = "v must be a vector of decreasing numbers or NAs."
+  )
+
+})

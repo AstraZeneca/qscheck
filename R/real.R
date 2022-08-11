@@ -277,3 +277,131 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
   )
   return(msg)
 }
+
+#' Checks if the passed entity is a vector of increasing numerical values.
+#'
+#' @param v The vector to check
+#' @param strictly boolean: If TRUE, only strictly increasing vectors will
+#'                          satisfy the test
+#' @param allow_na_values boolean: If TRUE, NA values are allowed in the vector
+#'                                 and are considered as not existent.
+#'                                 If FALSE, fails for vectors containing NAs.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_increasing_vector(my_parameter))
+#' # For check
+#' if (qscheck::is_increasing_vector(my_parameter)) {}
+#' }
+#'
+#' @concept vector
+#' @export
+is_increasing_vector <- function(
+    v, strictly = FALSE, allow_na_values = FALSE) {
+
+  if (!is_real_vector(v, allow_na_values = allow_na_values)) {
+    return(FALSE)
+  }
+
+  if (any(is.na(v)) && allow_na_values == FALSE) {
+    return(FALSE)
+  }
+
+  return(!is.unsorted(v, na.rm = TRUE, strictly = strictly))
+
+}
+assertthat::on_failure(is_increasing_vector) <- function(call, env) {
+  strictly <- FALSE
+  if (!is.null(call$strictly)) {
+    strictly <- eval(call$strictly, env)
+  }
+
+  allow_na_values <- FALSE
+  if (!is.null(call$allow_na_values)) {
+    allow_na_values <- eval(call$allow_na_values, env)
+  }
+
+  strictly_msg <- ""
+  if (strictly) {
+    strictly_msg <- " strictly"
+  }
+
+  allow_na_values_msg <- " with no NAs"
+  if (allow_na_values) {
+    allow_na_values_msg <- " or NAs"
+  }
+
+  msg <- paste0(
+    deparse(call$v), " must be a vector of", strictly_msg,
+    " increasing numbers", allow_na_values_msg,
+    ". Got: ",
+    deparse(eval(call$v, env))
+    )
+
+  return(msg)
+}
+
+#' Checks if the passed entity is a vector of decreasing numerical values.
+#'
+#' @param v The vector to check
+#' @param strictly boolean: If TRUE, only strictly decreasing vectors will
+#'                          satisfy the test.
+#' @param allow_na_values boolean: If TRUE, NA values are allowed in the vector
+#'                                 and are considered as not existent.
+#'                                 If FALSE, fails for vectors containing NAs.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_decreasing_vector(my_parameter))
+#' # For check
+#' if (qscheck::is_decreasing_vector(my_parameter)) {}
+#' }
+#'
+#' @concept vector
+#' @export
+is_decreasing_vector <- function(
+    v, strictly = FALSE, allow_na_values = FALSE) {
+
+  if (!is_real_vector(v, allow_na_values = allow_na_values)) {
+    return(FALSE)
+  }
+
+  if (any(is.na(v)) && allow_na_values == FALSE) {
+    return(FALSE)
+  }
+
+  return(!is.unsorted(rev(v), na.rm = TRUE, strictly = strictly))
+
+}
+assertthat::on_failure(is_decreasing_vector) <- function(call, env) {
+  strictly <- FALSE
+  if (!is.null(call$strictly)) {
+    strictly <- eval(call$strictly, env)
+  }
+
+  allow_na_values <- FALSE
+  if (!is.null(call$allow_na_values)) {
+    allow_na_values <- eval(call$allow_na_values, env)
+  }
+
+  strictly_msg <- ""
+  if (strictly) {
+    strictly_msg <- " strictly"
+  }
+
+  allow_na_values_msg <- " with no NAs"
+  if (allow_na_values) {
+    allow_na_values_msg <- " or NAs"
+  }
+
+  msg <- paste0(
+    deparse(call$v), " must be a vector of", strictly_msg,
+    " decreasing numbers", allow_na_values_msg,
+    ". Got: ",
+    deparse(eval(call$v, env))
+    )
+
+  return(msg)
+}
