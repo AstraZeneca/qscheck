@@ -56,8 +56,25 @@ test_that("mutually_exclusive", {
     as.character(err),
     paste(
       "Error: 'foo', 'baz' must be mutually exclusive",
-      "(all NULL allowed). Got -0.3, 5\n"
+      "or all NULL. Got -0.3, 5\n"
     )
+  )
+})
+
+test_that("#40: mutually_exclusive ", {
+  foo <- function(a = NULL, b = NULL) {
+    assertthat::assert_that(mutually_exclusive(a, b, allow_all_null = FALSE))
+  }
+
+  a <- NULL
+  b <- NULL
+  expect_error({
+    assertthat::assert_that(mutually_exclusive(
+      a, b, allow_all_null = FALSE)
+    )
+  }, regexp = paste(
+    "'a', 'b' must be mutually exclusive with exactly",
+    "one non-NULL element. Got all NULLs")
   )
 })
 
