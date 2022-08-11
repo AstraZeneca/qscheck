@@ -464,3 +464,68 @@ assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
   )
   return(msg)
 }
+
+#' Checks if a vector contains only binary values (0 or 1)
+#'
+#' @param v the vector
+#' @param allow_na_values if the vector can contain NA values. Default FALSE
+#' @param allow_degenerate if TRUE, the vector can contain only one value class
+#'        (e.g. all the non-NA values are 0, and there's not a single 1, or
+#'        vice-versa). If FALSE, such vectors will be rejected.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion.
+#' # Will fail if v contains any value that is not either 0 or 1
+#' assertthat::assert_that(qscheck::is_binary_vector(v))
+#' # For check
+#' if (qscheck::is_binary_vector(v)) {}
+#' }
+#'
+#' @concept vector
+#' @export
+is_binary_vector <- function(
+    v, allow_na_values = FALSE, allow_degenerate = TRUE
+    ) {
+
+  if (allow_na_values == TRUE) {
+    allowed <- c(0, 1, NA)
+  } else {
+    allowed <- c(0, 1)
+  }
+
+  if (!vector_allowed_values(v, allowed)) {
+    return(FALSE)
+  }
+
+
+  if (!allow_degenerate) {
+    v_entries <- unique(v)
+    if (length(v_entries[!is.na(v_entries)]) == 1) {
+      return(FALSE)
+    }
+  }
+  return(TRUE)
+}
+assertthat::on_failure(is_binary_vector) <- function(call, env) {
+  na_msg <- ""
+  degenerate_msg <- ""
+  if (!is.null(call$allow_na_values)
+      && eval(call$allow_na_values, env) == TRUE) {
+    na_msg <- " or NA"
+  }
+
+  if (!is.null(call$allow_degenerate)
+      && eval(call$allow_degenerate, env) == FALSE) {
+    degenerate_msg <- " non-degenerate"
+  }
+
+  return(
+    paste0(
+      deparse(call$v),
+      " must be a", degenerate_msg,
+      " vector of binary values (0 or 1",
+      na_msg, ")"
+    )
+  )
+}
