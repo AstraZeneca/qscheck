@@ -171,9 +171,11 @@ assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
 #'                   is at most the specified length, inclusive
 #'                   Note: if exact_length is specified, this parameter is
 #'                   ignored
-#' @param allow_na_values boolean: If passed allows vectors containing
+#' @param allow_na_values boolean. If passed allows vectors containing
 #'                        NAs. The length check is performed including
 #'                        the NA values. Default FALSE.
+#' @param allow_null boolean. If TRUE, also accepts a value of NULL.
+#'                   Default FALSE.
 #'
 #' @examples
 #' \dontrun{
@@ -189,8 +191,12 @@ assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
 #' @export
 is_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
-    allow_na_values = FALSE
+    allow_na_values = FALSE, allow_null = FALSE
     ) {
+
+  if (is.null(value)) {
+    return(allow_null)
+  }
 
   if (!is_vector(
       value,
@@ -249,6 +255,9 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
   if (is.null(call$allow_na_values)
       || eval(call$allow_na_values, env) == FALSE) {
     msg <- paste0(msg, " with no NAs")
+  }
+  if (!is.null(call$allow_null) && eval(call$allow_null, env) == TRUE) {
+    msg <- paste0(msg, " or NULL")
   }
   msg <- paste0(
     msg,

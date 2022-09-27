@@ -10,7 +10,8 @@ is_string_vector(
   exact_length = NULL,
   min_length = NULL,
   max_length = NULL,
-  allow_na_values = FALSE
+  allow_na_values = FALSE,
+  allow_null = FALSE
 )
 }
 \arguments{
@@ -29,9 +30,12 @@ is at most the specified length, inclusive
 Note: if exact_length is specified, this parameter is
 ignored}
 
-\item{allow_na_values}{boolean: If passed allows vectors containing
+\item{allow_na_values}{boolean. If passed allows vectors containing
 NAs. The length check is performed including
 the NA values. Default FALSE.}
+
+\item{allow_null}{boolean. If TRUE, also accepts a value of NULL.
+Default FALSE.}
 }
 \description{
 Checks if the passed entity is a vector of strings (character).

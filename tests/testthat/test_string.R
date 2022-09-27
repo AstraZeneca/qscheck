@@ -13,6 +13,7 @@ test_that("is_string_vector", {
   v <- c("foo", "bar", "baz")
   expect_true(is_string_vector(v))
   expect_false(is_string_vector(NULL))
+  expect_true(is_string_vector(NULL, allow_null = TRUE))
   expect_false(is_string_vector(v, exact_length = 4))
   expect_false(is_vector(v, min_length = 4))
   expect_true(is_vector(v, max_length = 4))
