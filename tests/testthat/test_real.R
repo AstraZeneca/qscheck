@@ -145,6 +145,7 @@ test_that("is_real_vector", {
   v2 <- c("hello", "hi")
   expect_true(is_real_vector(v))
   expect_false(is_real_vector(NULL))
+  expect_true(is_real_vector(NULL, allow_null = TRUE))
   expect_false(is_real_vector(v2))
   expect_false(is_real_vector(v, exact_length = 4))
   expect_false(is_real_vector(v, min_length = 4))

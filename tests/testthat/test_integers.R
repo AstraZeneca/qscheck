@@ -262,6 +262,7 @@ test_that("is_integer_vector", {
 
   expect_true(is_integer_vector(v))
   expect_false(is_integer_vector(NULL))
+  expect_true(is_integer_vector(NULL, allow_null = TRUE))
   expect_false(is_integer_vector(v2))
   expect_true(is_integer_vector(v3))
 
