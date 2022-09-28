@@ -47,11 +47,14 @@ is_vector <- function(
 }
 assertthat::on_failure(is_vector) <- function(call, env) {
   msg <- paste0(deparse(call$value), " must be a vector")
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
 
-  if (!is.null(call$exact_length)) {
+  if (!is.null(exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env),
+      " of exact length ", exact_length,
       ". Got: ",
       deparse(eval(call$value, env))
 
@@ -59,26 +62,26 @@ assertthat::on_failure(is_vector) <- function(call, env) {
     return(msg)
   }
 
-  if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  if (!is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
-      eval(call$min_length, env),
+      min_length,
       " and ",
-      eval(call$max_length, env),
+      max_length,
       " inclusive"
     )
-  } else if (is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not greater than ",
-      eval(call$max_length, env)
+      max_length
     )
-  } else if (!is.null(call$min_length) && is.null(call$max_length)) {
+  } else if (!is.null(min_length) && is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not less than ",
-      eval(call$min_length, env)
+      min_length
     )
   }
   msg <- paste0(
@@ -353,10 +356,14 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
     eval(call$vec, env) == eval(call$value, env), na.rm = TRUE
   )
 
-  if (!is.null(call$exact_occurrences)) {
+  exact_occurrences <- callget(call, env, "exact_occurrences", NULL)
+  min_occurrences <- callget(call, env, "min_occurrences", NULL)
+  max_occurrences <- callget(call, env, "max_occurrences", NULL)
+
+  if (!is.null(exact_occurrences)) {
     msg <- paste0(
       msg,
-      " exactly ", eval(call$exact_occurrences, env),
+      " exactly ", exact_occurrences,
       " times. Found it ",
       total_occurrences,
       " times."
@@ -364,27 +371,27 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
     return(msg)
   }
 
-  if (!is.null(call$min_occurrences) && !is.null(call$max_occurrences)) {
+  if (!is.null(min_occurrences) && !is.null(max_occurrences)) {
     msg <- paste0(
       msg,
       " between ",
-      eval(call$min_occurrences, env),
+      min_occurrences,
       " and ",
-      eval(call$max_occurrences, env),
+      max_occurrences,
       " times inclusive."
     )
-  } else if (is.null(call$min_occurrences) && !is.null(call$max_occurrences)) {
+  } else if (is.null(min_occurrences) && !is.null(max_occurrences)) {
     msg <- paste0(
       msg,
       " no more than ",
-      eval(call$max_occurrences, env),
+      max_occurrences,
       " times inclusive."
     )
-  } else if (!is.null(call$min_occurrences) && is.null(call$max_occurrences)) {
+  } else if (!is.null(min_occurrences) && is.null(max_occurrences)) {
     msg <- paste0(
       msg,
       " no less than ",
-      eval(call$min_occurrences, env),
+      min_occurrences,
       " times inclusive."
     )
   }

@@ -7,6 +7,14 @@ test_that("is_string_value", {
   expect_false(is_string_value(NA, allow_na = FALSE))
   expect_false(is_string_value(NA))
   expect_false(is_string_value(c("foo", "bar")))
+
+  err <- tryCatch({
+    assertthat::assert_that(is_string_value(4))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
 })
 
 test_that("is_string_vector", {

@@ -62,39 +62,38 @@ is_real_value <- function(value,
   return(TRUE)
 }
 assertthat::on_failure(is_real_value) <- function(call, env) {
+  min <- callget(call, env, "min", NULL)
+  max <- callget(call, env, "max", NULL)
+  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
+  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
   allow_na_msg <- ""
-  if (!is.null(call$allow_na)) {
-    if (eval(call$allow_na, env)) {
-      allow_na_msg <- " or NA"
-    }
+  if (allow_na) {
+    allow_na_msg <- " or NA"
   }
 
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
 
   interval_msg <- ""
-  if (!is.null(call$min) || !is.null(call$max)) {
+  if (!is.null(min) || !is.null(max)) {
     interval_msg <- " in the range "
-    if (is.null(call$min)) {
+    if (is.null(min)) {
       interval_msg <- paste0(interval_msg, "(-inf, ")
     } else {
-      min <- (eval(call$min, env))
-      inclusive_min <- (eval(call$inclusive_min, env))
       interval_msg <- paste0(
         interval_msg,
         ifelse(inclusive_min, "[", "("),
         deparse(min), ", ")
     }
 
-    if (is.null(call$max)) {
+    if (is.null(max)) {
       interval_msg <- paste0(interval_msg, "inf)")
     } else {
-      max <- (eval(call$max, env))
-      inclusive_max <- (eval(call$inclusive_max, env))
       interval_msg <- paste0(
         interval_msg, deparse(max),
         ifelse(inclusive_max, "]", ")"))
@@ -133,18 +132,17 @@ is_positive_real_value <- function(
           allow_na = allow_na, allow_null = allow_null))
 }
 assertthat::on_failure(is_positive_real_value) <- function(call, env) {
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
   allow_na_msg <- ""
-  if (!is.null(call$allow_na)) {
-    if (eval(call$allow_na, env)) {
-      allow_na_msg <- " or NA"
-    }
+  if (allow_na) {
+    allow_na_msg <- " or NA"
   }
 
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
 
   return(paste0(deparse(call$value),
@@ -175,11 +173,10 @@ is_probability_value <- function(value, allow_null = FALSE) {
   return(is_real_value(value, min = 0.0, max = 1.0, allow_null = allow_null))
 }
 assertthat::on_failure(is_probability_value) <- function(call, env) {
+  allow_null <- callget(call, env, "allow_null", FALSE)
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
   return(paste0(deparse(call$value),
                  " must be a single probability value in ",
@@ -245,40 +242,44 @@ is_real_vector <- function(
 }
 assertthat::on_failure(is_real_vector) <- function(call, env) {
   msg <- paste0(deparse(call$value), " must be a vector of real numbers")
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
 
-  if (!is.null(call$exact_length)) {
+  if (!is.null(exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env)
+      " of exact length ", exact_length
     )
-  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (!is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
-      eval(call$min_length, env),
+      min_length,
       " and ",
-      eval(call$max_length, env),
+      max_length,
       " inclusive"
     )
-  } else if (is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not greater than ",
-      eval(call$max_length, env)
+      max_length
     )
-  } else if (!is.null(call$min_length) && is.null(call$max_length)) {
+  } else if (!is.null(min_length) && is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not less than ",
-      eval(call$min_length, env)
+      min_length
     )
   }
-  if (is.null(call$allow_na_values)
-      || eval(call$allow_na_values, env) == FALSE) {
+  if (!allow_na_values) {
     msg <- paste0(msg, " with no NAs")
   }
 
-  if (!is.null(call$allow_null) && eval(call$allow_null, env) == TRUE) {
+  if (allow_null) {
     msg <- paste0(msg, " or NULL")
   }
 
@@ -324,15 +325,8 @@ is_increasing_vector <- function(
 
 }
 assertthat::on_failure(is_increasing_vector) <- function(call, env) {
-  strictly <- FALSE
-  if (!is.null(call$strictly)) {
-    strictly <- eval(call$strictly, env)
-  }
-
-  allow_na_values <- FALSE
-  if (!is.null(call$allow_na_values)) {
-    allow_na_values <- eval(call$allow_na_values, env)
-  }
+  strictly <- callget(call, env, "strictly", FALSE)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
 
   strictly_msg <- ""
   if (strictly) {
@@ -388,15 +382,8 @@ is_decreasing_vector <- function(
 
 }
 assertthat::on_failure(is_decreasing_vector) <- function(call, env) {
-  strictly <- FALSE
-  if (!is.null(call$strictly)) {
-    strictly <- eval(call$strictly, env)
-  }
-
-  allow_na_values <- FALSE
-  if (!is.null(call$allow_na_values)) {
-    allow_na_values <- eval(call$allow_na_values, env)
-  }
+  strictly <- callget(call, env, "strictly", FALSE)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
 
   strictly_msg <- ""
   if (strictly) {

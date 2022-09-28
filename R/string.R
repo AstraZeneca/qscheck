@@ -43,24 +43,21 @@ is_string_value <- function(value, allow_empty = TRUE,
 assertthat::on_failure(is_string_value) <- function(call, env) {
   non_empty_msg <- ""
 
-  if (!is.null(call$allow_empty)) {
-    if (!eval(call$allow_empty, env)) {
-      non_empty_msg <- " non-empty"
-    }
+  allow_empty <- callget(call, env, "allow_empty", TRUE)
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+  if (!allow_empty) {
+    non_empty_msg <- " non-empty"
   }
 
   allow_na_msg <- ""
-  if (!is.null(call$allow_na)) {
-    if (eval(call$allow_na, env)) {
-      allow_na_msg <- " or NA"
-    }
+  if (allow_na) {
+    allow_na_msg <- " or NA"
   }
 
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
 
   msg <- paste0(

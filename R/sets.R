@@ -117,10 +117,7 @@ assertthat::on_failure(mutually_exclusive) <- function(call, env) {
     }
   }
 
-  allow_all_null <- TRUE
-  if (!is.null(call$allow_all_null)) {
-    allow_all_null <- eval(call$allow_all_null, env)
-  }
+  allow_all_null <- callget(call, env, "allow_all_null", TRUE)
 
   allow_all_null_msg <- " or all NULL"
   if (!allow_all_null) {
