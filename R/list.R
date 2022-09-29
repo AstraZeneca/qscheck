@@ -51,24 +51,26 @@ is_list <- function(
 }
 assertthat::on_failure(is_list) <- function(call, env) {
   msg <- paste0(deparse(call$l), " must be a list")
-  if (!is.null(call$exact_length)) {
-    msg <- paste0(msg, " of exact length ", eval(call$exact_length, env),
+  required_names <- callget(call, env, "required_names", NULL)
+  exact_length <- callget(call, env, "exact_length", NULL)
+  allow_null <- callget(call, env, "allow_null", NULL)
+
+  if (!is.null(exact_length)) {
+    msg <- paste0(msg, " of exact length ", exact_length,
                   " (passed ", length(eval(call$l, env)), ")")
   }
 
-  if (!is.null(call$required_names)) {
+  if (!is.null(required_names)) {
     msg <- paste0(msg, " with at least names '",
                   paste0(
-                    eval(call$required_names, env),
+                    required_names,
                     collapse = "', '"
                     ),
                   "'"
                   )
   }
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
+  if (allow_null) {
       msg <- paste0(msg, " or NULL")
-    }
   }
   msg <- paste0(
    msg,

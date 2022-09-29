@@ -16,7 +16,7 @@
 #'
 #' @concept oop
 #' @export
-is_s3_instance <- function(value, class_name, allow_null=FALSE) {
+is_s3_instance <- function(value, class_name, allow_null = FALSE) {
   if (is.null(value) && allow_null) {
     return(TRUE)
   }
@@ -28,16 +28,15 @@ is_s3_instance <- function(value, class_name, allow_null=FALSE) {
   return(inherits(value, class_name))
 }
 assertthat::on_failure(is_s3_instance) <- function(call, env) {
+  allow_null <- callget(call, env, "allow_null", FALSE)
   msg <- paste0(
     deparse(call$value),
     " must be an instance of S3 class ",
     call$class_name
     )
 
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      msg <- paste0(msg, " or NULL")
-    }
+  if (allow_null) {
+    msg <- paste0(msg, " or NULL")
   }
 
   msg <- paste0(

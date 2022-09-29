@@ -27,20 +27,9 @@ is_function <- function(
 }
 
 assertthat::on_failure(is_function) <- function(call, env) {
-  allow_null <- FALSE
-  if (!is.null(call$allow_null)) {
-    allow_null <- eval(call$allow_null, env)
-  }
-
-  args <- NULL
-  if (!is.null(call$args)) {
-    args <- eval(call$args, env)
-  }
-
-  num_args <- NULL
-  if (!is.null(call$num_args)) {
-    num_args <- eval(call$num_args, env)
-  }
+  num_args <- callget(call, env, "num_args", NULL)
+  args <- callget(call, env, "args", NULL)
+  allow_null <- callget(call, env, "allow_null", FALSE)
 
   value_name <- deparse(call$value)
   res <- .inspect_function(eval(call$value, env), num_args, args, allow_null)

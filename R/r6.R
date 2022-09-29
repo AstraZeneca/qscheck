@@ -63,11 +63,10 @@ is_r6_instance <- function(value, class_name, allow_null = FALSE) {
          && class(value)[[length(class(value))]] == "R6")
 }
 assertthat::on_failure(is_r6_instance) <- function(call, env) {
+  allow_null <- callget(call, env, "allow_null", FALSE)
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
 
   msg <- paste0(

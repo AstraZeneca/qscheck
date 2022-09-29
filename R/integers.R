@@ -45,28 +45,28 @@ is_integer_value <- function(value,
 
 }
 assertthat::on_failure(is_integer_value) <- function(call, env) {
+  allow_null <- callget(call, env, "allow_null", FALSE)
+  min <- callget(call, env, "min", NULL)
+  max <- callget(call, env, "max", NULL)
+
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
 
   interval_msg <- ""
-  if (!is.null(call$min) || !is.null(call$max)) {
+  if (!is.null(min) || !is.null(max)) {
     interval_msg <- " in the range "
-    if (is.null(call$min)) {
+    if (is.null(min)) {
       interval_msg <- paste0(interval_msg, "(-inf, ")
     } else {
-      min <- (eval(call$min, env))
-      interval_msg <- paste0(interval_msg, "[", deparse(min), ", ")
+      interval_msg <- paste0(interval_msg, "[", min, ", ")
     }
 
-    if (is.null(call$max)) {
+    if (is.null(max)) {
       interval_msg <- paste0(interval_msg, "inf)")
     } else {
-      max <- (eval(call$max, env))
-      interval_msg <- paste0(interval_msg, deparse(max), "]")
+      interval_msg <- paste0(interval_msg, max, "]")
     }
   }
 
@@ -100,12 +100,12 @@ is_positive_integer_value <- function(value, allow_null = FALSE) {
   return(is_integer_value(value) && (value > 0))
 }
 assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
+  allow_null <- callget(call, env, "allow_null", FALSE)
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
+
   return(
     paste0(
       deparse(call$value),
@@ -139,12 +139,13 @@ is_non_negative_integer_value <- function(value, allow_null = FALSE) {
   return(is_integer_value(value) && (value >= 0))
 }
 assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
+  allow_null <- callget(call, env, "allow_null", FALSE)
   allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
+
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
   }
+
   return(
     paste0(
       deparse(call$value),
@@ -223,40 +224,46 @@ is_integer_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_integer_vector) <- function(call, env) {
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
   msg <- paste0(deparse(call$value),
     " must be a vector of integer values")
 
-  if (!is.null(call$exact_length)) {
+  if (!is.null(exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env))
-  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
+      " of exact length ", exact_length)
+  } else if (!is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
-      eval(call$min_length, env),
+      min_length,
       " and ",
-      eval(call$max_length, env),
+      max_length,
       " inclusive"
     )
-  } else if (is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not greater than ",
-      eval(call$max_length, env)
+      max_length
     )
-  } else if (!is.null(call$min_length) && is.null(call$max_length)) {
+  } else if (!is.null(min_length) && is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not less than ",
-      eval(call$min_length, env)
+      min_length
     )
   }
-  if (is.null(call$allow_na_values)
-      || eval(call$allow_na_values, env) == FALSE) {
+
+  if (!allow_na_values) {
     msg <- paste0(msg, " with no NAs")
   }
-  if (!is.null(call$allow_null) && eval(call$allow_null, env) == TRUE) {
+  if (allow_null) {
     msg <- paste0(msg, " or NULL")
   }
   msg <- paste0(
@@ -327,41 +334,46 @@ is_positive_integer_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+
   msg <- paste0(deparse(call$value),
     " must be a vector of positive integer values")
 
-  if (!is.null(call$exact_length)) {
+  if (!is.null(exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env)
+      " of exact length ", exact_length
     )
-  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (!is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
-      eval(call$min_length, env),
+      min_length,
       " and ",
-      eval(call$max_length, env),
+      max_length,
       " inclusive"
     )
-  } else if (is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not greater than ",
-      eval(call$max_length, env)
+      max_length
     )
-  } else if (!is.null(call$min_length) && is.null(call$max_length)) {
+  } else if (!is.null(min_length) && is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not less than ",
-      eval(call$min_length, env)
+      min_length
     )
   }
 
-  if (is.null(call$allow_na_values)
-      || eval(call$allow_na_values, env) == FALSE) {
+  if (!allow_na_values) {
     msg <- paste0(msg, " with no NAs")
   }
+
   msg <- paste0(
     msg,
     ". Got: ",
@@ -431,39 +443,43 @@ is_non_negative_integer_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+
   msg <- paste0(deparse(call$value),
     " must be a vector of non negative integer values")
 
-  if (!is.null(call$exact_length)) {
+  if (!is.null(exact_length)) {
     msg <- paste0(
       msg,
-      " of exact length ", eval(call$exact_length, env)
+      " of exact length ", exact_length
     )
-  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (!is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length between ",
-      eval(call$min_length, env),
+      min_length,
       " and ",
-      eval(call$max_length, env),
+      max_length,
       " inclusive"
     )
-  } else if (is.null(call$min_length) && !is.null(call$max_length)) {
+  } else if (is.null(min_length) && !is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not greater than ",
-      eval(call$max_length, env)
+      max_length
     )
-  } else if (!is.null(call$min_length) && is.null(call$max_length)) {
+  } else if (!is.null(min_length) && is.null(max_length)) {
     msg <- paste0(
       msg,
       " of length not less than ",
-      eval(call$min_length, env)
+      min_length
     )
   }
 
-  if (is.null(call$allow_na_values)
-      || eval(call$allow_na_values, env) == FALSE) {
+  if (!allow_na_values) {
     msg <- paste0(msg, " with no NAs")
   }
   msg <- paste0(
@@ -517,15 +533,16 @@ is_binary_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+  allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
+
   na_msg <- ""
   degenerate_msg <- ""
-  if (!is.null(call$allow_na_values)
-      && eval(call$allow_na_values, env) == TRUE) {
+  if (allow_na_values) {
     na_msg <- " or NA"
   }
 
-  if (!is.null(call$allow_degenerate)
-      && eval(call$allow_degenerate, env) == FALSE) {
+  if (!allow_degenerate) {
     degenerate_msg <- " non-degenerate"
   }
 
