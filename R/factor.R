@@ -65,7 +65,7 @@ assertthat::on_failure(is_factor) <- function(call, env) {
                   "')"
                   )
   }
-  if (allow_na_values == FALSE) {
+  if (!allow_na_values) {
     msg <- paste0(msg, " with no NAs")
   }
 
