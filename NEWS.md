@@ -1,3 +1,10 @@
+# qscheck 0.19.0
+
+- Add assert function
+- Added is_value as initial step towards passthrough of is_null / is_na
+- Add default call getter (internal)
+- #32 Added check for null to is_real_vector, is_integer_vector, is_string_vector
+
 # qscheck 0.18.0
 
 - #42 Fixes error in mutually_exclusive

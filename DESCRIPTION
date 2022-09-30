@@ -1,7 +1,7 @@
 Package: qscheck
 Type: Package
 Title: qscheck
-Version: 0.18.0
+Version: 0.19.0
 Authors@R: c(
     as.person(c("Stefano Borini <stefano.borini@astrazeneca.com> [aut, cre]"))
     )
@@ -10,7 +10,7 @@ Description: Performs checks on parameters and values, as well as assertions wit
 URL: https://github.com/astrazeneca/qscheck
 Depends: R (>= 3.5.0)
 Imports: assertthat (>= 0.2.0), R6 (>= 2.4)
-Suggests: testthat, knitr, rmarkdown
+Suggests: testthat, knitr, rmarkdown, lintr
 Encoding: UTF-8
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1

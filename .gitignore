@@ -13,3 +13,11 @@ tests/artifacts/*
 !tests/artifacts/.keepdir
 *.o
 *.dll
+.envs/
+bootstrap-venv/
+bootstrap.sh
+buildtools.conf
+invoke.yaml
+qs-buildtools/
+site/
+tasks.py
