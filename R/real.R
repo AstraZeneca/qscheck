@@ -291,6 +291,122 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
   return(msg)
 }
 
+
+#' Checks if the passed entity is a vector of positive reals (numeric).
+#' Note that in R single values are also vectors.
+#'
+#' @param value The value to check
+#' @param exact_length integer. If passed, checks if the vector is of the
+#'                    *exact* specified length.
+#' @param min_length integer. If passed, checks if the vector length
+#'                   is at least the specified length, inclusive.
+#'                   Note: if exact_length is specified, this parameter is
+#'                   ignored
+#' @param max_length integer. If passed, checks if the vector length
+#'                   is at most the specified length, inclusive
+#'                   Note: if exact_length is specified, this parameter is
+#'                   ignored
+#' @param allow_na_values boolean. If passed allows vectors containing
+#'                        NAs. The length check is performed including
+#'                        the NA values. Default FALSE.
+#' @param allow_null boolean. If TRUE, also accepts a value of NULL.
+#'                   Default FALSE.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_positive_real_vector(my_parameter))
+#' # For check
+#' if (qscheck::is_positive_real_vector(my_parameter)) {}
+#' }
+#'
+#' @concept real
+#' @export
+is_positive_real_vector <- function(
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_na_values = FALSE, allow_null = FALSE) {
+
+  if (is.null(value)) {
+    return(allow_null)
+  }
+
+  if (!is_vector(
+      value,
+      exact_length = exact_length,
+      min_length = min_length,
+      max_length = max_length)) {
+    return(FALSE)
+  }
+
+  if (!is.numeric(value)) {
+    return(FALSE)
+  }
+
+  if (any(is.na(value)) && allow_na_values == FALSE) {
+    return(FALSE)
+  }
+
+  value <- value[!is.na(value)]
+
+  if (!(all(value > 0))) {
+    return(FALSE)
+  }
+
+  return(TRUE)
+}
+assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
+  msg <- paste0(deparse(call$value), " must be a vector of positive real numbers")
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  if (!is.null(exact_length)) {
+    msg <- paste0(
+      msg,
+      " of exact length ", exact_length
+    )
+  } else if (!is.null(min_length) && !is.null(max_length)) {
+    msg <- paste0(
+      msg,
+      " of length between ",
+      min_length,
+      " and ",
+      max_length,
+      " inclusive"
+    )
+  } else if (is.null(min_length) && !is.null(max_length)) {
+    msg <- paste0(
+      msg,
+      " of length not greater than ",
+      max_length
+    )
+  } else if (!is.null(min_length) && is.null(max_length)) {
+    msg <- paste0(
+      msg,
+      " of length not less than ",
+      min_length
+    )
+  }
+  if (!allow_na_values) {
+    msg <- paste0(msg, " with no NAs")
+  }
+
+  if (allow_null) {
+    msg <- paste0(msg, " or NULL")
+  }
+
+  msg <- paste0(
+    msg,
+    ". Got: ",
+    deparse(eval(call$value, env))
+  )
+  return(msg)
+}
+
+
+
 #' Checks if the passed entity is a vector of increasing numerical values.
 #'
 #' @param v The vector to check
