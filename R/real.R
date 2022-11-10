@@ -400,12 +400,12 @@ is_positive_real_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a vector of positive real numbers")
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+  msg <- paste0(deparse(call$value), " must be a vector of positive real numbers")
 
   if (!is.null(exact_length)) {
     msg <- paste0(
@@ -513,12 +513,12 @@ is_non_negative_real_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_non_negative_real_vector) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a vector of non-negative real numbers")
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+  msg <- paste0(deparse(call$value), " must be a vector of non-negative real numbers")
 
   if (!is.null(exact_length)) {
     msg <- paste0(
