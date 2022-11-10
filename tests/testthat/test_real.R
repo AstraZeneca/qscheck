@@ -86,6 +86,42 @@ test_that("is_positive_real_value", {
 })
 
 
+test_that("is_non_negative_real_value", {
+  expect_true(is_non_negative_real_value(1))
+  expect_true(is_non_negative_real_value(0))
+  expect_false(is_non_negative_real_value(-0.01))
+  expect_true(is_non_negative_real_value(1.01))
+  expect_true(is_non_negative_real_value(NULL, allow_null = TRUE))
+  expect_true(is_non_negative_real_value(NA_real_, allow_na = TRUE))
+  expect_false(is_non_negative_real_value("1"))
+  expect_false(is_non_negative_real_value(c(1.2, 1.3)))
+
+  foo <- -1.5
+  err <- tryCatch({
+      assertthat::assert_that(is_non_negative_real_value(foo))
+    },
+    error = function(e) {
+      return(e)
+    })
+
+  expect_equal(
+    as.character(err),
+    "Error: foo must be a non-negative real value. Got: -1.5\n")
+
+  foo <- -1.5
+  err <- tryCatch({
+      assertthat::assert_that(is_non_negative_real_value(
+        foo, allow_na = TRUE, allow_null = TRUE))
+    },
+    error = function(e) {
+      return(e)
+    })
+
+  expect_equal(
+    as.character(err),
+    "Error: foo must be a non-negative real value or NA or NULL. Got: -1.5\n")
+})
+
 test_that("is_binary_vector", {
   v1 <- c(0, 1, 1, 1, 0)
   v2 <- c(0, 1, 1, 2, 0)
