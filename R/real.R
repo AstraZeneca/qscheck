@@ -184,6 +184,51 @@ assertthat::on_failure(is_probability_value) <- function(call, env) {
                  deparse(eval(call$value, env))))
 }
 
+
+#' Check if the passed entity is a single floating point non-negative value.
+#'
+#' @param value the value to check
+#' @param allow_na if true, accept a value that is NA.
+#' @param allow_null if true, accept a value that is NULL.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_non_negative_real_value(value))
+#' # For check
+#' if (qscheck::is_non_negative_real_value(value)) {}
+#' }
+#'
+#' @concept real
+#' @export
+is_non_negative_real_value <- function(
+    value, allow_na = FALSE, allow_null = FALSE) {
+  return(is_real_value(value, min = 0.0, inclusive_min = TRUE,
+          allow_na = allow_na, allow_null = allow_null))
+}
+assertthat::on_failure(is_non_negative_real_value) <- function(call, env) {
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  allow_na_msg <- ""
+  if (allow_na) {
+    allow_na_msg <- " or NA"
+  }
+
+  allow_null_msg <- ""
+  if (allow_null) {
+    allow_null_msg <- " or NULL"
+  }
+
+  return(paste0(deparse(call$value),
+                 " must be a non-negative real value",
+                 allow_na_msg,
+                 allow_null_msg,
+                 ". Got: ",
+                 deparse(eval(call$value, env))))
+}
+
+
 #' Checks if the passed entity is a vector of reals (numeric).
 #' Note that in R single values are also vectors.
 #'
