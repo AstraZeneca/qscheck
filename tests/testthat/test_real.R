@@ -332,6 +332,85 @@ test_that("is_positive_real_vector", {
       "Got: c(1.2, 1.3, 3)\n"))
 })
 
+test_that("is_non_negative_real_vector", {
+  v <- c(1.2, 1.3, 3.0)
+  v2 <- c(1.2, -1.3, 3.0)
+  v3 <- c(1.2, 1.3, 0.0)
+  v4 <- c("hello", "hi")
+  expect_true(is_non_negative_real_vector(v))
+  expect_false(is_non_negative_real_vector(v2))
+  expect_true(is_non_negative_real_vector(v3))
+  expect_false(is_non_negative_real_vector(v4))
+  expect_false(is_non_negative_real_vector(NULL))
+  expect_true(is_non_negative_real_vector(NULL, allow_null = TRUE))
+  expect_false(is_non_negative_real_vector(v, exact_length = 4))
+  expect_false(is_non_negative_real_vector(v, min_length = 4))
+  expect_true(is_non_negative_real_vector(v, max_length = 4))
+  expect_false(is_non_negative_real_vector(v, max_length = 2))
+  expect_true(is_non_negative_real_vector(v, exact_length = 3, max_length = 2))
+
+  v2 <- 1.0
+  expect_true(is_non_negative_real_vector(v2))
+
+  err <- tryCatch({
+    assertthat::assert_that(is_non_negative_real_vector(v, exact_length = 4))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0("Error: v must be a vector of real numbers of exact length 4",
+    " with no NAs. ",
+    "Got: c(1.2, 1.3, 3)\n"))
+
+  err <- tryCatch({
+    assertthat::assert_that(is_non_negative_real_vector(v, min_length = 4))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: v must be a vector of real numbers of length not less than 4",
+      " with no NAs. ",
+      "Got: c(1.2, 1.3, 3)\n"))
+
+  err <- tryCatch({
+    assertthat::assert_that(is_non_negative_real_vector(v, max_length = 2))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: v must be a vector of real numbers of length not ",
+      "greater than 2 with no NAs. ",
+      "Got: c(1.2, 1.3, 3)\n"))
+
+  err <- tryCatch({
+    assertthat::assert_that(is_non_negative_real_vector(v,
+      min_length = 4, max_length = 8, allow_na_values = FALSE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: v must be a vector of real numbers of length ",
+      "between 4 and 8 inclusive with no NAs. ",
+      "Got: c(1.2, 1.3, 3)\n"))
+})
 
 test_that("is_real_vector with NA", {
   v <- c(1.2, NA, 3.0)
