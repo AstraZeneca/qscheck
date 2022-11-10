@@ -443,7 +443,7 @@ test_that("is_probability_vector", {
   expect_equal(as.character(err),
     paste0("Error: v must be a vector of values in the interval [0.0, 1.0] of exact length 4",
     " with no NAs. ",
-    "Got: c(1.2, 1.3, 3)\n"))
+    "Got: c(0.2, 0, 1)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_probability_vector(v, min_length = 4))
@@ -458,7 +458,7 @@ test_that("is_probability_vector", {
     paste0(
       "Error: v must be a vector of values in the interval [0.0, 1.0] of length not less than 4",
       " with no NAs. ",
-      "Got: c(1.2, 1.3, 3)\n"))
+      "Got: c(0.2, 0, 1)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_probability_vector(v, max_length = 2))
@@ -473,7 +473,7 @@ test_that("is_probability_vector", {
     paste0(
       "Error: v must be a vector of values in the interval [0.0, 1.0] of length not ",
       "greater than 2 with no NAs. ",
-      "Got: c(1.2, 1.3, 3)\n"))
+      "Got: c(0.2, 0, 1)\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_probability_vector(v,
@@ -489,7 +489,7 @@ test_that("is_probability_vector", {
     paste0(
       "Error: v must be a vector of values in the interval [0.0, 1.0] of length ",
       "between 4 and 8 inclusive with no NAs. ",
-      "Got: c(1.2, 1.3, 3)\n"))
+      "Got: c(0.2, 0, 1)\n"))
 })
 
 
