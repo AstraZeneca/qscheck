@@ -1,3 +1,7 @@
+# qscheck 0.20.0
+
+- #53 Added is_positive_real_vector, is_non_negative_real_value, is_probability_vector, is_non_negative_real_vector
+
 # qscheck 0.19.0
 
 - Add assert function
