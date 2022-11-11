@@ -24,11 +24,8 @@ jobs:
            /usr/bin/sudo DEBIAN_FRONTEND=noninteractive apt-get install -y libcurl4-openssl-dev
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "rcmdcheck", "devtools", "testthat", "lintr"))
+          install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
-        shell: Rscript {0}
-      - name: Unittest
-        run: devtools::test(reporter=c('summary', 'fail'))
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
