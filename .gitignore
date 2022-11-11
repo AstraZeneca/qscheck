@@ -21,3 +21,4 @@ invoke.yaml
 qs-buildtools/
 site/
 tasks.py
+*.Rcheck
