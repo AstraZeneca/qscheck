@@ -3,6 +3,6 @@
 #' @param \dots Passthrough to assertthat::assert_that
 #'
 #' @export
-assert <- function(...) {
-  assertthat::assert_that(...)
+assert <- function(..., env = parent.frame(), msg = NULL) {
+  assertthat::assert_that(..., env = env, msg = msg)
 }
