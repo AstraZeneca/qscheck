@@ -1,4 +1,4 @@
-# qscheck 0.21.0
+# qscheck 0.22.0
 
 - #59 Added is_s4_instance
 
