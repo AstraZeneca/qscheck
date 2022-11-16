@@ -1,7 +1,11 @@
 test_that("is_S4_instance", {
-  setClass("student", slots = list(name = "character", age = "numeric"))
+  env <- new.env()
+  setClass(
+    "student", slots = list(name = "character", age = "numeric"),
+    where = env)
   s <- new("student", name = "John", age = 21)
-  setClass("worker", slots = list(name = "character", age = "numeric"))
+  setClass("worker", slots = list(name = "character", age = "numeric"),
+    where = env)
   w <- new("worker", name = "Jane", age = 23)
   expect_true(is_s4_instance(s, "student"))
   expect_false(is_s4_instance(w, "student"))
