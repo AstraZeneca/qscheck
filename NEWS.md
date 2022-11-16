@@ -1,5 +1,9 @@
 # qscheck 0.21.0
 
+- #59 Added is_s4_instance
+
+# qscheck 0.21.0
+
 - #57 Ensure that the correct scope is passed through to assertthat::assert_that
 
 # qscheck 0.20.0
