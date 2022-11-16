@@ -1,8 +1,8 @@
 test_that("is_S4_instance", {
-setClass("student", slots = list(name = "character", age = "numeric"))
-s <- new("student", name = "John", age = 21)
-setClass("worker", slots = list(name = "character", age = "numeric"))
-w <- new("worker", name = "Jane", age = 23)
+  setClass("student", slots = list(name = "character", age = "numeric"))
+  s <- new("student", name = "John", age = 21)
+  setClass("worker", slots = list(name = "character", age = "numeric"))
+  w <- new("worker", name = "Jane", age = 23)
   expect_true(is_s4_instance(s, "student"))
   expect_false(is_s4_instance(w, "student"))
   expect_true(is_s4_instance(w, "worker"))

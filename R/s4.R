@@ -26,7 +26,7 @@ is_s4_instance <- function(value, class_name, allow_null = FALSE) {
     return(FALSE)
   }
 
-  if (!(isS4(value) == TRUE)) {
+  if (!(isS4(value))) {
     return(FALSE)
   }
 
