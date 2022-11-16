@@ -4,7 +4,7 @@
 \alias{assert}
 \title{Shorter version of assertthat::assert_that}
 \usage{
-assert(...)
+assert(..., env = parent.frame(), msg = NULL)
 }
 \arguments{
 \item{\dots}{Passthrough to assertthat::assert_that}
