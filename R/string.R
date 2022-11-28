@@ -50,23 +50,13 @@ assertthat::on_failure(is_string_value) <- function(call, env) {
     non_empty_msg <- " non-empty"
   }
 
-  allow_na_msg <- ""
-  if (allow_na) {
-    allow_na_msg <- " or NA"
-  }
-
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
-
   msg <- paste0(
     deparse(call$value),
     " must be a",
     non_empty_msg,
     " string",
-    allow_na_msg,
-    allow_null_msg,
+    snippet_na(allow_na),
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
     )

@@ -35,12 +35,9 @@ assertthat::on_failure(is_s3_instance) <- function(call, env) {
     call$class_name
     )
 
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
-
   msg <- paste0(
     msg,
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )

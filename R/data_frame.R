@@ -84,19 +84,8 @@ is_data_frame <- function(df,
   return(TRUE)
 }
 assertthat::on_failure(is_data_frame) <- function(call, env) {
-  allow_na_msg <- ""
-  if (!is.null(call$allow_na)) {
-    if (eval(call$allow_na)) {
-      allow_na_msg <- " or NA"
-    }
-  }
-
-  allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null)) {
-      allow_null_msg <- " or NULL"
-    }
-  }
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
 
   base_msg <- paste0(deparse(call$df), " must be a data frame")
   exact_colnames_msg <- NULL
@@ -148,8 +137,8 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
         required_rownames_msg,
         required_colnames_msg), collapse = " and"
       ),
-    allow_na_msg,
-    allow_null_msg,
+    snippet_na(allow_na),
+    snippet_null(allow_null),
     ". Got: ",
     paste0(deparse(eval(call$df, env)), collapse = ""))
   return(msg)

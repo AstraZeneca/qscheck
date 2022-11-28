@@ -69,16 +69,6 @@ assertthat::on_failure(is_real_value) <- function(call, env) {
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  allow_na_msg <- ""
-  if (allow_na) {
-    allow_na_msg <- " or NA"
-  }
-
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
-
   interval_msg <- ""
   if (!is.null(min) || !is.null(max)) {
     interval_msg <- " in the range "
@@ -103,8 +93,8 @@ assertthat::on_failure(is_real_value) <- function(call, env) {
   return(paste0(deparse(call$value),
                 " must be a single real value",
                 interval_msg,
-                allow_na_msg,
-                allow_null_msg,
+                snippet_na(allow_na),
+                snippet_null(allow_null),
                 ". Got: ",
                 deparse(eval(call$value, env))))
 }
@@ -135,20 +125,10 @@ assertthat::on_failure(is_positive_real_value) <- function(call, env) {
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  allow_na_msg <- ""
-  if (allow_na) {
-    allow_na_msg <- " or NA"
-  }
-
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
-
   return(paste0(deparse(call$value),
                  " must be a positive real value",
-                 allow_na_msg,
-                 allow_null_msg,
+                 snippet_na(allow_na),
+                 snippet_null(allow_null),
                  ". Got: ",
                  deparse(eval(call$value, env))))
 }
@@ -174,13 +154,11 @@ is_probability_value <- function(value, allow_null = FALSE) {
 }
 assertthat::on_failure(is_probability_value) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
+
   return(paste0(deparse(call$value),
                  " must be a single probability value in ",
-                 "the interval [0.0, 1.0]", allow_null_msg, ". Got: ",
+                 "the interval [0.0, 1.0]",
+                 snippet_null(allow_null), ". Got: ",
                  deparse(eval(call$value, env))))
 }
 
@@ -210,20 +188,10 @@ assertthat::on_failure(is_non_negative_real_value) <- function(call, env) {
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  allow_na_msg <- ""
-  if (allow_na) {
-    allow_na_msg <- " or NA"
-  }
-
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
-
   return(paste0(deparse(call$value),
                  " must be a non-negative real value",
-                 allow_na_msg,
-                 allow_null_msg,
+                 snippet_na(allow_na),
+                 snippet_null(allow_null),
                  ". Got: ",
                  deparse(eval(call$value, env))))
 }
@@ -324,12 +292,9 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
     msg <- paste0(msg, " with no NAs")
   }
 
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
-
   msg <- paste0(
     msg,
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )
@@ -441,12 +406,9 @@ assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
     msg <- paste0(msg, " with no NAs")
   }
 
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
-
   msg <- paste0(
     msg,
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )
@@ -557,12 +519,9 @@ assertthat::on_failure(is_non_negative_real_vector) <- function(call, env) {
     msg <- paste0(msg, " with no NAs")
   }
 
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
-
   msg <- paste0(
     msg,
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )
@@ -674,12 +633,9 @@ assertthat::on_failure(is_probability_vector) <- function(call, env) {
     msg <- paste0(msg, " with no NAs")
   }
 
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
-
   msg <- paste0(
     msg,
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )

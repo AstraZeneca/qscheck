@@ -16,7 +16,7 @@
 #'
 #' @concept set
 #' @export
-is_one_of <- function(value, options, allow_null = NULL) {
+is_one_of <- function(value, options, allow_null = FALSE) {
   if (is.null(value) && allow_null) {
     return(TRUE)
   }
@@ -32,19 +32,15 @@ is_one_of <- function(value, options, allow_null = NULL) {
   return(value %in% options)
 }
 assertthat::on_failure(is_one_of) <- function(call, env) {
-  allow_null_msg <- ""
-  if (!is.null(call$allow_null)) {
-    if (eval(call$allow_null, env)) {
-      allow_null_msg <- " or NULL"
-    }
-  }
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
   msg <- paste0(deparse(call$value), " must be one of the following: '",
                 paste0(
                   eval(call$options, env),
                   collapse = "', '"
                   ),
                 "'",
-                allow_null_msg,
+                snippet_null(allow_null),
                 ". Got: ",
                 deparse(eval(call$value, env))
                 )

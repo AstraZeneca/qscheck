@@ -69,11 +69,10 @@ assertthat::on_failure(is_list) <- function(call, env) {
                   "'"
                   )
   }
-  if (allow_null) {
-      msg <- paste0(msg, " or NULL")
-  }
+
   msg <- paste0(
    msg,
+   snippet_null(allow_null),
    ". Got: ",
    deparse(eval(call$l, env))
   )

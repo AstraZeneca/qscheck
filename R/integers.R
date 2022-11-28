@@ -49,11 +49,6 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
   min <- callget(call, env, "min", NULL)
   max <- callget(call, env, "max", NULL)
 
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
-
   interval_msg <- ""
   if (!is.null(min) || !is.null(max)) {
     interval_msg <- " in the range "
@@ -73,7 +68,7 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
   return(paste0(deparse(call$value),
                 " must be an integer value",
                 interval_msg,
-                allow_null_msg,
+                snippet_null(allow_null),
                 ". Got: ",
                 deparse(eval(call$value, env))))
 }
@@ -101,16 +96,12 @@ is_positive_integer_value <- function(value, allow_null = FALSE) {
 }
 assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
 
   return(
     paste0(
       deparse(call$value),
       " must be a positive integer value",
-      allow_null_msg,
+      snippet_null(allow_null),
       ". Got: ",
       deparse(eval(call$value, env))
     )
@@ -140,17 +131,12 @@ is_non_negative_integer_value <- function(value, allow_null = FALSE) {
 }
 assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
-  allow_null_msg <- ""
-
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
 
   return(
     paste0(
       deparse(call$value),
       " must be a non negative integer value",
-      allow_null_msg,
+      snippet_null(allow_null),
       ". Got: ",
       deparse(eval(call$value, env))
     )
@@ -263,11 +249,9 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
   if (!allow_na_values) {
     msg <- paste0(msg, " with no NAs")
   }
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
   msg <- paste0(
     msg,
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )
