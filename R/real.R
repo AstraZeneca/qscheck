@@ -40,7 +40,7 @@ is_real_value <- function(value,
   }
 
   if (is_na_value(value)) {
-    return(ifelse(allow_na, TRUE, FALSE))
+    return(allow_na)
   }
 
   if (!is.null(min)) {
