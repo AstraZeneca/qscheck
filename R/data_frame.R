@@ -35,12 +35,12 @@ is_data_frame <- function(df,
                           allow_na = FALSE,
                           allow_null = FALSE) {
 
-  if (is_na_value(df)) {
-    return(allow_na)
-  }
-
   if (is.null(df)) {
     return(allow_null)
+  }
+
+  if (is_na_value(df)) {
+    return(allow_na)
   }
 
   if (!is.data.frame(df)) {
