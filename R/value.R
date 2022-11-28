@@ -16,7 +16,7 @@
 #' @export
 is_value <- function(value, allow_na = FALSE, allow_null = FALSE) {
   if (is.null(value)) {
-    return(ifelse(allow_null, TRUE, FALSE))
+    return(allow_null)
   }
 
   if (length(value) != 1) {

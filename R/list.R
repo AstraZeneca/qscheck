@@ -29,8 +29,8 @@ is_list <- function(
     allow_null = FALSE
     ) {
 
-  if (is.null(l) && allow_null) {
-    return(TRUE)
+  if (is.null(l)) {
+    return(allow_null)
   }
 
   if (!inherits(l, "list")) {
