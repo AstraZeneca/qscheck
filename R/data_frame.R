@@ -36,11 +36,11 @@ is_data_frame <- function(df,
                           allow_null = FALSE) {
 
   if (is_na_value(df) && allow_na) {
-    return(TRUE)
+    return(allow_na)
   }
 
-  if (is.null(df) && allow_null) {
-    return(TRUE)
+  if (is.null(df)) {
+    return(allow_null)
   }
 
   if (!is.data.frame(df)) {
