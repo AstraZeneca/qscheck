@@ -25,8 +25,7 @@ is_r6_class <- function(value, class_name) {
 assertthat::on_failure(is_r6_class) <- function(call, env) {
   msg <- paste0(
     deparse(call$value),
-    " must be an R6 class ",
-    call$class_name,
+    snippet_must_be(paste0("R6 class ", call$class_name)),
     ". Got: ",
     deparse(eval(call$value, env)))
   return(msg)
@@ -67,10 +66,10 @@ assertthat::on_failure(is_r6_instance) <- function(call, env) {
 
   msg <- paste0(
     deparse(call$value),
-    " must be an instance of R6 class ",
-    call$class_name,
+    snippet_must_be(paste0("instance of R6 class ", call$class_name)),
     snippet_null(allow_null),
     ". Got: ",
-    deparse(eval(call$value, env)))
+    deparse(eval(call$value, env))
+  )
   return(msg)
 }

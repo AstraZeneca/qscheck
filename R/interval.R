@@ -22,14 +22,20 @@ is_interval <- function(low, high, allow_degenerate = TRUE) {
   return(res$valid)
 }
 assertthat::on_failure(is_interval) <- function(call, env) {
-  allow_degenerate <- TRUE
-  if (!is.null(call$allow_degenerate)) {
-    allow_degenerate <- eval(call$allow_degenerate, env)
-  }
-  res <- .inspect_interval(
-    eval(call$low, env), eval(call$high, env), allow_degenerate
+  low <- callget(call, env, "low", NULL)
+  high <- callget(call, env, "high", NULL)
+  allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
+
+  res <- .inspect_interval(low, high, allow_degenerate)
+
+  return(
+    paste0(
+      "Arguments '", deparse(call$low), "' and '", deparse(call$high),
+      "' must define a",
+      snippet_degenerate(allow_degenerate),
+      " numerical interval. ", res$reason, "."
+    )
   )
-  return(.expected_interval_description(call, env, res$reason))
 }
 
 .inspect_interval <- function(low, high, allow_degenerate) {
@@ -58,26 +64,4 @@ assertthat::on_failure(is_interval) <- function(call, env) {
 
   res$valid <- TRUE
   return(res)
-}
-
-.expected_interval_description <- function(call, env, failure_reason) {
-
-  allow_degenerate <- TRUE
-  if (!is.null(call$allow_degenerate)) {
-    allow_degenerate <- eval(call$allow_degenerate, env)
-  }
-
-  degenerate_msg <- "non-degenerate"
-  if (allow_degenerate) {
-    degenerate_msg <- "possibly degenerate"
-  }
-
-  return(
-    paste0(
-      "Arguments '", deparse(call$low), "' and '",
-      deparse(call$high), "' must define a ", degenerate_msg,
-      " numerical interval. ", failure_reason, "."
-    )
-  )
-
 }

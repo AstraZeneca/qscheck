@@ -24,5 +24,5 @@ test_that("is_na_value", {
 
   expect_equal(
     as.character(err),
-    "Error: foo must be NA. Got: 3\n")
+    "Error: foo must be a NA (any type). Got: 3\n")
 })

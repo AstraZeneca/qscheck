@@ -33,17 +33,18 @@ is_one_of <- function(value, options, allow_null = FALSE) {
 }
 assertthat::on_failure(is_one_of) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
+  options <- callget(call, env, "options", NULL)
 
-  msg <- paste0(deparse(call$value), " must be one of the following: '",
-                paste0(
-                  eval(call$options, env),
-                  collapse = "', '"
-                  ),
-                "'",
-                snippet_null(allow_null),
-                ". Got: ",
-                deparse(eval(call$value, env))
-                )
+  msg <- paste0(
+    deparse(call$value),
+    snippet_must_be(
+      paste0("one of the following: ", flatten_vector(options)),
+      article = FALSE
+    ),
+    snippet_null(allow_null),
+    ". Got: ",
+    deparse(eval(call$value, env))
+  )
   return(msg)
 }
 
@@ -121,21 +122,17 @@ assertthat::on_failure(mutually_exclusive) <- function(call, env) {
   }
 
   if (length(not_null_idx) == 0 && !allow_all_null) {
-    msg <- paste0("'",
-      paste0(tail(args, -1), collapse = "', '"),
-      "' must be mutually exclusive", allow_all_null_msg, ". Got all NULLs"
+    msg <- paste0(
+      flatten_vector(tail(args, -1)),
+      " must be mutually exclusive", allow_all_null_msg, ". Got all NULLs"
     )
     return(msg)
   }
 
   msg <- paste0(
-    "'",
-    paste0(
-      args[not_null_idx],
-      collapse = "', '"
-      ),
-    "' must be mutually exclusive", allow_all_null_msg, ". Got ",
-    paste0(not_null_val[not_null_idx], collapse = ", ")
+    flatten_vector(args[not_null_idx]),
+    " must be mutually exclusive", allow_all_null_msg, ". Got ",
+    flatten_vector(not_null_val[not_null_idx])
     )
   return(msg)
 }

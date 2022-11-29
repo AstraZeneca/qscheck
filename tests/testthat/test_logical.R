@@ -12,5 +12,5 @@ test_that("is_logical_value", {
 
   expect_equal(
     as.character(err),
-    "Error: foo must be a single logical value. Got: -1.5\n")
+    "Error: foo must be a logical value. Got: -1.5\n")
 })

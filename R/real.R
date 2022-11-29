@@ -69,30 +69,10 @@ assertthat::on_failure(is_real_value) <- function(call, env) {
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  interval_msg <- ""
-  if (!is.null(min) || !is.null(max)) {
-    interval_msg <- " in the range "
-    if (is.null(min)) {
-      interval_msg <- paste0(interval_msg, "(-inf, ")
-    } else {
-      interval_msg <- paste0(
-        interval_msg,
-        ifelse(inclusive_min, "[", "("),
-        deparse(min), ", ")
-    }
-
-    if (is.null(max)) {
-      interval_msg <- paste0(interval_msg, "inf)")
-    } else {
-      interval_msg <- paste0(
-        interval_msg, deparse(max),
-        ifelse(inclusive_max, "]", ")"))
-    }
-  }
 
   return(paste0(deparse(call$value),
-                " must be a single real value",
-                interval_msg,
+                snippet_must_be("real value"),
+                snippet_numerical_range(min, max, inclusive_min, inclusive_max),
                 snippet_na(allow_na),
                 snippet_null(allow_null),
                 ". Got: ",
@@ -126,7 +106,7 @@ assertthat::on_failure(is_positive_real_value) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   return(paste0(deparse(call$value),
-                 " must be a positive real value",
+                 snippet_must_be("positive real value"),
                  snippet_na(allow_na),
                  snippet_null(allow_null),
                  ". Got: ",
@@ -156,8 +136,9 @@ assertthat::on_failure(is_probability_value) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   return(paste0(deparse(call$value),
-                 " must be a single probability value in ",
-                 "the interval [0.0, 1.0]",
+                 snippet_must_be(
+                  "probability value in the interval [0.0, 1.0]"
+                 ),
                  snippet_null(allow_null), ". Got: ",
                  deparse(eval(call$value, env))))
 }
@@ -189,7 +170,7 @@ assertthat::on_failure(is_non_negative_real_value) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   return(paste0(deparse(call$value),
-                 " must be a non-negative real value",
+                 snippet_must_be("non-negative real value"),
                  snippet_na(allow_na),
                  snippet_null(allow_null),
                  ". Got: ",
@@ -254,46 +235,17 @@ is_real_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_real_vector) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a vector of real numbers")
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length
-    )
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    snippet_must_be("vector of real numbers"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
@@ -370,44 +322,12 @@ assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+
   msg <- paste0(
     deparse(call$value),
-    " must be a vector of positive real numbers"
-  )
-
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length
-    )
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
-  msg <- paste0(
-    msg,
+    snippet_must_be("vector of positive real numbers"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
@@ -483,44 +403,12 @@ assertthat::on_failure(is_non_negative_real_vector) <- function(call, env) {
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+
   msg <- paste0(
     deparse(call$value),
-    " must be a vector of non-negative real numbers"
-  )
-
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length
-    )
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
-  msg <- paste0(
-    msg,
+    snippet_must_be("vector of non-negative real numbers"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
@@ -597,44 +485,12 @@ assertthat::on_failure(is_probability_vector) <- function(call, env) {
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+
   msg <- paste0(
     deparse(call$value),
-    " must be a vector of values in the interval [0.0, 1.0]"
-  )
-
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length
-    )
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
-  msg <- paste0(
-    msg,
+    snippet_must_be("vector of values in the interval [0.0, 1.0]"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
@@ -684,14 +540,10 @@ assertthat::on_failure(is_increasing_vector) <- function(call, env) {
     strictly_msg <- " strictly"
   }
 
-  allow_na_values_msg <- " with no NAs"
-  if (allow_na_values) {
-    allow_na_values_msg <- " or NAs"
-  }
-
   msg <- paste0(
-    deparse(call$v), " must be a vector of", strictly_msg,
-    " increasing numbers", allow_na_values_msg,
+    deparse(call$v),
+    snippet_must_be(paste0("vector of", strictly_msg, " increasing numbers")),
+    snippet_na_values(allow_na_values),
     ". Got: ",
     deparse(eval(call$v, env))
     )
@@ -741,14 +593,10 @@ assertthat::on_failure(is_decreasing_vector) <- function(call, env) {
     strictly_msg <- " strictly"
   }
 
-  allow_na_values_msg <- " with no NAs"
-  if (allow_na_values) {
-    allow_na_values_msg <- " or NAs"
-  }
-
   msg <- paste0(
-    deparse(call$v), " must be a vector of", strictly_msg,
-    " decreasing numbers", allow_na_values_msg,
+    deparse(call$v),
+    snippet_must_be(paste0("vector of", strictly_msg, " decreasing numbers")),
+    snippet_na_values(allow_na_values),
     ". Got: ",
     deparse(eval(call$v, env))
     )

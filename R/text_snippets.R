@@ -34,17 +34,21 @@ snippet_length <- function(
   return(msg)
 }
 
-snippet_must_be <- function(type) {
+snippet_must_be <- function(what, article = TRUE) {
 
-  article <- "a"
-  if (substr(type, 1, 1) %in% c("a", "i", "e", "o", "u")) {
-    article <- "an"
+  article_str <- ""
+  if (article) {
+    article_str <- "a "
+    if (substr(what, 1, 1) %in% c("a", "i", "e", "o", "u")) {
+      article_str <- "an "
+    }
   }
-  return(paste0(" must be ", article, " ", type))
+
+  return(paste0(" must be ", article_str, what))
 }
 
 snippet_na_values <- function(allow_na_values) {
-  msg <- ""
+  msg <- " or NAs"
   if (!allow_na_values) {
     msg <- paste0(" with no NAs")
   }
@@ -54,32 +58,40 @@ snippet_na_values <- function(allow_na_values) {
 snippet_exact_levels <- function(exact_levels) {
   msg <- ""
   if (!is.null(exact_levels)) {
-    msg <- paste0(" with exact levels ", flatten_vector(exact_levels))
+    msg <- paste0(" with exact levels ",
+      flatten_vector(exact_levels, parenthesis = TRUE))
   }
   return(msg)
 }
 
-snippet_numerical_range <- function(min = NULL, max = NULL) {
+snippet_numerical_range <- function(
+    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE
+  ) {
   msg <- ""
   if (!is.null(min) || !is.null(max)) {
     msg <- " in the range "
     if (is.null(min)) {
       msg <- paste0(msg, "(-inf, ")
     } else {
-      msg <- paste0(msg, "[", min, ", ")
+      msg <- paste0(
+        msg,
+        ifelse(inclusive_min, "[", "("),
+        min, ", ")
     }
 
     if (is.null(max)) {
       msg <- paste0(msg, "inf)")
     } else {
-      msg <- paste0(msg, max, "]")
+      msg <- paste0(
+        msg, max,
+        ifelse(inclusive_max, "]", ")"))
     }
   }
   return(msg)
 }
 
 snippet_degenerate <- function(allow_degenerate) {
-  msg <- ""
+  msg <- " possibly degenerate"
   if (!allow_degenerate) {
     msg <- " non-degenerate"
   }
@@ -94,9 +106,59 @@ snippet_names <- function(required_names = NULL) {
   return(msg)
 }
 
-flatten_vector <- function(vector) {
+snippet_not_empty <- function(allow_empty) {
+  msg <- ""
+  if (!allow_empty) {
+    msg <- " non-empty"
+  }
+  return(msg)
+}
+
+
+snippet_occurrences <- function(
+    exact_occurrences = NULL, min_occurrences = NULL, max_occurrences = NULL) {
+
+  if (!is.null(exact_occurrences)) {
+    msg <- paste0(" exactly ", exact_occurrences, " times")
+  } else if (!is.null(min_occurrences) && !is.null(max_occurrences)) {
+    msg <- paste0(" between ",
+      min_occurrences,
+      " and ",
+      max_occurrences,
+      " times inclusive"
+    )
+  } else if (is.null(min_occurrences) && !is.null(max_occurrences)) {
+    msg <- paste0(
+      " no more than ",
+      max_occurrences,
+      " times inclusive"
+    )
+  } else if (!is.null(min_occurrences) && is.null(max_occurrences)) {
+    msg <- paste0(
+      " no less than ",
+      min_occurrences,
+      " times inclusive"
+    )
+  }
+
+  return(msg)
+}
+
+flatten_vector <- function(vector, quotes = TRUE, parenthesis = FALSE) {
+  v <- lapply(vector, function(x) {
+    if (is.character(x) && is.na(x)) {
+        return(NA_character_)
+    } else if (is.numeric(x)) {
+      return(as.character(x))
+    } else {
+      quotes_str <- ifelse(quotes, "'", "")
+      return(paste0(quotes_str, x, quotes_str))
+    }
+  })
   msg <- paste0(
-    "('", paste0(vector, collapse = "', '"), "')"
+    ifelse(parenthesis, "(", ""),
+    paste0(v, collapse = ", "),
+    ifelse(parenthesis, ")", "")
   )
 
   return(msg)

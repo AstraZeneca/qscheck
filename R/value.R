@@ -32,7 +32,7 @@ is_value <- function(value, allow_na = FALSE, allow_null = FALSE) {
 assertthat::on_failure(is_value) <- function(call, env) {
   msg <- paste0(
     deparse(call$value),
-    " must be a single value",
+    snippet_must_be("single value"),
     ". Got: ",
     deparse(eval(call$value, env)))
   return(msg)
@@ -62,7 +62,7 @@ is_na_value <- function(value) {
 assertthat::on_failure(is_na_value) <- function(call, env) {
   msg <- paste0(
     deparse(call$value),
-    " must be NA",
+    snippet_must_be("NA (any type)"),
     ". Got: ",
     deparse(eval(call$value, env)))
   return(msg)

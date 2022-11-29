@@ -43,20 +43,14 @@ is_string_value <- function(value, allow_empty = TRUE,
   return(TRUE)
 }
 assertthat::on_failure(is_string_value) <- function(call, env) {
-  non_empty_msg <- ""
-
   allow_empty <- callget(call, env, "allow_empty", TRUE)
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
-  if (!allow_empty) {
-    non_empty_msg <- " non-empty"
-  }
 
   msg <- paste0(
     deparse(call$value),
-    " must be a",
-    non_empty_msg,
-    " string",
+    snippet_must_be("string"),
+    snippet_not_empty(allow_empty),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". Got: ",
@@ -119,46 +113,18 @@ is_string_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_string_vector) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a string vector")
-
-  if (!is.null(call$exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", eval(call$exact_length, env)
-    )
-  } else if (!is.null(call$min_length) && !is.null(call$max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      eval(call$min_length, env),
-      " and ",
-      eval(call$max_length, env),
-      " inclusive"
-    )
-  } else if (is.null(call$min_length) && !is.null(call$max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      eval(call$max_length, env)
-    )
-  } else if (!is.null(call$min_length) && is.null(call$max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      eval(call$min_length, env)
-    )
-  }
-  if (is.null(call$allow_na_values) ||
-      eval(call$allow_na_values, env) == FALSE) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
-  if (!is.null(call$allow_null) && eval(call$allow_null, env) == TRUE) {
-    msg <- paste0(msg, " or NULL")
-  }
+  exact_length <- callget(call, env, "exact_length", NULL)
+  min_length <- callget(call, env, "min_length", NULL)
+  max_length <- callget(call, env, "max_length", NULL)
+  allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
 
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    snippet_must_be("string vector"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )

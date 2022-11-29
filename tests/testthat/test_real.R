@@ -23,7 +23,7 @@ test_that("is_real_value", {
   )
   expect_equal(
     as.character(err),
-    "Error: foo must be a single real value. Got: \"hello\"\n")
+    "Error: foo must be a real value. Got: \"hello\"\n")
 })
 
 test_that("is_probability_value", {
@@ -48,7 +48,7 @@ test_that("is_probability_value", {
   )
   expect_equal(
     as.character(err),
-    "Error: foo must be a single probability value in the interval [0.0, 1.0]. Got: -0.3\n")
+    "Error: foo must be a probability value in the interval [0.0, 1.0]. Got: -0.3\n")
 })
 
 test_that("is_positive_real_value", {
@@ -139,7 +139,8 @@ test_that("is_binary_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v2 must be a vector of binary values (0 or 1) with no NAs\n"
+      "Error: v2 must be a vector of binary values (0 or 1) ",
+      "possibly degenerate with no NAs\n"
      ))
 })
 
