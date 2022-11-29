@@ -46,49 +46,18 @@ is_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_vector) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a vector")
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
 
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length,
-      ". Got: ",
-      deparse(eval(call$value, env))
-
-    )
-    return(msg)
-  }
-
-  if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    " must be a vector",
+    snippet_length(exact_length, min_length, max_length),
     ". Got: ",
     deparse(eval(call$value, env))
   )
+
   return(msg)
 }
 
