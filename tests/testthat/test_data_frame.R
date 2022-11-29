@@ -23,10 +23,11 @@ test_that("is_data_frame", {
 
   expect_equal(
     as.character(err),
-    paste0("Error: df must be a data frame with required colnames 'baz'. ",
-          "Got: structure(list(foo = c(1, 2, 3), bar = c(3, 4, 5)), ",
-           "class = \"data.frame\", row.names = c(NA, -3L))\n")
+    paste0(
+      "Error: df must be a data frame with required colnames 'baz'. ",
+      "'baz' is not in the colnames 'foo', 'bar'\n"
     )
+  )
 
   err <- tryCatch({
       assertthat::assert_that(is_data_frame(df,
@@ -39,10 +40,10 @@ test_that("is_data_frame", {
   expect_equal(
     as.character(err),
     paste0("Error: df must be a data frame with exact colnames ",
-      "'foo', 'bar', 'baz'. ",
-      "Got: structure(list(foo = c(1, 2, 3), bar = c(3, 4, 5)), ",
-      "class = \"data.frame\", row.names = c(NA, -3L))\n")
+      "'foo', 'bar', 'baz'. passed data frame has a different ",
+      "number of colnames\n"
     )
+  )
 
   err <- tryCatch({
       assertthat::assert_that(is_data_frame(df,
@@ -56,10 +57,10 @@ test_that("is_data_frame", {
   expect_equal(
     as.character(err),
     paste0("Error: df must be a data frame with exact rownames ",
-      "'one', 'two' and with exact colnames 'foo', 'bar', 'baz'. ",
-      "Got: structure(list(foo = c(1, 2, 3), bar = c(3, 4, 5)), ",
-      "class = \"data.frame\", row.names = c(NA, -3L))\n")
+      "'one', 'two' with exact colnames 'foo', 'bar', 'baz'. ",
+      "passed data frame has a different number of rownames\n"
     )
+  )
 })
 
 test_that("data_frames_same_colnames", {

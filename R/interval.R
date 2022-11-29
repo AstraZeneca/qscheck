@@ -18,7 +18,7 @@
 #' @concept real
 #' @export
 is_interval <- function(low, high, allow_degenerate = TRUE) {
-  res <- .inspect_interval(low, high, allow_degenerate)
+  res <- inspect_interval(low, high, allow_degenerate)
   return(res$valid)
 }
 assertthat::on_failure(is_interval) <- function(call, env) {
@@ -26,7 +26,7 @@ assertthat::on_failure(is_interval) <- function(call, env) {
   high <- callget(call, env, "high", NULL)
   allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
 
-  res <- .inspect_interval(low, high, allow_degenerate)
+  res <- inspect_interval(low, high, allow_degenerate)
 
   return(
     paste0(
@@ -38,7 +38,7 @@ assertthat::on_failure(is_interval) <- function(call, env) {
   )
 }
 
-.inspect_interval <- function(low, high, allow_degenerate) {
+inspect_interval <- function(low, high, allow_degenerate) {
   if (!is_real_value(low)) {
     return(failure("The low value must be a numeric value"))
   }
