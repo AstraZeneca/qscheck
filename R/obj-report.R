@@ -13,7 +13,7 @@ report <- function(valid, reason = NULL) {
         valid = valid,
         reason = reason
       )
-    ),
-    class = "qscheck::report"
+      class = "qscheck::report"
+    )
   )
 }
