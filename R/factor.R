@@ -24,8 +24,8 @@
 is_factor <- function(
   value, exact_levels = NULL, exact_length = NULL, allow_null = FALSE,
   allow_na_values = FALSE) {
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
 
   if (!is.factor(value)) {

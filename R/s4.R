@@ -18,8 +18,8 @@
 #' @export
 is_s4_instance <- function(value, class_name, allow_null = FALSE) {
 
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
 
   if (is.null(class_name)) {

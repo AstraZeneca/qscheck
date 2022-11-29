@@ -50,8 +50,8 @@ assertthat::on_failure(is_r6_class) <- function(call, env) {
 #' @concept oop
 #' @export
 is_r6_instance <- function(value, class_name, allow_null = FALSE) {
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
 
   if (is.null(class_name)) {

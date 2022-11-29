@@ -18,16 +18,17 @@
 #' @export
 is_string_value <- function(value, allow_empty = TRUE,
                       allow_na = FALSE, allow_null = FALSE) {
-  if (is_na_value(value) && allow_na) {
-    return(TRUE)
-  }
 
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
 
   if (!assertthat::is.string(value)) {
     return(FALSE)
+  }
+
+  if (is_na_value(value)) {
+    return(allow_na)
   }
 
   if (nchar(value) == 0) {
@@ -37,6 +38,7 @@ is_string_value <- function(value, allow_empty = TRUE,
       return(FALSE)
     }
   }
+
 
   return(TRUE)
 }

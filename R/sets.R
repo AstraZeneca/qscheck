@@ -17,8 +17,8 @@
 #' @concept set
 #' @export
 is_one_of <- function(value, options, allow_null = FALSE) {
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
 
   if (typeof(value) != typeof(options)) {

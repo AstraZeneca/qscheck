@@ -17,8 +17,8 @@
 #' @export
 is_integer_value <- function(value,
     min = NULL, max = NULL, allow_null = FALSE) {
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
 
   if (!is.numeric(value)) {
@@ -89,8 +89,8 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
 #' @concept integer
 #' @export
 is_positive_integer_value <- function(value, allow_null = FALSE) {
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
   return(is_integer_value(value) && (value > 0))
 }
@@ -124,8 +124,8 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 #' @concept integer
 #' @export
 is_non_negative_integer_value <- function(value, allow_null = FALSE) {
-  if (is.null(value) && allow_null) {
-    return(TRUE)
+  if (is.null(value)) {
+    return(allow_null)
   }
   return(is_integer_value(value) && (value >= 0))
 }

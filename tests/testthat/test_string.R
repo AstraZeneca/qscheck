@@ -2,10 +2,13 @@ test_that("is_string_value", {
   expect_true(is_string_value("ada"))
   expect_true(is_string_value(""))
   expect_false(is_string_value("", allow_empty = FALSE))
-  expect_true(is_string_value(NA, allow_na = TRUE))
+  expect_true(is_string_value(NA_character_, allow_na = TRUE))
   expect_false(is_string_value(2))
-  expect_false(is_string_value(NA, allow_na = FALSE))
-  expect_false(is_string_value(NA))
+  expect_false(is_string_value(NA_character_, allow_na = FALSE))
+  expect_false(is_string_value(NA_character_))
+  # check for non-string NA (logical in this case.
+  # Should return false as it's not a string)
+  expect_false(is_string_value(NA, allow_na = TRUE))
   expect_false(is_string_value(c("foo", "bar")))
 
   err <- tryCatch({
