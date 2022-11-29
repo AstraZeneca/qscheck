@@ -12,7 +12,7 @@ report <- function(valid, reason = NULL) {
       list(
         valid = valid,
         reason = reason
-      )
+      ),
       class = "qscheck::report"
     )
   )
