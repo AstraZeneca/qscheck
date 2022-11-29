@@ -139,7 +139,7 @@ test_that("is_binary_vector", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v2 must be a vector of binary values (0 or 1)\n"
+      "Error: v2 must be a vector of binary values (0 or 1) with no NAs\n"
      ))
 })
 
@@ -172,7 +172,8 @@ test_that("is_binary_vector allow_degenerate", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: v1 must be a non-degenerate vector of binary values (0 or 1)\n"
+      "Error: v1 must be a vector of binary values (0 or 1)",
+      " non-degenerate with no NAs\n"
      ))
 })
 

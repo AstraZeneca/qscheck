@@ -35,13 +35,18 @@ snippet_length <- function(
 }
 
 snippet_must_be <- function(type) {
-  return(paste0(" must be a ", type))
+
+  article <- "a"
+  if (substr(type, 1, 1) %in% c("a", "i", "e", "o", "u")) {
+    article <- "an"
+  }
+  return(paste0(" must be ", article, " ", type))
 }
 
 snippet_na_values <- function(allow_na_values) {
   msg <- ""
   if (!allow_na_values) {
-    msg <- paste0(" with no NA values")
+    msg <- paste0(" with no NAs")
   }
   return(msg)
 }
@@ -50,6 +55,41 @@ snippet_exact_levels <- function(exact_levels) {
   msg <- ""
   if (!is.null(exact_levels)) {
     msg <- paste0(" with exact levels ", flatten_vector(exact_levels))
+  }
+  return(msg)
+}
+
+snippet_numerical_range <- function(min = NULL, max = NULL) {
+  msg <- ""
+  if (!is.null(min) || !is.null(max)) {
+    msg <- " in the range "
+    if (is.null(min)) {
+      msg <- paste0(msg, "(-inf, ")
+    } else {
+      msg <- paste0(msg, "[", min, ", ")
+    }
+
+    if (is.null(max)) {
+      msg <- paste0(msg, "inf)")
+    } else {
+      msg <- paste0(msg, max, "]")
+    }
+  }
+  return(msg)
+}
+
+snippet_degenerate <- function(allow_degenerate) {
+  msg <- ""
+  if (!allow_degenerate) {
+    msg <- " non-degenerate"
+  }
+  return(msg)
+}
+
+snippet_names <- function(required_names = NULL) {
+  msg <- ""
+  if (!is.null(required_names)) {
+    msg <- paste0(" with at least names ", flatten_vector(required_names))
   }
   return(msg)
 }

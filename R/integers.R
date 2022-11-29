@@ -49,25 +49,10 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
   min <- callget(call, env, "min", NULL)
   max <- callget(call, env, "max", NULL)
 
-  interval_msg <- ""
-  if (!is.null(min) || !is.null(max)) {
-    interval_msg <- " in the range "
-    if (is.null(min)) {
-      interval_msg <- paste0(interval_msg, "(-inf, ")
-    } else {
-      interval_msg <- paste0(interval_msg, "[", min, ", ")
-    }
-
-    if (is.null(max)) {
-      interval_msg <- paste0(interval_msg, "inf)")
-    } else {
-      interval_msg <- paste0(interval_msg, max, "]")
-    }
-  }
 
   return(paste0(deparse(call$value),
-                " must be an integer value",
-                interval_msg,
+                snippet_must_be("integer value"),
+                snippet_numerical_range(min, max),
                 snippet_null(allow_null),
                 ". Got: ",
                 deparse(eval(call$value, env))))
@@ -100,7 +85,7 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
   return(
     paste0(
       deparse(call$value),
-      " must be a positive integer value",
+      snippet_must_be("positive integer value"),
       snippet_null(allow_null),
       ". Got: ",
       deparse(eval(call$value, env))
@@ -135,7 +120,7 @@ assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
   return(
     paste0(
       deparse(call$value),
-      " must be a non negative integer value",
+      snippet_must_be("non negative integer value"),
       snippet_null(allow_null),
       ". Got: ",
       deparse(eval(call$value, env))
@@ -216,41 +201,11 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  msg <- paste0(deparse(call$value),
-    " must be a vector of integer values")
-
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length)
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    snippet_must_be("vector of integer values"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
@@ -323,43 +278,11 @@ assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
 
-  msg <- paste0(deparse(call$value),
-    " must be a vector of positive integer values")
-
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length
-    )
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    snippet_must_be("vector of positive integer values"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     ". Got: ",
     deparse(eval(call$value, env))
   )
@@ -432,42 +355,11 @@ assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
 
-  msg <- paste0(deparse(call$value),
-    " must be a vector of non negative integer values")
-
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length
-    )
-  } else if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
-
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    snippet_must_be("vector of non negative integer values"),
+    snippet_length(exact_length, min_length, max_length),
+    snippet_na_values(allow_na_values),
     ". Got: ",
     deparse(eval(call$value, env))
   )
@@ -520,22 +412,12 @@ assertthat::on_failure(is_binary_vector) <- function(call, env) {
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
 
-  na_msg <- ""
-  degenerate_msg <- ""
-  if (allow_na_values) {
-    na_msg <- " or NA"
-  }
-
-  if (!allow_degenerate) {
-    degenerate_msg <- " non-degenerate"
-  }
-
   return(
     paste0(
       deparse(call$v),
-      " must be a", degenerate_msg,
-      " vector of binary values (0 or 1",
-      na_msg, ")"
+      snippet_must_be("vector of binary values (0 or 1)"),
+      snippet_degenerate(allow_degenerate),
+      snippet_na_values(allow_na_values)
     )
   )
 }
