@@ -46,35 +46,19 @@ is_factor <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_factor) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a factor")
   exact_length <- callget(call, env, "exact_length", NULL)
   exact_levels <- callget(call, env, "exact_levels", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
 
-  if (!is.null(exact_length)) {
-    msg <- paste0(msg, " of exact length ", eval(call$exact_length, env))
-  }
-
-  if (!is.null(exact_levels)) {
-    msg <- paste0(msg, " with exact levels ('",
-                  paste0(
-                    eval(call$exact_levels, env),
-                    collapse = "', '"
-                    ),
-                  "')"
-                  )
-  }
-  if (!allow_na_values) {
-    msg <- paste0(msg, " with no NAs")
-  }
-
-  if (allow_null) {
-    msg <- paste0(msg, "; or NULL")
-  }
-
   msg <- paste0(
-   msg,
+   deparse(call$value),
+   snippet_must_be("factor"),
+   snippet_length(exact_length),
+   snippet_exact_levels(exact_levels),
+   snippet_na_values(allow_na_values),
+   ";",
+   snippet_null(allow_null),
    ". Got: ",
    deparse(eval(call$value, env))
   )

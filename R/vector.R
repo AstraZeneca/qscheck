@@ -46,49 +46,18 @@ is_vector <- function(
   return(TRUE)
 }
 assertthat::on_failure(is_vector) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a vector")
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
 
-  if (!is.null(exact_length)) {
-    msg <- paste0(
-      msg,
-      " of exact length ", exact_length,
-      ". Got: ",
-      deparse(eval(call$value, env))
-
-    )
-    return(msg)
-  }
-
-  if (!is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length between ",
-      min_length,
-      " and ",
-      max_length,
-      " inclusive"
-    )
-  } else if (is.null(min_length) && !is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not greater than ",
-      max_length
-    )
-  } else if (!is.null(min_length) && is.null(max_length)) {
-    msg <- paste0(
-      msg,
-      " of length not less than ",
-      min_length
-    )
-  }
   msg <- paste0(
-    msg,
+    deparse(call$value),
+    snippet_must_be("vector"),
+    snippet_length(exact_length, min_length, max_length),
     ". Got: ",
     deparse(eval(call$value, env))
   )
+
   return(msg)
 }
 
@@ -203,13 +172,13 @@ vector_allowed_values <- function(v, allowed_values) {
   return(all(v %in% allowed_values))
 }
 assertthat::on_failure(vector_allowed_values) <- function(call, env) {
+  allowed_values <- callget(call, env, "allowed_values", NULL)
+
   return(paste0(
     deparse(call$v),
-    " must be a vector containing only elements from the following list: ",
-    paste0(
-      eval(call$allowed_values, env),
-      collapse = ", "
-    )
+    snippet_must_be("vector"),
+    " containing only elements from the following list: ",
+    flatten_vector(allowed_values)
   ))
 }
 
@@ -241,7 +210,10 @@ is_vector_without_na <- function(value) {
   return(TRUE)
 }
 assertthat::on_failure(is_vector_without_na) <- function(call, env) {
-  msg <- paste0(deparse(call$value), " must be a vector with no NA values.")
+  msg <- paste0(deparse(call$value),
+    snippet_must_be("vector with no NAs"),
+    "."
+  )
 
   return(msg)
 }
@@ -276,7 +248,8 @@ is_vector_all_na <- function(value) {
 assertthat::on_failure(is_vector_all_na) <- function(call, env) {
   msg <- paste0(
     deparse(call$value),
-    " must be a vector containing only NA values."
+    snippet_must_be("vector containing only NAs"),
+    "."
   )
 
   return(msg)
@@ -345,12 +318,6 @@ vector_value_occurrences <- function(
 
 }
 assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
-  msg <- paste0(
-    deparse(call$vec),
-    " must be a vector containing value '",
-    eval(call$value, env),
-    "'"
-  )
 
   total_occurrences <- sum(
     eval(call$vec, env) == eval(call$value, env), na.rm = TRUE
@@ -359,47 +326,14 @@ assertthat::on_failure(vector_value_occurrences) <- function(call, env) {
   exact_occurrences <- callget(call, env, "exact_occurrences", NULL)
   min_occurrences <- callget(call, env, "min_occurrences", NULL)
   max_occurrences <- callget(call, env, "max_occurrences", NULL)
+  value <- callget(call, env, "value", NULL)
 
-  if (!is.null(exact_occurrences)) {
-    msg <- paste0(
-      msg,
-      " exactly ", exact_occurrences,
-      " times. Found it ",
-      total_occurrences,
-      " times."
-    )
-    return(msg)
-  }
-
-  if (!is.null(min_occurrences) && !is.null(max_occurrences)) {
-    msg <- paste0(
-      msg,
-      " between ",
-      min_occurrences,
-      " and ",
-      max_occurrences,
-      " times inclusive."
-    )
-  } else if (is.null(min_occurrences) && !is.null(max_occurrences)) {
-    msg <- paste0(
-      msg,
-      " no more than ",
-      max_occurrences,
-      " times inclusive."
-    )
-  } else if (!is.null(min_occurrences) && is.null(max_occurrences)) {
-    msg <- paste0(
-      msg,
-      " no less than ",
-      min_occurrences,
-      " times inclusive."
-    )
-  }
   msg <- paste0(
-    msg,
-    " Found it ",
-    total_occurrences,
-    " times."
+    deparse(call$vec),
+    snippet_must_be("vector"),
+    " containing value '", value, "'",
+    snippet_occurrences(exact_occurrences, min_occurrences, max_occurrences),
+    ". Found it ", total_occurrences, " times."
   )
   return(msg)
 }

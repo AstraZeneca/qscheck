@@ -18,7 +18,8 @@ is_logical_value <- function(value) {
 assertthat::on_failure(is_logical_value) <- function(call, env) {
   return(paste0(
     deparse(call$value),
-    " must be a single logical value. Got: ",
+    snippet_must_be("logical value"),
+    ". Got: ",
     deparse(eval(call$value, env))
   ))
 }

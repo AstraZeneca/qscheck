@@ -29,18 +29,11 @@ is_s3_instance <- function(value, class_name, allow_null = FALSE) {
 }
 assertthat::on_failure(is_s3_instance) <- function(call, env) {
   allow_null <- callget(call, env, "allow_null", FALSE)
+
   msg <- paste0(
     deparse(call$value),
-    " must be an instance of S3 class ",
-    call$class_name
-    )
-
-  if (allow_null) {
-    msg <- paste0(msg, " or NULL")
-  }
-
-  msg <- paste0(
-    msg,
+    snippet_must_be(paste0("instance of S3 class ", call$class_name)),
+    snippet_null(allow_null),
     ". Got: ",
     deparse(eval(call$value, env))
   )

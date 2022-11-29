@@ -101,7 +101,7 @@ test_that("is_one_of", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: val must be one of the following: 'foo', 'quux', 'NA' or NULL. ",
+      "Error: val must be one of the following: 'foo', 'quux', NA or NULL. ",
       "Got: \"x\"\n"
      ))
 })
