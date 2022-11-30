@@ -9,6 +9,9 @@ test_that("assert", {
   )
   expect_equal(
     as.character(err),
-    "Error: 3 must be a factor with exact levels ('bar', 'foo') with no NAs; or NULL. Got: 3\n"
+    paste0(
+      "Error: 3 must be a factor with exact levels ('bar', 'foo') ",
+      "with no NAs; or NULL. passed value is not a factor\n"
+    )
   )
 })
