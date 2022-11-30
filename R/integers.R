@@ -17,45 +17,72 @@
 #' @export
 is_integer_value <- function(value,
     min = NULL, max = NULL, allow_null = FALSE) {
-  if (is.null(value)) {
-    return(allow_null)
-  }
 
-  if (!is.numeric(value)) {
-    return(FALSE)
-  }
+  res <- inspect_integer_value(
+    value, min = min, max = max, allow_null = allow_null
+  )
 
-  if (length(value) != 1) {
-    return(FALSE)
-  }
-
-  if ((value %% 1) != 0) {
-    return(FALSE)
-  }
-
-  if (!is.null(min) && value < min) {
-    return(FALSE)
-  }
-
-  if (!is.null(max) && value > max) {
-    return(FALSE)
-  }
-
-  return(TRUE)
-
+  return(res$valid)
 }
 assertthat::on_failure(is_integer_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
   min <- callget(call, env, "min", NULL)
   max <- callget(call, env, "max", NULL)
 
+  res <- inspect_integer_value(
+    value, min = min, max = max, allow_null = allow_null
+  )
 
   return(paste0(deparse(call$value),
                 snippet_must_be("integer value"),
                 snippet_numerical_range(min, max),
                 snippet_null(allow_null),
-                ". Got: ",
-                deparse(eval(call$value, env))))
+                ". ", res$reason
+                ))
+}
+
+inspect_integer_value <- function(value,
+    min = NULL, max = NULL, allow_null = FALSE) {
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("passed value is NULL"))
+    }
+  }
+
+  if (!is.numeric(value)) {
+    return(failure("passed value is not a numerical"))
+  }
+
+  if (length(value) != 1) {
+    return(failure(
+      "passed value must be a single numerical value, not a vector"
+    ))
+  }
+
+  if ((value %% 1) != 0) {
+    return(failure("passed value must be a whole number (integer)"))
+  }
+
+  if (!is.null(min) && value < min) {
+    return(failure(
+      paste0(
+        "The passed value ", value,
+        " must be greater than the minimum value of ", min
+      )
+    ))
+  }
+
+  if (!is.null(max) && value > max) {
+    return(failure(
+      paste0("The passed value ", value,
+        " must be less than the maximum value of ", max
+      )))
+  }
+
+  return(success())
 }
 
 #' Checks if the value is a single positive integer value (not type)
