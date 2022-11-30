@@ -163,3 +163,33 @@ flatten_vector <- function(vector, quotes = TRUE, parenthesis = FALSE) {
 
   return(msg)
 }
+
+snippet_rowcolnames <- function(
+    exact_rownames, exact_colnames, required_rownames, required_colnames
+  ) {
+  msg <- ""
+
+  if (!is.null(exact_rownames)) {
+    msg <- paste0(
+      msg, " with exact rownames ", flatten_vector(exact_rownames)
+    )
+  } else if (!is.null(required_rownames)) {
+    msg <- paste0(
+      msg, " with required rownames ", flatten_vector(required_rownames)
+    )
+  }
+
+  if (!is.null(exact_colnames)) {
+    msg <- paste0(
+      msg, " with exact colnames ", flatten_vector(exact_colnames)
+    )
+  } else if (!is.null(required_colnames)) {
+    msg <- paste0(
+      msg, " with required colnames ", flatten_vector(required_colnames)
+    )
+  }
+
+
+  return(msg)
+
+}

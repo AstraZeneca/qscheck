@@ -18,7 +18,7 @@
 #' @concept real
 #' @export
 is_interval <- function(low, high, allow_degenerate = TRUE) {
-  res <- .inspect_interval(low, high, allow_degenerate)
+  res <- inspect_interval(low, high, allow_degenerate)
   return(res$valid)
 }
 assertthat::on_failure(is_interval) <- function(call, env) {
@@ -26,7 +26,7 @@ assertthat::on_failure(is_interval) <- function(call, env) {
   high <- callget(call, env, "high", NULL)
   allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
 
-  res <- .inspect_interval(low, high, allow_degenerate)
+  res <- inspect_interval(low, high, allow_degenerate)
 
   return(
     paste0(
@@ -38,30 +38,22 @@ assertthat::on_failure(is_interval) <- function(call, env) {
   )
 }
 
-.inspect_interval <- function(low, high, allow_degenerate) {
-  res <- list(valid = FALSE, reason = "")
-
+inspect_interval <- function(low, high, allow_degenerate) {
   if (!is_real_value(low)) {
-    res$reason <- "The low value must be a numeric value"
-    return(res)
+    return(failure("The low value must be a numeric value"))
   }
 
   if (!is_real_value(high)) {
-    res$reason <- "The high value must be a numeric value"
-    return(res)
+    return(failure("The high value must be a numeric value"))
   }
 
   if (low == high && !allow_degenerate) {
-    res$reason <- paste0(
-      "The low and high values are degenerate")
-    return(res)
+    return(failure("The low and high values are degenerate"))
   }
 
   if (low > high) {
-    res$reason <- "The low value cannot be higher than the high value"
-    return(res)
+    return(failure("The low value cannot be higher than the high value"))
   }
 
-  res$valid <- TRUE
-  return(res)
+  return(success())
 }
