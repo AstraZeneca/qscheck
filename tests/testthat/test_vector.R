@@ -225,7 +225,8 @@ test_that("vector_allowed_values", {
     as.character(err),
     paste0(
       "Error: v1 must be a vector containing only elements from the ",
-      "following list: 'foo', 'quux', NA\n"
+      "following list: 'foo', 'quux', NA. Argument v contains elements ",
+      "that are not in the allowed_values\n"
      ))
 })
 test_that("is_vector_without_na", {
