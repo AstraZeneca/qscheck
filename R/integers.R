@@ -26,9 +26,9 @@ is_integer_value <- function(value,
 }
 assertthat::on_failure(is_integer_value) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
-  allow_null <- callget(call, env, "allow_null", FALSE)
   min <- callget(call, env, "min", NULL)
   max <- callget(call, env, "max", NULL)
+  allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_integer_value(
     value, min = min, max = max, allow_null = allow_null
@@ -48,37 +48,37 @@ inspect_integer_value <- function(value,
     if (allow_null == TRUE) {
       return(success())
     } else {
-      return(failure("passed value is NULL"))
+      return(failure("Passed value is NULL"))
     }
   }
 
   if (!is.numeric(value)) {
-    return(failure("passed value is not a numerical"))
+    return(failure("Passed value is not a numerical"))
   }
 
   if (length(value) != 1) {
     return(failure(
-      "passed value must be a single numerical value, not a vector"
+      "Passed value must be a single numerical value, not a vector"
     ))
   }
 
   if ((value %% 1) != 0) {
-    return(failure("passed value must be a whole number (integer)"))
+    return(failure("Passed value must be a whole number (integer)"))
   }
 
   if (!is.null(min) && value < min) {
     return(failure(
       paste0(
-        "The passed value ", value,
-        " must be greater than the minimum value of ", min
+        "Passed value ", value,
+        " must be greater than the minimum value ", min
       )
     ))
   }
 
   if (!is.null(max) && value > max) {
     return(failure(
-      paste0("The passed value ", value,
-        " must be less than the maximum value of ", max
+      paste0("Passed value ", value,
+        " must be less than the maximum value ", max
       )))
   }
 
@@ -101,21 +101,21 @@ inspect_integer_value <- function(value,
 #' @concept integer
 #' @export
 is_positive_integer_value <- function(value, allow_null = FALSE) {
-  if (is.null(value)) {
-    return(allow_null)
-  }
-  return(is_integer_value(value) && (value > 0))
+  res <- inspect_integer_value(value, min = 1, allow_null = allow_null)
+  return(res$valid)
 }
 assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_integer_value(value, min = 1, allow_null = allow_null)
 
   return(
     paste0(
       deparse(call$value),
       snippet_must_be("positive integer value"),
       snippet_null(allow_null),
-      ". Got: ",
-      deparse(eval(call$value, env))
+      ". ", res$reason
     )
   )
 }
@@ -136,21 +136,20 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 #' @concept integer
 #' @export
 is_non_negative_integer_value <- function(value, allow_null = FALSE) {
-  if (is.null(value)) {
-    return(allow_null)
-  }
-  return(is_integer_value(value) && (value >= 0))
+  res <- inspect_integer_value(value, min = 0, allow_null = allow_null)
+  return(res$valid)
 }
 assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
+  res <- inspect_integer_value(value, min = 0, allow_null = allow_null)
   return(
     paste0(
       deparse(call$value),
       snippet_must_be("non negative integer value"),
       snippet_null(allow_null),
-      ". Got: ",
-      deparse(eval(call$value, env))
+      ". ", res$reason
     )
   )
 }
@@ -192,41 +191,26 @@ is_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
     allow_na_values = FALSE, allow_null = FALSE
     ) {
-
-  if (is.null(value)) {
-    return(allow_null)
-  }
-
-  if (!is_vector(
-      value,
-      exact_length = exact_length,
-      min_length = min_length,
-      max_length = max_length)) {
-    return(FALSE)
-  }
-
-  if (!is.numeric(value)) {
-    return(FALSE)
-  }
-
-  if (any(is.na(value)) && allow_na_values == FALSE) {
-    return(FALSE)
-  }
-
-  value <- value[!is.na(value)]
-
-  if (!(all(value %% 1 == 0))) {
-    return(FALSE)
-  }
-
-  return(TRUE)
+  res <- inspect_integer_vector(
+    value, exact_length = exact_length, min_length = min_length,
+    max_length = max_length, allow_na_values = allow_na_values,
+    allow_null = allow_null
+  )
+  return(res$valid)
 }
 assertthat::on_failure(is_integer_vector) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_integer_vector(
+    value, exact_length = exact_length, min_length = min_length,
+    max_length = max_length, allow_na_values = allow_na_values,
+    allow_null = allow_null
+  )
 
   msg <- paste0(
     deparse(call$value),
@@ -234,10 +218,50 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
     snippet_length(exact_length, min_length, max_length),
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   )
   return(msg)
+}
+
+inspect_integer_vector <- function(
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_na_values = FALSE, allow_null = FALSE
+) {
+
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value is NULL"))
+    }
+  }
+
+  res <- inspect_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length
+  )
+
+  if (!res$valid) {
+    return(res)
+  }
+
+  if (!is.numeric(value)) {
+    return(failure("Passed vector is not a numerical vector"))
+  }
+
+  if (any(is.na(value)) && allow_na_values == FALSE) {
+    return(failure("Passed vector contains NAs"))
+  }
+
+  value <- value[!is.na(value)]
+
+  if (!(all(value %% 1 == 0))) {
+    return(failure("Passed vector contains non integer values"))
+  }
+
+  return(success())
 }
 
 #' Checks if the passed entity is a vector of positive integers.
@@ -275,47 +299,65 @@ is_positive_integer_vector <- function(
     allow_na_values = FALSE
     ) {
 
-  if (!is_vector(
-      value,
-      exact_length = exact_length,
-      min_length = min_length,
-      max_length = max_length)) {
-    return(FALSE)
-  }
+  res <- inspect_positive_integer_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length,
+    allow_na_values = allow_na_values
+  )
 
-  if (!is.numeric(value)) {
-    return(FALSE)
-  }
-
-  if (any(is.na(value)) && allow_na_values == FALSE) {
-    return(FALSE)
-  }
-
-  value <- value[!is.na(value)]
-
-  if (!(all(value %% 1 == 0) && all(value > 0))) {
-    return(FALSE)
-  }
-
-  return(TRUE)
+  return(res$valid)
 }
 assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+
+  res <- inspect_positive_integer_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length,
+    allow_na_values = allow_na_values
+  )
 
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("vector of positive integer values"),
     snippet_length(exact_length, min_length, max_length),
     snippet_na_values(allow_na_values),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   )
   return(msg)
 }
 
+inspect_positive_integer_vector <- function(
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_na_values = FALSE
+) {
+  res <- inspect_integer_vector(
+    value, exact_length = exact_length, min_length = min_length,
+    max_length = max_length, allow_na_values = allow_na_values
+  )
+
+  if (!res$valid) {
+    return(res)
+  }
+
+  value <- value[!is.na(value)]
+
+  if (!(all(value %% 1 == 0) && all(value > 0))) {
+    return(failure(
+      "Passed vector contain values that are not positive integers"
+    ))
+  }
+
+  return(success())
+
+}
 
 #' Checks if the passed entity is a vector of non negative integers.
 #' Note that in R single values are also vectors.

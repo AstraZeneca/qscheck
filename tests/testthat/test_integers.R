@@ -20,7 +20,10 @@ test_that("is_integer_value", {
 
   expect_equal(
     as.character(err),
-    "Error: foo must be an integer value in the range [3, inf). Got: 2\n")
+    paste0(
+      "Error: foo must be an integer value in the range [3, inf). ",
+      "Passed value 2 must be greater than the minimum value 3\n")
+    )
 
   err <- tryCatch({
       assertthat::assert_that(is_integer_value(foo, max = 1))
@@ -31,7 +34,11 @@ test_that("is_integer_value", {
 
   expect_equal(
     as.character(err),
-    "Error: foo must be an integer value in the range (-inf, 1]. Got: 2\n")
+    paste0(
+      "Error: foo must be an integer value in the range (-inf, 1]. ",
+      "Passed value 2 must be less than the maximum value 1\n"
+    )
+  )
 
   err <- tryCatch({
       assertthat::assert_that(is_integer_value(foo, min = 3, max = 5))
@@ -42,7 +49,11 @@ test_that("is_integer_value", {
 
   expect_equal(
     as.character(err),
-    "Error: foo must be an integer value in the range [3, 5]. Got: 2\n")
+    paste0(
+      "Error: foo must be an integer value in the range [3, 5]. ",
+      "Passed value 2 must be greater than the minimum value 3\n"
+    )
+  )
 
   err <- tryCatch({
       assertthat::assert_that(is_integer_value(data.frame(), min = 3, max = 5))
@@ -55,8 +66,8 @@ test_that("is_integer_value", {
     as.character(err),
     paste0(
       "Error: data.frame() must be an integer value in the range [3, 5].",
-      " Got: structure(list(), .Names = character(0), row.names = ",
-      "integer(0), class = \"data.frame\")\n"))
+      " Passed value is not a numerical\n")
+  )
 
 })
 
@@ -70,6 +81,21 @@ test_that("is_positive_integer_value", {
   expect_false(is_positive_integer_value("hello"))
   expect_false(is_positive_integer_value(NULL))
   expect_true(is_positive_integer_value(NULL, allow_null = TRUE))
+
+  err <- tryCatch({
+      assertthat::assert_that(is_positive_integer_value(-1))
+    },
+    error = function(e) {
+      return(e)
+    })
+
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: -1 must be a positive integer value. ",
+      "Passed value -1 must be greater than the minimum value 1\n"
+    )
+  )
 })
 
 test_that("is_non_negative_integer_value", {
@@ -82,6 +108,20 @@ test_that("is_non_negative_integer_value", {
   expect_false(is_non_negative_integer_value("hello"))
   expect_false(is_non_negative_integer_value(NULL))
   expect_true(is_non_negative_integer_value(NULL, allow_null = TRUE))
+  err <- tryCatch({
+      assertthat::assert_that(is_non_negative_integer_value(-1))
+    },
+    error = function(e) {
+      return(e)
+    })
+
+  expect_equal(
+    as.character(err),
+    paste0(
+      "Error: -1 must be a non negative integer value. ",
+      "Passed value -1 must be greater than the minimum value 0\n"
+    )
+  )
 })
 
 
@@ -200,7 +240,8 @@ test_that("is_positive_integer_vector", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of positive integer values of exact ",
-      "length 4 with no NAs. Got: c(1, 13, 1)\n"))
+      "length 4 with no NAs. Passed vector length is 3 instead of the ",
+      "expected 4\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_positive_integer_vector(v, min_length = 4))
@@ -214,7 +255,8 @@ test_that("is_positive_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of positive integer values of length ",
-      "not less than 4 with no NAs. Got: c(1, 13, 1)\n"))
+      "not less than 4 with no NAs. Passed vector length is 3 but must ",
+      "be at least 4\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_positive_integer_vector(v, max_length = 2))
@@ -228,7 +270,8 @@ test_that("is_positive_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of positive integer values of ",
-      "length not greater than 2 with no NAs. Got: c(1, 13, 1)\n"))
+      "length not greater than 2 with no NAs. Passed vector length ",
+      "is 3 but must be at most 2\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_positive_integer_vector(v,
@@ -244,7 +287,7 @@ test_that("is_positive_integer_vector", {
     paste0(
       "Error: v must be a vector of positive integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
-      "Got: c(1, 13, 1)\n"))
+      "Passed vector length is 3 but must be at least 4\n"))
 })
 
 test_that("is_positive_integer_vector with NA", {
@@ -285,7 +328,10 @@ test_that("is_integer_vector", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of integer values of exact ",
-      "length 4 with no NAs. Got: c(1, 13, 0)\n"))
+      "length 4 with no NAs. Passed vector length is 3 instead ",
+      "of the expected 4\n"
+      )
+    )
 
   err <- tryCatch({
     assertthat::assert_that(is_integer_vector(v, min_length = 4))
@@ -299,7 +345,8 @@ test_that("is_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of integer values of length ",
-      "not less than 4 with no NAs. Got: c(1, 13, 0)\n"))
+      "not less than 4 with no NAs. Passed vector length is 3 ",
+      "but must be at least 4\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_integer_vector(v, max_length = 2))
@@ -313,7 +360,8 @@ test_that("is_integer_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of integer values of ",
-      "length not greater than 2 with no NAs. Got: c(1, 13, 0)\n"))
+      "length not greater than 2 with no NAs. ",
+      "Passed vector length is 3 but must be at most 2\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_integer_vector(v,
@@ -329,7 +377,7 @@ test_that("is_integer_vector", {
     paste0(
       "Error: v must be a vector of integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
-      "Got: c(1, 13, 0)\n"))
+      "Passed vector length is 3 but must be at least 4\n"))
 })
 
 test_that("is_integer_vector with NA", {
