@@ -394,45 +394,64 @@ is_non_negative_integer_vector <- function(
     allow_na_values = FALSE
     ) {
 
-  if (!is_vector(
-      value,
-      exact_length = exact_length,
-      min_length = min_length,
-      max_length = max_length)) {
-    return(FALSE)
-  }
+  res <- inspect_non_negative_integer_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length,
+    allow_na_values = allow_na_values
+  )
 
-  if (!is.numeric(value)) {
-    return(FALSE)
-  }
-
-  if (any(is.na(value)) && allow_na_values == FALSE) {
-    return(FALSE)
-  }
-
-  value <- value[!is.na(value)]
-
-  if (!(all(value %% 1 == 0) && all(value >= 0))) {
-    return(FALSE)
-  }
-
-  return(TRUE)
+  return(res$valid)
 }
 assertthat::on_failure(is_non_negative_integer_vector) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
+
+  res <- inspect_non_negative_integer_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length,
+    allow_na_values = allow_na_values
+  )
 
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("vector of non negative integer values"),
     snippet_length(exact_length, min_length, max_length),
     snippet_na_values(allow_na_values),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   )
   return(msg)
+}
+
+inspect_non_negative_integer_vector <- function(
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_na_values = FALSE
+) {
+  res <- inspect_integer_vector(
+    value, exact_length = exact_length, min_length = min_length,
+    max_length = max_length, allow_na_values = allow_na_values
+  )
+
+  if (!res$valid) {
+    return(res)
+  }
+
+  value <- value[!is.na(value)]
+
+  if (!(all(value %% 1 == 0) && all(value >= 0))) {
+    return(failure(
+      "Passed vector contain values that are negative"
+    ))
+  }
+
+  return(success())
+
 }
 
 #' Checks if a vector contains only binary values (0 or 1)
