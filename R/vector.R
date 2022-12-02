@@ -199,7 +199,6 @@ vector_allowed_values <- function(v, allowed_values) {
   res <- inspect_vector_allowed_values(v, allowed_values)
 
   return(res$valid)
-
 }
 assertthat::on_failure(vector_allowed_values) <- function(call, env) {
   v <- callget(call, env, "v", NULL)
@@ -240,7 +239,7 @@ inspect_vector_allowed_values <- function(v, allowed_values) {
 
   if (!all(v %in% allowed_values)) {
     return(failure(
-      "Argument v contains elements that are not in the allowed_values"))
+      "Vector contains elements that are not in the allowed_values"))
   }
 
   return(success())
