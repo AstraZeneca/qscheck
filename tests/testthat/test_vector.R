@@ -35,7 +35,8 @@ test_that("is_vector", {
     paste0(
       "Error: v must be a vector of length not less than 4. ",
       "Passed vector length is 3 but must be at least 4\n"
-    ))
+    )
+  )
 
   err <- tryCatch({
     assertthat::assert_that(is_vector(v, max_length = 2))
