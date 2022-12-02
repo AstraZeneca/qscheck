@@ -213,6 +213,7 @@ assertthat::on_failure(vector_allowed_values) <- function(call, env) {
     flatten_vector(allowed_values), ". ", res$reason
   ))
 }
+
 inspect_vector_allowed_values <- function(v, allowed_values) {
   res <- inspect_vector(v)
   if (!res$valid) {
@@ -244,6 +245,7 @@ inspect_vector_allowed_values <- function(v, allowed_values) {
 
   return(success())
 }
+
 #' Checks if the passed vector contains no NAs.
 #'
 #' @param value The value to check
