@@ -71,18 +71,18 @@ inspect_factor <- function(
     if (allow_null == TRUE) {
       return(success())
     } else {
-      return(failure("passed value is NULL"))
+      return(failure("Passed value is NULL"))
     }
   }
 
   if (!is.factor(value)) {
-    return(failure("passed value is not a factor"))
+    return(failure("Passed value is not a factor"))
   }
 
   if (!is.null(exact_length) && length(value) != exact_length) {
     return(failure(
       paste0(
-        "factor length of ", length(value), " does not match the ",
+        "Factor length of ", length(value), " does not match the ",
         "expected exact length of ", exact_length
       )
     ))
@@ -100,7 +100,7 @@ inspect_factor <- function(
   }
   if (any(is.na(value)) && !allow_na_values) {
     return(failure(
-      paste0("factor contains NAs")
+      paste0("Factor contains NAs, but it must not")
     ))
   }
 
