@@ -20,5 +20,6 @@ test_that("is_list", {
       return(e)
     }
   )
-  expect_equal(as.character(err), "Error: 3 must be a list or NULL. Got: 3\n")
+  expect_equal(as.character(err),
+    "Error: 3 must be a list or NULL. The passed entity is not a list\n")
 })

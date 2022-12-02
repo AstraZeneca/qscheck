@@ -29,30 +29,24 @@ is_list <- function(
     allow_null = FALSE
     ) {
 
-  if (is.null(l)) {
-    return(allow_null)
-  }
-
-  if (!inherits(l, "list")) {
-    return(FALSE)
-  }
-  if (!is.null(required_names)) {
-    for (name in required_names) {
-      if (!(name %in% names(l))) {
-        return(FALSE)
-      }
-    }
-  }
-
-  if (!is.null(exact_length)) {
-    return(assertthat::are_equal(length(l), exact_length))
-  }
-  return(TRUE)
+  res <- inspect_list(l,
+    required_names = required_names,
+    exact_length = exact_length,
+    allow_null = allow_null
+  )
+  return(res$valid)
 }
 assertthat::on_failure(is_list) <- function(call, env) {
+  l <- callget(call, env, "l", NULL)
   required_names <- callget(call, env, "required_names", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   allow_null <- callget(call, env, "allow_null", NULL)
+
+  res <- inspect_list(l,
+    required_names = required_names,
+    exact_length = exact_length,
+    allow_null = allow_null
+  )
 
   msg <- paste0(
    deparse(call$l),
@@ -60,8 +54,53 @@ assertthat::on_failure(is_list) <- function(call, env) {
    snippet_length(exact_length),
    snippet_names(required_names),
    snippet_null(allow_null),
-   ". Got: ",
-   deparse(eval(call$l, env))
+   ". ", res$reason
   )
   return(msg)
+}
+
+inspect_list <- function(
+    l,
+    required_names = NULL,
+    exact_length = NULL,
+    allow_null = FALSE
+) {
+
+  if (is.null(l)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value is null"))
+    }
+  }
+
+  if (!inherits(l, "list")) {
+    return(failure("The passed entity is not a list"))
+  }
+
+  if (!is.null(required_names)) {
+    for (name in required_names) {
+      if (!(name %in% names(l))) {
+        return(failure(
+          paste0(
+            "Required name '", name, "' is not available in the list"
+          )
+        ))
+      }
+    }
+  }
+
+  if (!is.null(exact_length)) {
+    if (length(l) != exact_length) {
+      return(failure(
+        paste0(
+          "Passed list length is ", length(l),
+          " instead of the expected ", exact_length
+        )
+      ))
+    }
+  }
+
+  return(success())
+
 }
