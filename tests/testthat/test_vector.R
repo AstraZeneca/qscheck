@@ -17,7 +17,10 @@ test_that("is_vector", {
   })
 
   expect_equal(as.character(err),
-    "Error: v must be a vector of exact length 4. Got: c(1, 2, 3)\n")
+    paste0(
+      "Error: v must be a vector of exact length 4. ",
+      "Passed vector length is 3 instead of the expected 4\n"
+    ))
 
   err <- tryCatch({
     assertthat::assert_that(is_vector(v, min_length = 4))
@@ -29,7 +32,11 @@ test_that("is_vector", {
 
   expect_equal(
     as.character(err),
-    "Error: v must be a vector of length not less than 4. Got: c(1, 2, 3)\n")
+    paste0(
+      "Error: v must be a vector of length not less than 4. ",
+      "Passed vector length is 3 but must be at least 4\n"
+    )
+  )
 
   err <- tryCatch({
     assertthat::assert_that(is_vector(v, max_length = 2))
@@ -42,7 +49,7 @@ test_that("is_vector", {
   expect_equal(
     as.character(err),
     paste0("Error: v must be a vector of length not greater than 2. ",
-    "Got: c(1, 2, 3)\n"))
+    "Passed vector length is 3 but must be at most 2\n"))
 
   err <- tryCatch({
     assertthat::assert_that(is_vector(v, min_length = 4, max_length = 8))
@@ -56,7 +63,7 @@ test_that("is_vector", {
     as.character(err),
     paste0(
       "Error: v must be a vector of length between 4 and 8 inclusive. ",
-      "Got: c(1, 2, 3)\n"))
+      "Passed vector length is 3 but must be at least 4\n"))
 })
 
 test_that("vectors_disjoint", {
@@ -219,7 +226,8 @@ test_that("vector_allowed_values", {
     as.character(err),
     paste0(
       "Error: v1 must be a vector containing only elements from the ",
-      "following list: 'foo', 'quux', NA\n"
+      "following list: 'foo', 'quux', NA. Vector contains elements that ",
+      "are not in the allowed_values\n"
      ))
 })
 test_that("is_vector_without_na", {

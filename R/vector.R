@@ -25,42 +25,77 @@
 #' @export
 is_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL) {
-  if (!is.vector(value)) {
-    return(FALSE)
-  }
-  if (!is.null(exact_length)) {
-    return(assertthat::are_equal(length(value), exact_length))
-  }
 
-  if (!is.null(min_length)) {
-    if (length(value) < min_length) {
-      return(FALSE)
-    }
-  }
-
-  if (!is.null(max_length)) {
-    if (length(value) > max_length) {
-      return(FALSE)
-    }
-  }
-  return(TRUE)
+  res <- inspect_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length
+  )
+  return(res$valid)
 }
 assertthat::on_failure(is_vector) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
+
+  res <- inspect_vector(
+    value,
+    exact_length = exact_length,
+    min_length = min_length,
+    max_length = max_length
+  )
 
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("vector"),
     snippet_length(exact_length, min_length, max_length),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   )
 
   return(msg)
 }
 
+inspect_vector <- function(
+    value, exact_length = NULL, min_length = NULL, max_length = NULL) {
+
+  if (!is.vector(value)) {
+    return(failure("Passed value is not a vector"))
+  }
+
+  if (!is.null(exact_length)) {
+    if (length(value) != exact_length) {
+      return(failure(
+        paste0(
+          "Passed vector length is ", length(value),
+          " instead of the expected ", exact_length
+        )
+      ))
+    } else {
+      return(success())
+    }
+  }
+
+  if (!is.null(min_length)) {
+    if (length(value) < min_length) {
+      return(failure(paste0(
+        "Passed vector length is ", length(value),
+        " but must be at least ", min_length
+      )))
+    }
+  }
+
+  if (!is.null(max_length)) {
+    if (length(value) > max_length) {
+      return(failure(paste0(
+        "Passed vector length is ", length(value),
+        " but must be at most ", max_length
+      )))
+    }
+  }
+  return(success())
+}
 
 #' Checks if two vectors are of the exact same length.
 #'
@@ -161,25 +196,54 @@ assertthat::on_failure(vectors_disjoint) <- function(call, env) {
 #' @concept vector
 #' @export
 vector_allowed_values <- function(v, allowed_values) {
-  if (!is_vector(v) || !is_vector(allowed_values)) {
-    return(FALSE)
-  }
+  res <- inspect_vector_allowed_values(v, allowed_values)
 
-  if (typeof(v) != typeof(allowed_values)) {
-    return(FALSE)
-  }
-
-  return(all(v %in% allowed_values))
+  return(res$valid)
 }
 assertthat::on_failure(vector_allowed_values) <- function(call, env) {
+  v <- callget(call, env, "v", NULL)
   allowed_values <- callget(call, env, "allowed_values", NULL)
+
+  res <- inspect_vector_allowed_values(v, allowed_values)
 
   return(paste0(
     deparse(call$v),
     snippet_must_be("vector"),
     " containing only elements from the following list: ",
-    flatten_vector(allowed_values)
+    flatten_vector(allowed_values), ". ", res$reason
   ))
+}
+
+inspect_vector_allowed_values <- function(v, allowed_values) {
+  res <- inspect_vector(v)
+  if (!res$valid) {
+    return(failure(paste0(
+      "Argument v has the following issue: ", res$reason
+    )))
+  }
+
+  res <- inspect_vector(allowed_values)
+  if (!res$valid) {
+    return(failure(paste0(
+      "Argument allowed_values has the following issue: ", res$reason
+    )))
+  }
+
+  if (typeof(v) != typeof(allowed_values)) {
+    return(failure(
+      paste0(
+        "Arguments have different types: v is ", typeof(v),
+        " and allowed_values is ", typeof(allowed_values)
+      )
+    ))
+  }
+
+  if (!all(v %in% allowed_values)) {
+    return(failure(
+      "Vector contains elements that are not in the allowed_values"))
+  }
+
+  return(success())
 }
 
 #' Checks if the passed vector contains no NAs.
