@@ -11,7 +11,7 @@ test_that("assert", {
     as.character(err),
     paste0(
       "Error: 3 must be a factor with exact levels ('bar', 'foo') ",
-      "with no NAs; or NULL. passed value is not a factor\n"
+      "with no NAs; or NULL. Passed value is not a factor\n"
     )
   )
 })
