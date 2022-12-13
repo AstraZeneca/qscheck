@@ -1,6 +1,11 @@
 #' Check if the passed entity is a matrix
 #'
 #' @param value the value to check
+#' @param exact_num_rows If specified, the matrix must have the specified
+#'        exact number of rows
+#' @param exact_num_cols If specified, the matrix must have the specified
+#'        exact number of cols
+#' @param allow_null If TRUE, allow NULL as a value
 #'
 #' @examples
 #' \dontrun{
