@@ -91,4 +91,15 @@ test_that("is_square_matrix", {
       "Passed matrix has 3 rows"
     )
   )
+
+  foo <- matrix(nrow = 4, ncol = 3)
+  expect_error(
+    assertthat::assert_that(
+      is_square_matrix(foo)
+    ),
+    paste0(
+      "foo must be a square matrix. Passed non-square matrix ",
+      "with dimensions \\(4, 3\\)"
+    )
+  )
 })
