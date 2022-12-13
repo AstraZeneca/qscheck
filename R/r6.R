@@ -14,22 +14,42 @@
 #' @concept oop
 #' @export
 is_r6_class <- function(value, class_name) {
-  if (is.null(class_name) || is.null(value)) {
-    return(FALSE)
-  }
+  res <- inspect_r6_class(value, class_name)
 
-  return(length(class(value)) >= 1
-         && "R6ClassGenerator" %in% class(value)
-         && value$classname == class_name)
+  return(res$valid)
 }
 assertthat::on_failure(is_r6_class) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+  class_name <- callget(call, env, "class_name", NULL)
+
+  res <- inspect_r6_class(value, class_name)
+
   msg <- paste0(
     deparse(call$value),
-    snippet_must_be(paste0("R6 class ", call$class_name)),
-    ". Got: ",
-    deparse(eval(call$value, env)))
+    snippet_must_be(paste0("R6 class '", class_name, "'")),
+    ". ", res$reason
+  )
   return(msg)
 }
+inspect_r6_class <- function(value, class_name) {
+  if (is.null(value)) {
+    return(failure("Passed class cannot be NULL"))
+  }
+
+  if (!inherits(value, "R6ClassGenerator")) {
+    return(failure("Passed value is not an R6 class"))
+  }
+
+  if (value$classname != class_name) {
+    return(failure(
+      paste0("Passed value is an R6 class '", value$classname, "'")))
+  }
+
+  return(success())
+
+}
+
+
 
 #' Checks if the passed entity is an instance of a given R6 class name.
 #'

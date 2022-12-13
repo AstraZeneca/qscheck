@@ -3,7 +3,17 @@ test_that("is_r6_class", {
   expect_true(is_r6_class(cls, "mycls"))
   expect_false(is_r6_class(cls, "whatever"))
   expect_false(is_r6_class(NULL, "mycls"))
-  expect_false(is_r6_class(instance, NULL))
+
+  expect_error(
+    assertthat::assert_that(is_r6_class(cls, "whatever")),
+    "cls must be a R6 class 'whatever'. Passed value is an R6 class 'mycls'"
+  )
+
+  expect_error(
+    assertthat::assert_that(is_r6_class(NULL, "mycls")),
+    "NULL must be a R6 class 'mycls'. Passed class cannot be NULL"
+  )
+
 })
 
 test_that("is_r6_instance", {
