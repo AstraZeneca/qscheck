@@ -193,3 +193,24 @@ snippet_rowcolnames <- function(
   return(msg)
 
 }
+
+snippet_exact_matrix_dimension <- function(num_rows, num_cols) {
+  if (is.null(num_rows) && is.null(num_cols)) {
+    return("")
+  }
+
+  msg <- " with exactly "
+
+  if (!is.null(num_rows)) {
+    msg <- paste0(msg, num_rows, " rows")
+    if (!is.null(num_cols)) {
+      msg <- paste0(msg, " and ")
+    }
+  }
+
+  if (!is.null(num_cols)) {
+    msg <- paste0(msg, num_cols, " columns")
+  }
+
+  return(msg)
+}
