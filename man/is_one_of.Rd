@@ -4,7 +4,7 @@
 \alias{is_one_of}
 \title{Checks if the passed entity is one of the ones in the options vector.}
 \usage{
-is_one_of(value, options, allow_null = NULL)
+is_one_of(value, options, allow_null = FALSE)
 }
 \arguments{
 \item{value}{the value to check}
