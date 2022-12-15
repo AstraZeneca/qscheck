@@ -13,13 +13,32 @@
 #' @concept logical
 #' @export
 is_logical_value <- function(value) {
-  return(is.logical(value) && length(value) == 1)
+  res <- inspect_logical_value(value)
+
+  return(res$valid)
 }
 assertthat::on_failure(is_logical_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+
+  res <- inspect_logical_value(value)
+
   return(paste0(
     deparse(call$value),
     snippet_must_be("logical value"),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   ))
+}
+
+inspect_logical_value <- function(value) {
+  if (!is.logical(value)) {
+    return(failure("Passed value is not a logical"))
+  }
+
+  if (length(value) != 1) {
+    return(failure(
+      "Passed value must be a single logical value, not a vector"
+    ))
+  }
+
+  return(success())
 }
