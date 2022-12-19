@@ -15,27 +15,49 @@
 #' @concept value
 #' @export
 is_value <- function(value, allow_na = FALSE, allow_null = FALSE) {
-  if (is.null(value)) {
-    return(allow_null)
-  }
-
-  if (length(value) != 1) {
-    return(FALSE)
-  }
-
-  if (is_na_value(value)) {
-    return(ifelse(allow_na, TRUE, FALSE))
-  }
-
-  return(TRUE)
+  res <- inspect_value(value, allow_na = allow_na, allow_null = allow_null)
+  return(res$valid)
 }
 assertthat::on_failure(is_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_value(value, allow_na = allow_na, allow_null = allow_null)
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("single value"),
-    ". Got: ",
-    deparse(eval(call$value, env)))
+    ". ", res$reason
+  )
   return(msg)
+}
+inspect_value <- function(value, allow_na = FALSE, allow_null = FALSE) {
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value cannot be NULL"))
+    }
+  }
+
+  if (!is.atomic(value)) {
+    return(failure("Passed value is not a R atomic vector"))
+  }
+
+  if (length(value) != 1) {
+    return(failure("Passed value must be a single value, not a vector"))
+  }
+
+  if (is.na(value)) {
+    if (allow_na == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value cannot be NA"))
+    }
+  }
+
+  return(success())
+
 }
 
 
@@ -57,13 +79,31 @@ assertthat::on_failure(is_value) <- function(call, env) {
 #' @concept value
 #' @export
 is_na_value <- function(value) {
-  return(is.vector(value) && length(value) == 1 && is.na(value))
+  res <- inspect_na_value(value)
+  return(res$valid)
 }
 assertthat::on_failure(is_na_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+  res <- inspect_na_value(value)
+
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("NA (any type)"),
-    ". Got: ",
-    deparse(eval(call$value, env)))
+    ". ", res$reason)
   return(msg)
+}
+inspect_na_value <- function(value) {
+  res <- inspect_value(
+    value, allow_na = TRUE, allow_null = FALSE
+  )
+  if (!res$valid) {
+    return(res)
+  }
+
+  if (!is.na(value)) {
+    return(failure("Passed value is not NA"))
+  }
+
+  return(success())
+
 }
