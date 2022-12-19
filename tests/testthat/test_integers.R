@@ -390,3 +390,46 @@ test_that("is_integer_vector with NA", {
   expect_true(is_integer_vector(v, allow_na_values = TRUE))
 
 })
+
+test_that("is_binary_vector", {
+  v1 <- c(0, 1, 1, 1, 0)
+  v2 <- c(0, 1, 1, 2, 0)
+
+  expect_true(is_binary_vector(v1))
+  expect_false(is_binary_vector(v2))
+  expect_error(
+    assertthat::assert_that(is_binary_vector(v2)),
+    paste0(
+      "v2 must be a vector of binary values \\(0 or 1\\) ",
+      "possibly degenerate with no NAs. Vector contains",
+      " elements that are not in the allowed values"
+     ))
+})
+
+test_that("is_binary_vector with NA", {
+  v1 <- c(0, 1, NA, 1, 0)
+
+  expect_false(is_binary_vector(v1))
+  expect_true(is_binary_vector(v1, allow_na_values = TRUE))
+
+})
+
+test_that("is_binary_vector allow_degenerate", {
+  v1 <- c(1, 1, 1, 1, 1, NA)
+  v2 <- c(0, 0, 0, 0)
+
+  expect_true(is_binary_vector(v1, allow_na_values = TRUE))
+  expect_false(is_binary_vector(
+    v1, allow_na_values = TRUE, allow_degenerate = FALSE))
+
+  expect_true(is_binary_vector(v2))
+  expect_false(is_binary_vector(v2, allow_degenerate = FALSE))
+
+  expect_error(
+    assertthat::assert_that(is_binary_vector(v1, allow_degenerate = FALSE)),
+    paste0(
+      "v1 must be a vector of binary values \\(0 or 1\\)",
+      " non-degenerate with no NAs. Vector contains ",
+      "elements that are not in the allowed values"
+     ))
+})

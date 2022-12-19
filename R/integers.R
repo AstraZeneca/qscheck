@@ -477,35 +477,51 @@ is_binary_vector <- function(
     v, allow_na_values = FALSE, allow_degenerate = TRUE
     ) {
 
-  if (allow_na_values == TRUE) {
-    allowed <- c(0, 1, NA)
-  } else {
-    allowed <- c(0, 1)
-  }
+  res <- inspect_binary_vector(
+    v, allow_na_values = allow_na_values, allow_degenerate = allow_degenerate
+  )
 
-  if (!vector_allowed_values(v, allowed)) {
-    return(FALSE)
-  }
-
-
-  if (!allow_degenerate) {
-    v_entries <- unique(v)
-    if (length(v_entries[!is.na(v_entries)]) == 1) {
-      return(FALSE)
-    }
-  }
-  return(TRUE)
+  return(res$valid)
 }
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
+  v <- callget(call, env, "v", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
+
+  res <- inspect_binary_vector(v)
 
   return(
     paste0(
       deparse(call$v),
       snippet_must_be("vector of binary values (0 or 1)"),
       snippet_degenerate(allow_degenerate),
-      snippet_na_values(allow_na_values)
+      snippet_na_values(allow_na_values),
+      ". ", res$reason
     )
   )
+}
+inspect_binary_vector <- function(
+    v, allow_na_values = FALSE, allow_degenerate = TRUE) {
+  if (allow_na_values == TRUE) {
+    allowed <- c(0, 1, NA)
+  } else {
+    allowed <- c(0, 1)
+  }
+
+  res <- inspect_vector_allowed_values(v, allowed)
+  if (!res$valid) {
+    return(res)
+  }
+
+  if (!allow_degenerate) {
+    v_entries <- unique(v)
+    if (length(v_entries[!is.na(v_entries)]) == 1) {
+      return(failure(
+        paste0(
+          "Passed vector is degenerate on the value ", v_entries[[1]]))
+      )
+    }
+  }
+  return(success())
+
 }

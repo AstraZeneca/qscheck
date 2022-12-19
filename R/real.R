@@ -394,8 +394,11 @@ is_positive_real_vector <- function(
     min_length = min_length, max_length = max_length,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
+
+  return(res$valid)
 }
 assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
@@ -683,7 +686,7 @@ inspect_increasing_vector <- function(
     strictly_msg <- " strictly"
   }
 
-  if (!is.unsorted(v, na.rm = TRUE, strictly = strictly)) {
+  if (is.unsorted(v, na.rm = TRUE, strictly = strictly)) {
     return(failure(
       paste0("Passed vector is not", strictly_msg, " increasing")))
   }
@@ -758,9 +761,10 @@ inspect_decreasing_vector <- function(
     strictly_msg <- " strictly"
   }
 
-  if (!is.unsorted(rev(v), na.rm = TRUE, strictly = strictly)) {
+  if (is.unsorted(rev(v), na.rm = TRUE, strictly = strictly)) {
     return(failure(
       paste0("Passed vector is not", strictly_msg, " decreasing")))
   }
 
+  return(success())
 }

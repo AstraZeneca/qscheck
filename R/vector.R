@@ -240,7 +240,7 @@ inspect_vector_allowed_values <- function(v, allowed_values) {
 
   if (!all(v %in% allowed_values)) {
     return(failure(
-      "Vector contains elements that are not in the allowed_values"))
+      "Vector contains elements that are not in the allowed values"))
   }
 
   return(success())
