@@ -214,3 +214,16 @@ snippet_exact_matrix_dimension <- function(num_rows, num_cols) {
 
   return(msg)
 }
+
+snippet_function_args <- function(num_args, args) {
+  msg <- ""
+  if (!is.null(num_args)) {
+   msg <- paste0(msg, " with ", num_args, " arguments")
+  }
+
+  if (!is.null(args)) {
+    msg <- paste0(msg, " with arguments named ", flatten_vector(args))
+  }
+
+  return(msg)
+}
