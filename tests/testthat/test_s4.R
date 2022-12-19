@@ -13,31 +13,21 @@ test_that("is_S4_instance", {
   expect_false(is_s4_instance(s, "worker"))
   expect_true(is_s4_instance(NULL, "student", allow_null = TRUE))
 
-  err <- tryCatch({
-      assertthat::assert_that(is_s4_instance(NULL, "student"))
-      NULL
-    },
-    error = function(e) {
-      return(e)
-    }
-  )
-  expect_equal(
-    as.character(err),
-    "Error: NULL must be an instance of S4 class student. Got: NULL\n")
-
-  err <- tryCatch({
-      assertthat::assert_that(is_s4_instance(
-        list(), "student", allow_null = TRUE))
-      NULL
-    },
-    error = function(e) {
-      return(e)
-    }
-  )
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_s4_instance(NULL, "student")),
     paste0(
-      "Error: list() must be an instance of S4 class student or NULL. ",
-      "Got: list()\n"))
+      "NULL must be an instance of S4 class student. ",
+      "Passed value cannot be NULL"
+    )
+  )
+
+  expect_error(
+    assertthat::assert_that(
+      is_s4_instance(list(), "student", allow_null = TRUE)
+    ),
+    paste0(
+      "list\\(\\) must be an instance of S4 class student or NULL. ",
+      "Passed value is not an S4 instance"
+    )
+  )
 })
