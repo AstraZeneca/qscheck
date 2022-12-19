@@ -88,20 +88,19 @@ test_that("is_one_of", {
 
   val <- "x"
   err <- tryCatch({
-      assertthat::assert_that(is_one_of(
-        val,
-        c("foo", "quux", NA_character_),
-        allow_null = TRUE))
       NULL
     },
     error = function(e) {
       return(e)
     }
   )
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_one_of(
+      val,
+      c("foo", "quux", NA_character_),
+      allow_null = TRUE)),
     paste0(
-      "Error: val must be one of the following: 'foo', 'quux', NA or NULL. ",
-      "Got: \"x\"\n"
+      "val must be one of the following: 'foo', 'quux', NA or NULL. ",
+      "Value x is not one of the allowed options"
      ))
 })

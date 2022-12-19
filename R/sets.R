@@ -17,23 +17,15 @@
 #' @concept set
 #' @export
 is_one_of <- function(value, options, allow_null = FALSE) {
-  if (is.null(value)) {
-    return(allow_null)
-  }
-
-  if (typeof(value) != typeof(options)) {
-    return(FALSE)
-  }
-
-  if (length(value) != 1) {
-    return(FALSE)
-  }
-
-  return(value %in% options)
+  res <- inspect_is_one_of(value, options, allow_null = allow_null)
+  return(res$valid)
 }
 assertthat::on_failure(is_one_of) <- function(call, env) {
-  allow_null <- callget(call, env, "allow_null", FALSE)
+  value <- callget(call, env, "value", NULL)
   options <- callget(call, env, "options", NULL)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_is_one_of(value, options, allow_null = allow_null)
 
   msg <- paste0(
     deparse(call$value),
@@ -42,10 +34,39 @@ assertthat::on_failure(is_one_of) <- function(call, env) {
       article = FALSE
     ),
     snippet_null(allow_null),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   )
   return(msg)
+}
+inspect_is_one_of <- function(value, options, allow_null = FALSE) {
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value cannot be NULL"))
+    }
+  }
+
+  if (typeof(value) != typeof(options)) {
+    return(failure(
+      paste0(
+        "Options is of type ", typeof(options),
+        " and value is of incompatible type ", typeof(value))
+      )
+    )
+  }
+
+  if (length(value) != 1) {
+    return(failure("Value cannot be a vector"))
+  }
+
+  if (!(value %in% options)) {
+    return(failure(
+      paste0("Value ", value, " is not one of the allowed options"))
+    )
+  }
+
+  return(success())
 }
 
 #' Checks if the passed values are mutually exclusive.
