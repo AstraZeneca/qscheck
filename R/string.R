@@ -122,31 +122,26 @@ is_string_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
     allow_na_values = FALSE, allow_null = FALSE) {
 
-  if (is.null(value)) {
-    return(allow_null)
-  }
-
-  if (!is_vector(
-      value,
-      exact_length = exact_length,
-      min_length = min_length,
-      max_length = max_length)) {
-    return(FALSE)
-  }
-  if (!is.character(value)) {
-    return(FALSE)
-  }
-  if (any(is.na(value)) && allow_na_values == FALSE) {
-    return(FALSE)
-  }
-  return(TRUE)
+  res <- inspect_string_vector(
+    value, exact_length = exact_length, min_length = min_length,
+    max_length = max_length, allow_na_values = allow_na_values,
+    allow_null = allow_null
+  )
+  return(res$valid)
 }
 assertthat::on_failure(is_string_vector) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_string_vector(
+    value, exact_length = exact_length, min_length = min_length,
+    max_length = max_length, allow_na_values = allow_na_values,
+    allow_null = allow_null
+  )
 
   msg <- paste0(
     deparse(call$value),
@@ -154,8 +149,37 @@ assertthat::on_failure(is_string_vector) <- function(call, env) {
     snippet_length(exact_length, min_length, max_length),
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
-    ". Got: ",
-    deparse(eval(call$value, env))
+    ". ", res$reason
   )
   return(msg)
+}
+inspect_string_vector <- function(
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_na_values = FALSE, allow_null = FALSE) {
+
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value cannot be NULL"))
+    }
+  }
+
+  res <- inspect_vector(
+      value,
+      exact_length = exact_length,
+      min_length = min_length,
+      max_length = max_length
+  )
+  if (!res$valid) {
+    return(res)
+  }
+
+  if (!is.character(value)) {
+    return(failure("Passed vector is not of type character"))
+  }
+  if (any(is.na(value)) && allow_na_values == FALSE) {
+    return(failure("Passed vector contains NAs"))
+  }
+  return(success())
 }

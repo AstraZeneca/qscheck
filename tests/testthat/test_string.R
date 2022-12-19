@@ -31,61 +31,30 @@ test_that("is_string_vector", {
   v2 <- "hello"
   expect_true(is_string_vector(v2))
 
-  err <- tryCatch({
-    assertthat::assert_that(is_string_vector(v, exact_length = 4))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
+  expect_error(
+    assertthat::assert_that(is_string_vector(v, exact_length = 4)),
+    paste0("v must be a string vector of exact length 4 with no NAs. ",
+    "Passed vector length is 3 instead of the expected 4"))
 
-  expect_equal(as.character(err),
-    paste0("Error: v must be a string vector of exact length 4 with no NAs. ",
-    "Got: c(\"foo\", \"bar\", \"baz\")\n"))
-
-  err <- tryCatch({
-    assertthat::assert_that(is_string_vector(v, min_length = 4))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_string_vector(v, min_length = 4)),
     paste0(
-      "Error: v must be a string vector of length not less than 4",
+      "v must be a string vector of length not less than 4",
       " with no NAs.",
-      " Got: c(\"foo\", \"bar\", \"baz\")\n"))
+      " Passed vector length is 3 but must be at least 4"))
 
-  err <- tryCatch({
-    assertthat::assert_that(is_string_vector(v, max_length = 2))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_string_vector(v, max_length = 2)),
     paste0(
-    "Error: v must be a string vector of length not greater than 2",
+    "v must be a string vector of length not greater than 2",
     " with no NAs.",
-    " Got: c(\"foo\", \"bar\", \"baz\")\n"))
+    " Passed vector length is 3 but must be at most 2"))
 
-  err <- tryCatch({
-    assertthat::assert_that(is_string_vector(v,
-      min_length = 4, max_length = 8))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(
+      is_string_vector(v, min_length = 4, max_length = 8)),
     paste0(
-      "Error: v must be a string vector of length between 4 and 8 inclusive",
+      "v must be a string vector of length between 4 and 8 inclusive",
       " with no NAs.",
-      " Got: c(\"foo\", \"bar\", \"baz\")\n"))
+      " Passed vector length is 3 but must be at least 4"))
 })
