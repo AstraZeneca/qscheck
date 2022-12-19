@@ -11,13 +11,10 @@ test_that("is_string_value", {
   expect_false(is_string_value(NA, allow_na = TRUE))
   expect_false(is_string_value(c("foo", "bar")))
 
-  err <- tryCatch({
-    assertthat::assert_that(is_string_value(4))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
+  expect_error(
+    assertthat::assert_that(is_string_value(4)),
+    "4 must be a string. Passed value is not a character"
+  )
 })
 
 test_that("is_string_vector", {
