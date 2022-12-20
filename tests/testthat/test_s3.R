@@ -7,31 +7,21 @@ test_that("is_S3_instance", {
   expect_false(is_s3_instance(NULL, "Student"))
   expect_true(is_s3_instance(NULL, "Student", allow_null = TRUE))
 
-  err <- tryCatch({
-      assertthat::assert_that(is_s3_instance(NULL, "Student"))
-      NULL
-    },
-    error = function(e) {
-      return(e)
-    }
-  )
-  expect_equal(
-    as.character(err),
-    "Error: NULL must be an instance of S3 class Student. Got: NULL\n")
-
-  err <- tryCatch({
-      assertthat::assert_that(is_s3_instance(
-        list(), "Student", allow_null = TRUE))
-      NULL
-    },
-    error = function(e) {
-      return(e)
-    }
-  )
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_s3_instance(NULL, "Student")),
     paste0(
-      "Error: list() must be an instance of S3 class Student or NULL. ",
-      "Got: list()\n"))
+      "NULL must be an instance of S3 class Student. ",
+      "Passed value cannot be NULL"
+    )
+  )
+
+  expect_error(
+    assertthat::assert_that(
+      is_s3_instance(list(), "Student", allow_null = TRUE)
+    ),
+    paste0(
+      "list\\(\\) must be an instance of S3 class Student or NULL. ",
+      "Passed value is not an instance of the specifieed S3 class"
+    )
+  )
 })
