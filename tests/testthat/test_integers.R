@@ -432,4 +432,14 @@ test_that("is_binary_vector allow_uniform", {
       " non-uniform with no NAs. Vector contains ",
       "elements that are not in the allowed values"
      ))
+
+  expect_error(
+    assertthat::assert_that(is_binary_vector(
+      v1, allow_na_values = TRUE, allow_uniform = FALSE
+    )),
+    paste0(
+      "v1 must be a vector of binary values \\(0 or 1\\) non-uniform or NAs. ",
+      "Passed vector is uniform on the value 1")
+  )
+
 })

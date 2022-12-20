@@ -511,7 +511,9 @@ assertthat::on_failure(is_binary_vector) <- function(call, env) {
     allow_uniform <- allow_degenerate
   }
 
-  res <- inspect_binary_vector(v)
+  res <- inspect_binary_vector(v,
+    allow_na_values = allow_na_values,
+    allow_uniform = allow_uniform)
 
   return(
     paste0(
