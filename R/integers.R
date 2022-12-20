@@ -1,4 +1,4 @@
-#' Checks if the passed value is a single integer value (not type)
+#' Checks if the passed value is a single integer value (not type).
 #'
 #' @param value the value to verify
 #' @param min minimum value to constraint the integer, inclusive
