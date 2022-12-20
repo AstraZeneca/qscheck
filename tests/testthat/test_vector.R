@@ -227,7 +227,7 @@ test_that("vector_allowed_values", {
     paste0(
       "Error: v1 must be a vector containing only elements from the ",
       "following list: 'foo', 'quux', NA. Vector contains elements that ",
-      "are not in the allowed_values\n"
+      "are not in the allowed values\n"
      ))
 })
 test_that("is_vector_without_na", {

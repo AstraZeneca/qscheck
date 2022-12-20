@@ -481,16 +481,6 @@ is_binary_vector <- function(
     allow_uniform = TRUE
     ) {
 
-  if (allow_na_values == TRUE) {
-    allowed <- c(0, 1, NA)
-  } else {
-    allowed <- c(0, 1)
-  }
-
-  if (!vector_allowed_values(v, allowed)) {
-    return(FALSE)
-  }
-
   if (!is.null(allow_degenerate)) {
     lifecycle::deprecate_warn(
       "0.23.0",
@@ -500,15 +490,14 @@ is_binary_vector <- function(
     allow_uniform <- allow_degenerate
   }
 
-  if (!allow_uniform) {
-    v_entries <- unique(v)
-    if (length(v_entries[!is.na(v_entries)]) == 1) {
-      return(FALSE)
-    }
-  }
-  return(TRUE)
+  res <- inspect_binary_vector(
+    v, allow_na_values = allow_na_values, allow_uniform = allow_uniform
+  )
+
+  return(res$valid)
 }
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
+  v <- callget(call, env, "v", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_degenerate <- callget(call, env, "allow_degenerate", NULL)
   allow_uniform <- callget(call, env, "allow_uniform", TRUE)
@@ -522,12 +511,40 @@ assertthat::on_failure(is_binary_vector) <- function(call, env) {
     allow_uniform <- allow_degenerate
   }
 
+  res <- inspect_binary_vector(v)
+
   return(
     paste0(
       deparse(call$v),
       snippet_must_be("vector of binary values (0 or 1)"),
       snippet_uniform(allow_uniform),
-      snippet_na_values(allow_na_values)
+      snippet_na_values(allow_na_values),
+      ". ", res$reason
     )
   )
+}
+inspect_binary_vector <- function(
+    v, allow_na_values = FALSE, allow_uniform = TRUE) {
+  if (allow_na_values == TRUE) {
+    allowed <- c(0, 1, NA)
+  } else {
+    allowed <- c(0, 1)
+  }
+
+  res <- inspect_vector_allowed_values(v, allowed)
+  if (!res$valid) {
+    return(res)
+  }
+
+  if (!allow_uniform) {
+    v_entries <- unique(v)
+    if (length(v_entries[!is.na(v_entries)]) == 1) {
+      return(failure(
+        paste0(
+          "Passed vector is uniform on the value ", v_entries[[1]]))
+      )
+    }
+  }
+  return(success())
+
 }
