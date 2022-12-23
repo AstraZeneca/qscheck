@@ -13,16 +13,9 @@ test_that("is_na_value", {
   expect_false(is_na_value(c(NA, NA)))
   expect_false(is_na_value("hello"))
 
-  err <- tryCatch({
-    foo <- 3
-    assertthat::assert_that(is_na_value(foo))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
-    "Error: foo must be a NA (any type). Got: 3\n")
+  foo <- 3
+  expect_error(
+    assertthat::assert_that(is_na_value(foo)),
+    "foo must be a NA \\(any type\\). Passed value is not NA"
+  )
 })
