@@ -2,6 +2,7 @@
 
 export(any_satisfied)
 export(assert)
+export(consequential)
 export(data_frames_same_colnames)
 export(is_binary_vector)
 export(is_data_frame)
