@@ -1,4 +1,4 @@
-#' Checks if the passed value is a single integer value (not type)
+#' Checks if the passed value is a single integer value (not type).
 #'
 #' @param value the value to verify
 #' @param min minimum value to constraint the integer, inclusive
@@ -454,13 +454,16 @@ inspect_non_negative_integer_vector <- function(
 
 }
 
+
 #' Checks if a vector contains only binary values (0 or 1)
 #'
 #' @param v the vector
 #' @param allow_na_values if the vector can contain NA values. Default FALSE
-#' @param allow_degenerate if TRUE, the vector can contain only one value class
-#'        (e.g. all the non-NA values are 0, and there's not a single 1, or
-#'        vice-versa). If FALSE, such vectors will be rejected.
+#' @param allow_uniform if TRUE (the default), the vector is allowed to contain
+#         only one value class (e.g. all the non-NA values are 0, and there's
+#         not a single 1, or vice-versa). If FALSE, such vectors will be
+#         rejected.
+#' @param allow_degenerate deprecated. Use allow_uniform.
 #'
 #' @examples
 #' \dontrun{
@@ -474,11 +477,21 @@ inspect_non_negative_integer_vector <- function(
 #' @concept vector
 #' @export
 is_binary_vector <- function(
-    v, allow_na_values = FALSE, allow_degenerate = TRUE
+    v, allow_na_values = FALSE, allow_degenerate = NULL,
+    allow_uniform = TRUE
     ) {
 
+  if (!is.null(allow_degenerate)) {
+    lifecycle::deprecate_warn(
+      "0.23.0",
+      "is_binary_vector(allow_degenerate)",
+      "is_binary_vector(allow_uniform)"
+    )
+    allow_uniform <- allow_degenerate
+  }
+
   res <- inspect_binary_vector(
-    v, allow_na_values = allow_na_values, allow_degenerate = allow_degenerate
+    v, allow_na_values = allow_na_values, allow_uniform = allow_uniform
   )
 
   return(res$valid)
@@ -486,22 +499,34 @@ is_binary_vector <- function(
 assertthat::on_failure(is_binary_vector) <- function(call, env) {
   v <- callget(call, env, "v", NULL)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
-  allow_degenerate <- callget(call, env, "allow_degenerate", TRUE)
+  allow_degenerate <- callget(call, env, "allow_degenerate", NULL)
+  allow_uniform <- callget(call, env, "allow_uniform", TRUE)
 
-  res <- inspect_binary_vector(v)
+  if (!is.null(allow_degenerate)) {
+    lifecycle::deprecate_warn(
+      "0.23.0",
+      "is_binary_vector(allow_degenerate)",
+      "is_binary_vector(allow_uniform)"
+    )
+    allow_uniform <- allow_degenerate
+  }
+
+  res <- inspect_binary_vector(v,
+    allow_na_values = allow_na_values,
+    allow_uniform = allow_uniform)
 
   return(
     paste0(
       deparse(call$v),
       snippet_must_be("vector of binary values (0 or 1)"),
-      snippet_degenerate(allow_degenerate),
+      snippet_uniform(allow_uniform),
       snippet_na_values(allow_na_values),
       ". ", res$reason
     )
   )
 }
 inspect_binary_vector <- function(
-    v, allow_na_values = FALSE, allow_degenerate = TRUE) {
+    v, allow_na_values = FALSE, allow_uniform = TRUE) {
   if (allow_na_values == TRUE) {
     allowed <- c(0, 1, NA)
   } else {
@@ -513,12 +538,12 @@ inspect_binary_vector <- function(
     return(res)
   }
 
-  if (!allow_degenerate) {
+  if (!allow_uniform) {
     v_entries <- unique(v)
     if (length(v_entries[!is.na(v_entries)]) == 1) {
       return(failure(
         paste0(
-          "Passed vector is degenerate on the value ", v_entries[[1]]))
+          "Passed vector is uniform on the value ", v_entries[[1]]))
       )
     }
   }

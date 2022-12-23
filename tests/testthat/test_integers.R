@@ -401,7 +401,7 @@ test_that("is_binary_vector", {
     assertthat::assert_that(is_binary_vector(v2)),
     paste0(
       "v2 must be a vector of binary values \\(0 or 1\\) ",
-      "possibly degenerate with no NAs. Vector contains",
+      "possibly uniform with no NAs. Vector contains",
       " elements that are not in the allowed values"
      ))
 })
@@ -414,22 +414,32 @@ test_that("is_binary_vector with NA", {
 
 })
 
-test_that("is_binary_vector allow_degenerate", {
+test_that("is_binary_vector allow_uniform", {
   v1 <- c(1, 1, 1, 1, 1, NA)
   v2 <- c(0, 0, 0, 0)
 
   expect_true(is_binary_vector(v1, allow_na_values = TRUE))
   expect_false(is_binary_vector(
-    v1, allow_na_values = TRUE, allow_degenerate = FALSE))
+    v1, allow_na_values = TRUE, allow_uniform = FALSE))
 
   expect_true(is_binary_vector(v2))
-  expect_false(is_binary_vector(v2, allow_degenerate = FALSE))
+  expect_false(is_binary_vector(v2, allow_uniform = FALSE))
 
   expect_error(
-    assertthat::assert_that(is_binary_vector(v1, allow_degenerate = FALSE)),
+    assertthat::assert_that(is_binary_vector(v1, allow_uniform = FALSE)),
     paste0(
       "v1 must be a vector of binary values \\(0 or 1\\)",
-      " non-degenerate with no NAs. Vector contains ",
+      " non-uniform with no NAs. Vector contains ",
       "elements that are not in the allowed values"
      ))
+
+  expect_error(
+    assertthat::assert_that(is_binary_vector(
+      v1, allow_na_values = TRUE, allow_uniform = FALSE
+    )),
+    paste0(
+      "v1 must be a vector of binary values \\(0 or 1\\) non-uniform or NAs. ",
+      "Passed vector is uniform on the value 1")
+  )
+
 })

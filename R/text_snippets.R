@@ -98,6 +98,14 @@ snippet_degenerate <- function(allow_degenerate) {
   return(msg)
 }
 
+snippet_uniform <- function(allow_uniform) {
+  msg <- " possibly uniform"
+  if (!allow_uniform) {
+    msg <- " non-uniform"
+  }
+  return(msg)
+}
+
 snippet_names <- function(required_names = NULL) {
   msg <- ""
   if (!is.null(required_names)) {
