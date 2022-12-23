@@ -21,53 +21,52 @@
 is_function <- function(
     value, num_args = NULL, args = NULL, allow_null = FALSE) {
 
-  res <- .inspect_function(value, num_args, args, allow_null)
-
+  res <- inspect_function(value, num_args, args, allow_null)
   return(res$valid)
 }
 
 assertthat::on_failure(is_function) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
   num_args <- callget(call, env, "num_args", NULL)
   args <- callget(call, env, "args", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  value_name <- deparse(call$value)
-  res <- .inspect_function(eval(call$value, env), num_args, args, allow_null)
-  msg <- .expected_description(
-    value_name, num_args, args, allow_null, res$reason
+  res <- inspect_function(value, num_args, args, allow_null)
+
+
+  msg <- paste0(
+    deparse(call$value),
+    snippet_must_be("function"),
+    snippet_function_args(num_args, args),
+    snippet_null(allow_null),
+    ". ", res$reason
   )
+
   return(msg)
 }
 
-.inspect_function <- function(value, num_args, args, allow_null) {
-  res <- list(
-    valid = FALSE,
-    reason = ""
-  )
-
+inspect_function <- function(value, num_args, args, allow_null) {
   if (is.null(value)) {
     if (allow_null) {
-      res$valid <- TRUE
-      return(res)
+      return(success())
     } else {
-      res$reason <- "The passed value was NULL"
+      return(failure("Passed value cannot be NULL"))
     }
   }
 
   if (!inherits(value, "function")) {
-    res$reason <- "The passed value was not a function"
-    return(res)
+    return(failure("Passed value is not a function"))
   }
 
   func_args <- formals(value)
   if (!is.null(num_args)) {
     if (length(func_args) != num_args) {
-      res$reason <- paste0(
-        "The passed function has an incorrect number of arguments (",
-        as.character(length(func_args)),
-        ")"
+      return(failure(
+          paste0(
+          "Passed function has an incorrect number of arguments (",
+          length(func_args), ")"
+          ))
       )
-      return(res)
     }
   }
 
@@ -75,54 +74,24 @@ assertthat::on_failure(is_function) <- function(call, env) {
     num_args <- length(args)
 
     if (num_args != length(func_args)) {
-      res$reason <- paste0(
+      return(failure(paste0(
         "The passed function has an incorrect number of arguments (",
-        as.character(length(func_args)),
+        length(func_args),
         ")"
-      )
-      return(res)
+      )))
     }
 
     for (idx in seq_len(num_args)) {
       if (args[idx] != names(func_args)[idx]) {
-        res$reason <- paste0(
-          "Argument ", as.character(idx), " was '", names(func_args)[idx],
-          "' but '", args[idx], "' is required")
-        return(res)
+        return(failure(
+          paste0(
+            "Argument ", idx, " was '", names(func_args)[idx],
+            "' but '", args[idx], "' is required"
+          )
+        ))
       }
     }
   }
 
-  res$valid <- TRUE
-  return(res)
-}
-
-.expected_description <- function(
-    value_name, num_args, args, allow_null, failure_reason) {
-  allow_null_msg <- ""
-  if (allow_null) {
-    allow_null_msg <- " or NULL"
-  }
-
-  args_msg <- ""
-  if (!is.null(args)) {
-    args_msg <- paste0(" with arguments named ", paste(args, collapse = ", "))
-  }
-
-  num_args_msg <- ""
-  if (!is.null(num_args)) {
-    num_args_msg <- paste0(" with ", num_args, " arguments")
-  }
-
-  msg <- paste0(
-    value_name,
-    " must be a function",
-    num_args_msg,
-    args_msg,
-    allow_null_msg,
-    ". ",
-    failure_reason,
-    ".")
-
-  return(msg)
+  return(success())
 }

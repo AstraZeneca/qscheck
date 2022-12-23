@@ -15,35 +15,19 @@ test_that("is_function", {
 
   expect_false(is_function(tibble::tibble()))
 
-  err <- tryCatch({
-    assertthat::assert_that(is_function(foo, args = c("x", "z", "y")))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_function(foo, args = c("x", "z", "y"))),
     paste0(
-      "Error: foo must be a function with arguments named x, z, y. ",
-      "Argument 2 was 'y' but 'z' is required.\n"
+      "foo must be a function with arguments named 'x', 'z', 'y'. ",
+      "Argument 2 was 'y' but 'z' is required"
     )
   )
 
-  err <- tryCatch({
-    assertthat::assert_that(is_function(foo, num_args = 2))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(
-    as.character(err),
+  expect_error(
+    assertthat::assert_that(is_function(foo, num_args = 2)),
     paste0(
-      "Error: foo must be a function with 2 arguments. ",
-      "The passed function has an incorrect number of arguments (3).\n"
+      "foo must be a function with 2 arguments. ",
+      "Passed function has an incorrect number of arguments \\(3\\)"
     )
   )
 })
