@@ -4,16 +4,21 @@
 \alias{is_binary_vector}
 \title{Checks if a vector contains only binary values (0 or 1)}
 \usage{
-is_binary_vector(v, allow_na_values = FALSE, allow_degenerate = TRUE)
+is_binary_vector(
+  v,
+  allow_na_values = FALSE,
+  allow_degenerate = NULL,
+  allow_uniform = TRUE
+)
 }
 \arguments{
 \item{v}{the vector}
 
 \item{allow_na_values}{if the vector can contain NA values. Default FALSE}
 
-\item{allow_degenerate}{if TRUE, the vector can contain only one value class
-(e.g. all the non-NA values are 0, and there's not a single 1, or
-vice-versa). If FALSE, such vectors will be rejected.}
+\item{allow_degenerate}{deprecated. Use allow_uniform.}
+
+\item{allow_uniform}{if TRUE (the default), the vector is allowed to contain}
 }
 \description{
 Checks if a vector contains only binary values (0 or 1)

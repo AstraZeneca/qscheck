@@ -1,3 +1,27 @@
+# qscheck 0.23.0
+
+- #85 Add consequential directive to check simultaneous presence or absence of parameters
+- #84 Deprecate allow_degenerate in is_binary_vector in favour of allow_uniform
+- #83 Update function analysis code against modern code
+- #82 Added motivation for value check
+- #81 Add motivation for string value and vector
+- #80 added motivation failure to is_one_of
+- #79 Added motivation failure for S4 checks
+- #78 Added motivation failure for s3 checks
+- #77 Add motivation failure for real entities.
+- #76 Add is_r6_class/instance motivation failure output
+- #75 Added motivation failure to is_logical_value
+- #74 Added motivation failure for lists
+- #73 Add square matrix checks
+- #72 Added is_matrix
+- #71, #69 Introduced motivation failure for integer
+- #70 Introduced motivation failure for vector
+- #68 Added motivation failure for factors
+- #67 Added motivation failure report for data frame objects.
+- #66 Refactor failure reasons in interval to introduce report object
+- #65 Extract text snippets from message producing routines to ensure less duplication
+- #63 Change allow_null handling to ensure that the value is returned immediately, and not left to a fallback
+
 # qscheck 0.22.0
 
 - #59 Added is_s4_instance

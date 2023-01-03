@@ -2,7 +2,7 @@
 % Please edit documentation in R/integers.R
 \name{is_integer_value}
 \alias{is_integer_value}
-\title{Checks if the passed value is a single integer value (not type)}
+\title{Checks if the passed value is a single integer value (not type).}
 \usage{
 is_integer_value(value, min = NULL, max = NULL, allow_null = FALSE)
 }
@@ -16,7 +16,7 @@ is_integer_value(value, min = NULL, max = NULL, allow_null = FALSE)
 \item{allow_null}{if TRUE, accepts a null value}
 }
 \description{
-Checks if the passed value is a single integer value (not type)
+Checks if the passed value is a single integer value (not type).
 }
 \examples{
 \dontrun{
