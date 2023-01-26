@@ -1,4 +1,4 @@
-test_that("assert", {
+test_that("assertionViaQScheck", {
   err <- tryCatch({
     assert(is_factor(3, exact_levels = c("bar", "foo"), allow_null = TRUE))
     NULL

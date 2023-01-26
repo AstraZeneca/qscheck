@@ -61,7 +61,12 @@ reference:
   contents:
   - has_concept("set")
 
+- title: Strings
+  desc: Functions to check for strings
+  contents:
+  - has_concept("string")
+
 - title: Other
   desc: Other functions
   contents:
-  - lacks_concepts(c("integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "na"))
+  - lacks_concepts(c("integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "na", "string"))
