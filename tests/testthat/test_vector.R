@@ -248,7 +248,10 @@ test_that("vectorsSameLength", {
   expect_false(vectors_same_length(c(1, 2, 3), list()))
   expect_error(
     assert(vectors_same_length(c(1, 2, 3), c("foo", "bar", "baz", "quux"))),
-    "xxx"
+    paste0(
+      "vectors c\\(1, 2, 3\\) and c\\(\"foo\", \"bar\", \"baz\", \"quux\"\\)",
+      " must have the exact same length."
+    )
   )
 
 })
