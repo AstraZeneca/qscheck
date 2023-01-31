@@ -1,4 +1,4 @@
-test_that("is_interval", {
+test_that("twoValuesOrderedIntervalLimits", {
 
   expect_true(is_interval(0, 1))
   expect_true(is_interval(1, 1, allow_degenerate = TRUE))

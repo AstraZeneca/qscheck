@@ -1,4 +1,4 @@
-test_that("is_vector", {
+test_that("variableIsVector", {
   v <- c(1, 2, 3)
   expect_true(is_vector(v))
   expect_false(is_vector(NULL))
@@ -66,7 +66,7 @@ test_that("is_vector", {
       "Passed vector length is 3 but must be at least 4\n"))
 })
 
-test_that("vectors_disjoint", {
+test_that("vectorsDisjoint", {
   v1 <- c("foo", "bar", "baz")
   v2 <- c(2, 3, 4)
   v3 <- c(2, "foo", 4)
@@ -123,7 +123,7 @@ test_that("vectors_disjoint", {
   )
 })
 
-test_that("vector_value_occurrences", {
+test_that("valueOccursTimesInVector", {
   vec <- c(1, 2, 3)
   val <- 3
   err <- tryCatch({
@@ -205,7 +205,7 @@ test_that("vector_value_occurrences", {
 
 })
 
-test_that("vector_allowed_values", {
+test_that("vectorHasValuesOutOfSet", {
   v1 <- c("foo", "bar", "bar", NA_character_)
 
   expect_true(vector_allowed_values(v1, c("foo", "bar", "baz", NA_character_)))
@@ -230,14 +230,28 @@ test_that("vector_allowed_values", {
       "are not in the allowed values\n"
      ))
 })
-test_that("is_vector_without_na", {
+test_that("variableVectorNoNA", {
   expect_false(is_vector_without_na(c(1, NA, 2)))
   expect_true(is_vector_without_na(c(1, 2)))
 
 })
 
-test_that("is_vector_all_na", {
+test_that("isVectorOfOnlyNAs", {
   expect_false(is_vector_all_na(c(1, NA, 2)))
   expect_true(is_vector_all_na(c(NA, NA)))
+
+})
+
+test_that("vectorsSameLength", {
+  expect_true(vectors_same_length(c(1, 2, 3), c("foo", "bar", "baz")))
+  expect_false(vectors_same_length(c(1, 2, 3), c("foo", "bar", "baz", "quux")))
+  expect_false(vectors_same_length(c(1, 2, 3), list()))
+  expect_error(
+    assert(vectors_same_length(c(1, 2, 3), c("foo", "bar", "baz", "quux"))),
+    paste0(
+      "vectors c\\(1, 2, 3\\) and c\\(\"foo\", \"bar\", \"baz\", \"quux\"\\)",
+      " must have the exact same length."
+    )
+  )
 
 })

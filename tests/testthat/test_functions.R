@@ -1,4 +1,4 @@
-test_that("is_function", {
+test_that("variableIsAFunction", {
   foo <- function(x, y, z) {
   }
 

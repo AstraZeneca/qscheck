@@ -1,4 +1,4 @@
-test_that("consequential", {
+test_that("presenceOfVariableIsDependentOnAnother", {
   expect_true(consequential(NULL, NULL))
   expect_false(consequential(1, NULL))
   expect_false(consequential(NULL, 1))

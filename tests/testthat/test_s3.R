@@ -1,4 +1,4 @@
-test_that("is_S3_instance", {
+test_that("variableIsAS3Instance", {
   s <- list(name = "John", age = 21)
   class(s) <- c("InternationalStudent", "Student")
   expect_true(is_s3_instance(s, "InternationalStudent"))

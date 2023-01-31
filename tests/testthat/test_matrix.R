@@ -1,4 +1,4 @@
-test_that("is_matrix", {
+test_that("variableIsAMatrix", {
   expect_true(is_matrix(matrix(nrow = 3, ncol = 3)))
   expect_true(is_matrix(matrix(nrow = 3, ncol = 3), exact_num_rows = 3))
   expect_true(is_matrix(matrix(nrow = 3, ncol = 3), exact_num_cols = 3))
@@ -42,7 +42,7 @@ test_that("is_matrix", {
   )
 })
 
-test_that("is_square_matrix", {
+test_that("passedEntityIsSquaredMatrix", {
   expect_true(is_square_matrix(matrix(nrow = 3, ncol = 3)))
   expect_false(is_square_matrix(matrix(nrow = 4, ncol = 3)))
   expect_true(is_square_matrix(matrix(nrow = 3, ncol = 3), exact_dimension = 3))

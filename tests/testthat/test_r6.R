@@ -1,4 +1,4 @@
-test_that("is_r6_class", {
+test_that("variableIsR6Class", {
   cls <- R6::R6Class("mycls", list())
   expect_true(is_r6_class(cls, "mycls"))
   expect_false(is_r6_class(cls, "whatever"))
@@ -16,7 +16,7 @@ test_that("is_r6_class", {
 
 })
 
-test_that("is_r6_instance", {
+test_that("variableIsR6Instance", {
   cls <- R6::R6Class("mycls", list())
   instance <- cls$new()
   lst <- list()

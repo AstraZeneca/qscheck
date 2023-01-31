@@ -1,4 +1,4 @@
-test_that("is_integer_value", {
+test_that("variableIntegerValueWithinSpecifiedLimits", {
   expect_true(is_integer_value(1))
   expect_false(is_integer_value(1.01))
   expect_false(is_integer_value("1"))
@@ -71,7 +71,7 @@ test_that("is_integer_value", {
 
 })
 
-test_that("is_positive_integer_value", {
+test_that("variablePositiveIntegerValue", {
   expect_true(is_positive_integer_value(3))
   expect_true(is_positive_integer_value(3.0))
   expect_false(is_positive_integer_value(3.5))
@@ -98,7 +98,7 @@ test_that("is_positive_integer_value", {
   )
 })
 
-test_that("is_non_negative_integer_value", {
+test_that("variableNonNegativeIntegerValue", {
   expect_true(is_non_negative_integer_value(3))
   expect_true(is_non_negative_integer_value(3.0))
   expect_true(is_non_negative_integer_value(0))
@@ -125,7 +125,7 @@ test_that("is_non_negative_integer_value", {
 })
 
 
-test_that("is_non_negative_integer_vector", {
+test_that("variableVectorNonNegativeIntegers", {
   v <- c(1, 13, 0)
   v2 <- c(1, 5.2, 3)
   v3 <- c(3, -4, 3)
@@ -141,6 +141,11 @@ test_that("is_non_negative_integer_vector", {
   expect_false(is_non_negative_integer_vector(v, max_length = 2))
   expect_true(is_non_negative_integer_vector(
     v, exact_length = 3, max_length = 2))
+
+  v4 <- c(1, NA, 0)
+
+  expect_false(is_non_negative_integer_vector(v4))
+  expect_true(is_non_negative_integer_vector(v4, allow_na_values = TRUE))
 
   err <- tryCatch({
     assertthat::assert_that(
@@ -204,15 +209,7 @@ test_that("is_non_negative_integer_vector", {
       "Passed vector length is 3 but must be at least 4\n"))
 })
 
-test_that("is_non_negative_integer_vector with NA", {
-  v <- c(1, NA, 0)
-
-  expect_false(is_non_negative_integer_vector(v))
-  expect_true(is_non_negative_integer_vector(v, allow_na_values = TRUE))
-
-})
-
-test_that("is_positive_integer_vector", {
+test_that("variableVectorPositiveIntegers", {
   v <- c(1, 13, 1)
   v1 <- c(1, 13, 0)
   v2 <- c(1, 5.2, 3)
@@ -291,9 +288,7 @@ test_that("is_positive_integer_vector", {
       "Error: v must be a vector of positive integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4\n"))
-})
 
-test_that("is_positive_integer_vector with NA", {
   v <- c(1, NA, 20)
 
   expect_false(is_positive_integer_vector(v))
@@ -301,10 +296,11 @@ test_that("is_positive_integer_vector with NA", {
 
 })
 
-test_that("is_integer_vector", {
+test_that("variableVectorOfIntegerValues", {
   v <- c(1, 13, 0)
   v2 <- c(1, 5.2, 3)
   v3 <- c(3, -4, 3)
+  v4 <- c(3, NA, 3)
 
   expect_true(is_integer_vector(v))
   expect_false(is_integer_vector(NULL))
@@ -318,6 +314,9 @@ test_that("is_integer_vector", {
   expect_false(is_integer_vector(v, max_length = 2))
   expect_true(is_integer_vector(
     v, exact_length = 3, max_length = 2))
+
+  expect_true(is_integer_vector(v4, allow_na_values = TRUE))
+  expect_false(is_integer_vector(v4, allow_na_values = FALSE))
 
   err <- tryCatch({
     assertthat::assert_that(
@@ -381,9 +380,7 @@ test_that("is_integer_vector", {
       "Error: v must be a vector of integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4\n"))
-})
 
-test_that("is_integer_vector with NA", {
   v <- c(1, NA, 0)
 
   expect_false(is_integer_vector(v))
@@ -391,7 +388,7 @@ test_that("is_integer_vector with NA", {
 
 })
 
-test_that("is_binary_vector", {
+test_that("variableVectorBinary", {
   v1 <- c(0, 1, 1, 1, 0)
   v2 <- c(0, 1, 1, 2, 0)
 
@@ -404,17 +401,12 @@ test_that("is_binary_vector", {
       "possibly uniform with no NAs. Vector contains",
       " elements that are not in the allowed values"
      ))
-})
 
-test_that("is_binary_vector with NA", {
   v1 <- c(0, 1, NA, 1, 0)
 
   expect_false(is_binary_vector(v1))
   expect_true(is_binary_vector(v1, allow_na_values = TRUE))
 
-})
-
-test_that("is_binary_vector allow_uniform", {
   v1 <- c(1, 1, 1, 1, 1, NA)
   v2 <- c(0, 0, 0, 0)
 

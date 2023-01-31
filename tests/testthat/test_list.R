@@ -1,4 +1,4 @@
-test_that("is_list", {
+test_that("variableIsAList", {
   # this is expected. data frame is not inheriting from list.
   expect_false(is_list(data.frame()))
 

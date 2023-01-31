@@ -1,4 +1,4 @@
-test_that("is_value", {
+test_that("entityIsASingleValue", {
   expect_true(is_value(34))
   expect_false(is_value(NA))
   expect_false(is_value(NULL))
@@ -8,7 +8,7 @@ test_that("is_value", {
 
 })
 
-test_that("is_na_value", {
+test_that("passedEntityIsNAValue", {
   expect_true(is_na_value(NA))
   expect_false(is_na_value(c(NA, NA)))
   expect_false(is_na_value("hello"))

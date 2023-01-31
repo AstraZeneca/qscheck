@@ -1,4 +1,4 @@
-test_that("is_logical_value", {
+test_that("variableLogicalValue", {
   expect_true(is_logical_value(FALSE))
   expect_false(is_logical_value(c(FALSE, FALSE)))
   expect_false(is_logical_value(""))
