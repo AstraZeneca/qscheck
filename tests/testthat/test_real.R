@@ -277,10 +277,7 @@ test_that("variableVectorProbabilities", {
       "v must be a vector of values in the interval \\[0.0, 1.0\\] of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4"))
-})
 
-
-test_that("is_real_vector with NA", {
   v <- c(1.2, NA, 3.0)
   expect_false(is_real_vector(v))
   expect_true(is_real_vector(v, allow_na_values = TRUE))

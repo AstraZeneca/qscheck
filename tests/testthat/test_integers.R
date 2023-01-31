@@ -288,9 +288,7 @@ test_that("variableVectorPositiveIntegers", {
       "Error: v must be a vector of positive integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4\n"))
-})
 
-test_that("is_positive_integer_vector with NA", {
   v <- c(1, NA, 20)
 
   expect_false(is_positive_integer_vector(v))
@@ -382,9 +380,7 @@ test_that("variableVectorOfIntegerValues", {
       "Error: v must be a vector of integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4\n"))
-})
 
-test_that("is_integer_vector with NA", {
   v <- c(1, NA, 0)
 
   expect_false(is_integer_vector(v))
@@ -405,17 +401,12 @@ test_that("variableVectorBinary", {
       "possibly uniform with no NAs. Vector contains",
       " elements that are not in the allowed values"
      ))
-})
 
-test_that("is_binary_vector with NA", {
   v1 <- c(0, 1, NA, 1, 0)
 
   expect_false(is_binary_vector(v1))
   expect_true(is_binary_vector(v1, allow_na_values = TRUE))
 
-})
-
-test_that("is_binary_vector allow_uniform", {
   v1 <- c(1, 1, 1, 1, 1, NA)
   v2 <- c(0, 0, 0, 0)
 

@@ -59,9 +59,8 @@ test_that("twoVariablesAreMutuallyExclusive", {
       "or all NULL. Got -0.3, 5\n"
     )
   )
-})
 
-test_that("#40: mutually_exclusive ", {
+  # Issue #40
   foo <- function(a = NULL, b = NULL) {
     assertthat::assert_that(mutually_exclusive(a, b, allow_all_null = FALSE))
   }
