@@ -1,4 +1,4 @@
-test_that("is_data_frame", {
+test_that("variableBeingDataFrame", {
   df <- data.frame(
       foo = c(1, 2, 3),
       bar = c(3, 4, 5)
@@ -63,7 +63,7 @@ test_that("is_data_frame", {
   )
 })
 
-test_that("data_frames_same_colnames", {
+test_that("twoDataFramesHaveExactColumnNames", {
   df1 <- data.frame(foo=c(1,2,3), bar=c(1,2,3))
   df2 <- data.frame(foo=c(1,2,3))
   df3 <- data.frame(foo=c(1,2,3), bar=c(1,2,3), baz=c(1,2,3))

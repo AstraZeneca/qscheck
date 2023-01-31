@@ -1,4 +1,4 @@
-test_that("is_real_value", {
+test_that("variableRealValueWithLimits", {
   expect_true(is_real_value(10.0))
   expect_true(is_real_value(-0.1))
   expect_true(is_real_value(0.0, min = 0.0))
@@ -18,7 +18,7 @@ test_that("is_real_value", {
     "foo must be a real value. Passed value is not a numerical")
 })
 
-test_that("is_probability_value", {
+test_that("variableProbabilityValue", {
   expect_true(is_probability_value(1.0))
   expect_true(is_probability_value(0.5))
   expect_true(is_probability_value(0.0))
@@ -37,7 +37,7 @@ test_that("is_probability_value", {
       "Passed value -0.3 is below the minimum of 0"))
 })
 
-test_that("is_positive_real_value", {
+test_that("variablePositiveRealValue", {
   expect_true(is_positive_real_value(1))
   expect_true(is_positive_real_value(1.01))
   expect_true(is_positive_real_value(NULL, allow_null = TRUE))
@@ -62,7 +62,7 @@ test_that("is_positive_real_value", {
 })
 
 
-test_that("is_non_negative_real_value", {
+test_that("variableNonNegativeRealValue", {
   expect_true(is_non_negative_real_value(1))
   expect_true(is_non_negative_real_value(0))
   expect_false(is_non_negative_real_value(-0.01))
@@ -89,7 +89,7 @@ test_that("is_non_negative_real_value", {
 })
 
 
-test_that("is_real_vector", {
+test_that("variableVectorRealValues", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c("hello", "hi")
   expect_true(is_real_vector(v))
@@ -135,7 +135,7 @@ test_that("is_real_vector", {
       "Passed vector length is 3 but must be at least 4"))
 })
 
-test_that("is_positive_real_vector", {
+test_that("variableVectorPositiveReals", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c(1.2, -1.3, 3.0)
   v3 <- c(1.2, 1.3, 0.0)
@@ -182,7 +182,7 @@ test_that("is_positive_real_vector", {
       "Passed vector length is 3 but must be at least 4"))
 })
 
-test_that("is_non_negative_real_vector", {
+test_that("variableVectorNonNegativeReals", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c(1.2, -1.3, 3.0)
   v3 <- c(1.2, 1.3, 0.0)
@@ -229,7 +229,7 @@ test_that("is_non_negative_real_vector", {
       "Passed vector length is 3 but must be at least 4"))
 })
 
-test_that("is_probability_vector", {
+test_that("variableVectorProbabilities", {
   v <- c(0.2, 0.0, 1.0)
   v2 <- c(1.2, -1.3, 3.0)
   v3 <- c(0.2, -0.1, 1.0)
@@ -286,7 +286,7 @@ test_that("is_real_vector with NA", {
   expect_true(is_real_vector(v, allow_na_values = TRUE))
 })
 
-test_that("is_increasing_vector", {
+test_that("vectorsIncreasing", {
   v <- c(1.2, 3.0)
   expect_true(is_increasing_vector(v))
 
@@ -325,7 +325,7 @@ test_that("is_increasing_vector", {
 
 })
 
-test_that("is_decreasing_vector", {
+test_that("vectorsDecreasing", {
   v <- c(3.0, 1.2)
   expect_true(is_decreasing_vector(v))
 

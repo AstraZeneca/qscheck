@@ -1,4 +1,4 @@
-test_that("is_string_value", {
+test_that("variableBeingAString", {
   expect_true(is_string_value("ada"))
   expect_true(is_string_value(""))
   expect_false(is_string_value("", allow_empty = FALSE))
@@ -17,7 +17,7 @@ test_that("is_string_value", {
   )
 })
 
-test_that("is_string_vector", {
+test_that("variableVectorStrings", {
   v <- c("foo", "bar", "baz")
   expect_true(is_string_vector(v))
   expect_false(is_string_vector(NULL))

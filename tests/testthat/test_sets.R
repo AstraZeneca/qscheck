@@ -1,4 +1,4 @@
-test_that("any_satisfied", {
+test_that("anyOfAPossibleSetOfChecksIsSatisfied", {
   expect_true(any_satisfied(is_string_value(""), is_logical_value("")))
   expect_true(any_satisfied(is_string_value(FALSE), is_logical_value(FALSE)))
   expect_false(
@@ -31,7 +31,7 @@ test_that("any_satisfied", {
 
 })
 
-test_that("mutually_exclusive", {
+test_that("twoVariablesAreMutuallyExclusive", {
   expect_true(mutually_exclusive(NULL, NULL, NULL))
   expect_false(mutually_exclusive(NULL, NULL, NULL, allow_all_null = FALSE))
   expect_true(mutually_exclusive(1, NULL, NULL))
@@ -78,7 +78,7 @@ test_that("#40: mutually_exclusive ", {
   )
 })
 
-test_that("is_one_of", {
+test_that("passedEntityExistsWithinElementsOfVectorOptions", {
   options <- c("foo", "bar", "baz")
 
   expect_true(is_one_of("foo", options))

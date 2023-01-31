@@ -1,4 +1,4 @@
-test_that("is_S4_instance", {
+test_that("variableIsAS4Instance", {
   env <- new.env()
   setClass(
     "student", slots = list(name = "character", age = "numeric"),

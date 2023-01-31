@@ -1,5 +1,5 @@
 
-test_that("is_factor", {
+test_that("variableContainsAFactorOfGivenLevelsAndLength", {
   expect_false(is_factor(data.frame()))
   expect_false(is_factor(NULL))
   expect_true(is_factor(NULL, allow_null = TRUE))
