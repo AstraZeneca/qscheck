@@ -1,3 +1,7 @@
+# qscheck 0.24.0
+
+- #87, #88 fixed tests to match internal identifiers
+
 # qscheck 0.23.0
 
 - #85 Add consequential directive to check simultaneous presence or absence of parameters
