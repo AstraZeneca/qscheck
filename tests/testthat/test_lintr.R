@@ -1,4 +1,4 @@
-test_that("Linting R source", {
+test_that("linting", {
   skip_on_covr()
   lints <- lintr::lint_dir("../../R")
   if (length(lints) != 0) {
