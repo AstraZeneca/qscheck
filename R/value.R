@@ -164,8 +164,8 @@ if (is.null(value) || is.null(comparator)) {
   ))
 } else {
   return(paste0(
-    deparse(call$value),
-    snippet_must_be(paste0("greater value than ", deparse(call$comparator))),
+    call$value,
+    snippet_must_be(paste0("greater value than ", call$comparator)),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -269,7 +269,7 @@ is_less_than_value <- function(value,
     comparator, strictly = TRUE,
     allow_na = FALSE, allow_null = FALSE) {
 
-  res <- inspect_greater_than_value(
+  res <- inspect_less_than_value(
     value, comparator,
     strictly = strictly,
     allow_na = allow_na,
@@ -285,7 +285,7 @@ assertthat::on_failure(is_less_than_value) <- function(call, env) {
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  res <- inspect_greater_than_value(
+  res <- inspect_less_than_value(
     value, comparator,
     strictly = strictly,
     allow_na = allow_na,
@@ -298,8 +298,8 @@ if (is.null(value) || is.null(comparator)) {
   ))
 } else {
   return(paste0(
-    deparse(call$value),
-    snippet_must_be(paste0("smaller value than ", deparse(call$comparator))),
+    call$value,
+    snippet_must_be(paste0("smaller value than ", call$comparator)),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -368,7 +368,7 @@ inspect_less_than_value <- function(
         return(failure(
           paste0(
             "Passed value ", value,
-            " is below the maximum of ", comparator)
+            " is above the maximum of ", comparator)
           )
         )
       }
