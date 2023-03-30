@@ -131,9 +131,10 @@ inspect_na_value <- function(value) {
 #'
 #' @concept value
 #' @export
-is_greater_than_value <- function(value,
-    comparator, strictly = TRUE,
-    allow_na = FALSE, allow_null = FALSE) {
+is_greater_than_value <- function(
+  value, comparator, strictly = TRUE,
+  allow_na = FALSE, allow_null = FALSE
+) {
 
   res <- inspect_greater_than_value(
     value, comparator,
@@ -174,7 +175,8 @@ if (is.null(value) || is.null(comparator)) {
 }
 inspect_greater_than_value <- function(
   value, comparator, strictly = TRUE,
-  allow_na = FALSE, allow_null = FALSE) {
+  allow_na = FALSE, allow_null = FALSE
+) {
 
   if (is.null(value)) {
     if (allow_null == TRUE) {
@@ -265,9 +267,9 @@ inspect_greater_than_value <- function(
 #'
 #' @concept value
 #' @export
-is_less_than_value <- function(value,
-    comparator, strictly = TRUE,
-    allow_na = FALSE, allow_null = FALSE) {
+is_less_than_value <- function(
+  value, comparator, strictly = TRUE,
+  allow_na = FALSE, allow_null = FALSE) {
 
   res <- inspect_less_than_value(
     value, comparator,
