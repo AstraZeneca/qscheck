@@ -158,7 +158,7 @@ assertthat::on_failure(is_greater_than_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-if (is.null(comparator)) {
+if (is.null(value) || is.null(comparator)) {
   return(paste(
     res$reason
   ))
