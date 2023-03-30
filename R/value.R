@@ -306,7 +306,7 @@ if (is.null(value) || is.null(comparator)) {
   ))
 }
 }
-inspect_greater_than_value <- function(
+inspect_less_than_value <- function(
   value, comparator, strictly = TRUE,
   allow_na = FALSE, allow_null = FALSE) {
 

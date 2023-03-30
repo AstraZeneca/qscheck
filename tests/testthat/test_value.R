@@ -29,7 +29,7 @@ test_that("greater_than_value", {
   expect_false(is_greater_than_value(-6, 5))
   expect_error(
     assertthat::assert_that(is_greater_than_value("hello", 5, allow_na = TRUE)),
-    ""hello" must be a greater value than 5 or NA. Passed value is not a numerical"
+    " 'hello' must be a greater value than 5 or NA. Passed value is not a numerical"
   )
   expect_error(
     assertthat::assert_that(is_greater_than_value(value = NULL, 5)),
@@ -50,7 +50,7 @@ test_that("less_than_value", {
   expect_false(is_less_than_value(5, -6))
   expect_error(
     assertthat::assert_that(is_less_than_value("hello", 5, allow_na = TRUE)),
-    ""hello" must be a smaller value than 5 or NA. Passed value is not a numerical"
+    " \'hello\' must be a smaller value than 5 or NA. Passed value is not a numerical"
   )
   expect_error(
     assertthat::assert_that(is_less_than_value(value = NULL, 5)),
