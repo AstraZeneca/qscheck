@@ -44,22 +44,14 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
 
 inspect_integer_value <- function(value,
     min = NULL, max = NULL, allow_null = FALSE) {
-  if (is.null(value)) {
-    if (allow_null == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value is NULL"))
-    }
+
+  res <- inspect_value(value, allow_null = allow_null)
+  if (!res$valid) {
+    return(res)
   }
 
   if (!is.numeric(value)) {
     return(failure("Passed value is not a numerical"))
-  }
-
-  if (length(value) != 1) {
-    return(failure(
-      "Passed value must be a single numerical value, not a vector"
-    ))
   }
 
   if ((value %% 1) != 0) {
@@ -228,19 +220,12 @@ inspect_integer_vector <- function(
     allow_na_values = FALSE, allow_null = FALSE
 ) {
 
-  if (is.null(value)) {
-    if (allow_null == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value is NULL"))
-    }
-  }
-
   res <- inspect_vector(
     value,
     exact_length = exact_length,
     min_length = min_length,
-    max_length = max_length
+    max_length = max_length,
+    allow_null = allow_null
   )
 
   if (!res$valid) {

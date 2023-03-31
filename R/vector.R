@@ -24,13 +24,15 @@
 #' @concept vector
 #' @export
 is_vector <- function(
-    value, exact_length = NULL, min_length = NULL, max_length = NULL) {
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_null = FALSE) {
 
   res <- inspect_vector(
     value,
     exact_length = exact_length,
     min_length = min_length,
-    max_length = max_length
+    max_length = max_length,
+    allow_null = allow_null
   )
   return(res$valid)
 }
@@ -39,18 +41,21 @@ assertthat::on_failure(is_vector) <- function(call, env) {
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
+  allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_vector(
     value,
     exact_length = exact_length,
     min_length = min_length,
-    max_length = max_length
+    max_length = max_length,
+    allow_null = allow_null
   )
 
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("vector"),
     snippet_length(exact_length, min_length, max_length),
+    snippet_null(allow_null),
     ". ", res$reason
   )
 
@@ -58,7 +63,16 @@ assertthat::on_failure(is_vector) <- function(call, env) {
 }
 
 inspect_vector <- function(
-    value, exact_length = NULL, min_length = NULL, max_length = NULL) {
+    value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    allow_null = FALSE) {
+
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value is NULL"))
+    }
+  }
 
   if (!is.vector(value)) {
     return(failure("Passed value is not a vector"))
