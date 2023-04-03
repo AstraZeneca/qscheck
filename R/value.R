@@ -34,7 +34,7 @@ assertthat::on_failure(is_value) <- function(call, env) {
 inspect_value <- function(value, allow_na = FALSE, allow_null = FALSE) {
   if (is.null(value)) {
     if (allow_null == TRUE) {
-      return(success())
+      return(success(conclusive = TRUE))
     } else {
       return(failure("Passed value cannot be NULL"))
     }
@@ -50,7 +50,7 @@ inspect_value <- function(value, allow_na = FALSE, allow_null = FALSE) {
 
   if (is.na(value)) {
     if (allow_na == TRUE) {
-      return(success())
+      return(success(conclusive = TRUE))
     } else {
       return(failure("Passed value cannot be NA"))
     }

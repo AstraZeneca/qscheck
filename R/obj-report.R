@@ -1,17 +1,18 @@
 failure <- function(reason) {
-  return(report(FALSE, reason))
+  return(report(FALSE, reason, TRUE))
 }
 
-success <- function() {
-  return(report(TRUE, NULL))
+success <- function(conclusive = FALSE) {
+  return(report(TRUE, NULL, conclusive))
 }
 
-report <- function(valid, reason = NULL) {
+report <- function(valid, reason = NULL, conclusive = FALSE) {
   return(
     structure(
       list(
         valid = valid,
-        reason = reason
+        reason = reason,
+        conclusive = conclusive
       ),
       class = "qscheck::report"
     )

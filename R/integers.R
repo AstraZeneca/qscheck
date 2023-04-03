@@ -46,7 +46,7 @@ inspect_integer_value <- function(value,
     min = NULL, max = NULL, allow_null = FALSE) {
 
   res <- inspect_value(value, allow_null = allow_null)
-  if (!res$valid) {
+  if (res$conclusive) {
     return(res)
   }
 
