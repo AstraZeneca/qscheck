@@ -32,24 +32,24 @@
 #' @concept general
 #' @export
 is_satisfying_funcs <- function(value, func_or_list) {
-  res <- inspect_is_satisfying_funcs(entity, func_or_list)
+  res <- inspect_is_satisfying_funcs(value, func_or_list)
   return(res$valid)
 }
 assertthat::on_failure(is_satisfying_funcs) <- function(call, env) {
-  entity <- callget(call, env, "entity", NULL)
+  value <- callget(call, env, "value", NULL)
   func_or_list <- callget(call, env, "func_or_list", NULL)
 
-  res <- inspect_is_satisfying_funcs(entity, func_or_list)
+  res <- inspect_is_satisfying_funcs(value, func_or_list)
 
   return(
     paste0(
-      "Argument '", deparse(call$entity),
+      "Argument '", deparse(call$value),
       "' must satisfy all conditions in the check. ",
       res$reason, "."
     )
   )
 }
-inspect_is_satisfying_funcs <- function(entity, func_or_list) {
+inspect_is_satisfying_funcs <- function(value, func_or_list) {
   if (inherits(func_or_list, "function")) {
     func_or_list <- list(func_or_list)
   }
@@ -59,7 +59,7 @@ inspect_is_satisfying_funcs <- function(entity, func_or_list) {
     func_tag <- names(func_or_list)[[func_idx]]
     func_tag <- ifelse(is.null(func_tag), as.character(func_idx), func_tag)
 
-    res <- func(entity)
+    res <- func(value)
     if (! (is.logical(res) || inherits(res, "qscheck::report"))) {
       return(
         failure(paste0(
