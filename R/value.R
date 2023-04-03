@@ -223,3 +223,119 @@ inspect_lt_value <- function(
 
   return(success())
 }
+
+#' Check if the passed entity is a single floating point which is
+#' less than or equal to another specified value.
+#'
+#' @param value the value to check
+#' @param comparator the maximum allowed value, inclusive or exclusive.
+#' @param allow_na if true, accept a value that is NA.
+#' @param allow_null if true, accept a value that is NULL.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_lte_value(value, comparator))
+#' # For check
+#' if (qscheck::is_lte_value(value, comparator)) {}
+#' }
+#'
+#' @concept value
+#' @export
+is_lte_value <- function(
+  value, comparator,
+  allow_na = FALSE, allow_null = FALSE) {
+
+  res <- inspect_lte_value(
+    value, comparator,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
+
+  return(res$valid)
+}
+assertthat::on_failure(is_lte_value) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+  comparator <- callget(call, env, "comparator", NULL)
+  allow_na <- callget(call, env, "allow_na", FALSE)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_lte_value(
+    value, comparator,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
+
+  if (is.null(value) || is.null(comparator)) {
+    return(
+      res$reason
+    )
+  } else {
+    return(paste0(
+      call$value,
+      snippet_must_be(paste0("smaller value or equal to ", call$comparator)),
+      snippet_na(allow_na),
+      snippet_null(allow_null),
+      ". ", res$reason
+    ))
+  }
+}
+inspect_lte_value <- function(
+    value, comparator,
+    allow_na = FALSE, allow_null = FALSE) {
+
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value is NULL"))
+    }
+  }
+
+  if (is.null(comparator)) {
+    return(failure("Passed comparator value is NULL"))
+  }
+
+  if (!is.numeric(value)) {
+    return(failure("Passed value is not a numerical"))
+  }
+
+  if (!is.numeric(comparator)) {
+    return(failure("Passed comparator value is not a numerical"))
+  }
+
+  if (length(value) != 1) {
+    return(failure(
+      "Passed value must be a single numerical value, not a vector"
+    ))
+  }
+
+  if (length(comparator) != 1) {
+    return(failure(
+      "Passed comparator value must be a single numerical value, not a vector"
+    ))
+  }
+
+  if (is_na_value(value)) {
+    if (allow_na == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value was NA"))
+    }
+  }
+
+  if (is_na_value(comparator)) {
+    return(failure("Passed comparator value was NA"))
+  }
+
+  if (value > comparator) {
+    return(failure(
+      paste0(
+        "Passed value ", value,
+        " is above the maximum of ", comparator)
+    )
+    )
+  }
+
+  return(success())
+}
