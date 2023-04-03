@@ -34,7 +34,7 @@ test_that("lessThanNULLAllowed", {
 
 test_that("lessThanNumericalNA", {
   expect_true(
-    assertthat::assert_that(is_lt_value(comparator = 6, allow_na = TRUE))
+    assertthat::assert_that(is_lt_value(value = NA_real_ , comparator = 6, allow_na = TRUE))
   )
 })
 
