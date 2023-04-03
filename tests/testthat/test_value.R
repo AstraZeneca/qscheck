@@ -80,7 +80,7 @@ test_that("lessOrEqualThanNumericalNA", {
 test_that("lessOrEqualThanAssertFails", {
   expect_error(
     assertthat::assert_that(is_lte_value(value = 6, comparator = 5)),
-    "6 must be a value smaller than or equal to 5. Passed value 6 is above the maximum of 5"
+    "6 must be a value smaller than or equal to 5. Passed value 6 is greater than the maximum of 5"
   )
 })
 

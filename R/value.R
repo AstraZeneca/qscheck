@@ -332,7 +332,7 @@ inspect_lte_value <- function(
     return(failure(
       paste0(
         "Passed value ", value,
-        " is above the maximum of ", comparator)
+        " is greater than the maximum of ", comparator)
     )
     )
   }
