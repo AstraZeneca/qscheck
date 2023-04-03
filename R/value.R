@@ -108,7 +108,6 @@ inspect_na_value <- function(value) {
 
 }
 
-
 #' Check if the passed entity is a single floating point which is
 #' less than another specified value.
 #'
@@ -128,8 +127,8 @@ inspect_na_value <- function(value) {
 #' @concept value
 #' @export
 is_lt_value <- function(
-  value, comparator,
-  allow_na = FALSE, allow_null = FALSE) {
+    value, comparator,
+    allow_na = FALSE, allow_null = FALSE) {
 
   res <- inspect_lt_value(
     value, comparator,
@@ -151,23 +150,23 @@ assertthat::on_failure(is_lt_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-if (is.null(value) || is.null(comparator)) {
-  return(
-    res$reason
-  )
-} else {
-  return(paste0(
-    call$value,
-    snippet_must_be(paste0("smaller value than ", call$comparator)),
-    snippet_na(allow_na),
-    snippet_null(allow_null),
-    ". ", res$reason
-  ))
-}
+  if (is.null(value) || is.null(comparator)) {
+    return(
+      res$reason
+    )
+  } else {
+    return(paste0(
+      call$value,
+      snippet_must_be(paste0("smaller value than ", call$comparator)),
+      snippet_na(allow_na),
+      snippet_null(allow_null),
+      ". ", res$reason
+    ))
+  }
 }
 inspect_lt_value <- function(
-  value, comparator,
-  allow_na = FALSE, allow_null = FALSE) {
+    value, comparator,
+    allow_na = FALSE, allow_null = FALSE) {
 
   if (is.null(value)) {
     if (allow_null == TRUE) {
@@ -218,7 +217,7 @@ inspect_lt_value <- function(
       paste0(
         "Passed value ", value,
         " is above the maximum of ", comparator)
-      )
+    )
     )
   }
 
