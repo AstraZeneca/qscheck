@@ -66,6 +66,11 @@ reference:
   contents:
   - has_concept("string")
 
+- title:
+  desc: General checks
+  contents:
+  - has_concept("general")
+
 - title: Other
   desc: Other functions
   contents:

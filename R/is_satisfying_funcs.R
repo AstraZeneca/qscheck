@@ -1,4 +1,37 @@
-is_satisfying_funcs <- function(entity, func_or_list) {
+#' Checks if a passed value satisfies one or more tests provided as functions.
+#'
+#' @param value the value to verify
+#' @param func_or_list a function or (optionally named) list of functions.
+#'        The function must accept a single argument (which will receive the
+#'        value) and return either a logical (TRUE or FALSE), or an instance
+#'        of qscheck::report.
+#'
+#' @examples
+#' \dontrun{
+#' qscheck::assert(
+#'    qscheck::is_satisfying_funcs(
+#'      my_parameter,
+#'      list(
+#'         more_than_five = function(x) {
+#'            # Short form. Returns a logical
+#'            x > 5
+#'         },
+#'         less_than_two = function(x) {
+#'            # expanded form. use success() and failure(reason)
+#'            if (x < 2) {
+#'              return(success())
+#'            } else {
+#'              return(failure("Value must be less than two"))
+#'            }
+#'         }
+#'      )
+#'    )
+#' ))
+#' }
+#'
+#' @concept general
+#' @export
+is_satisfying_funcs <- function(value, func_or_list) {
   res <- inspect_is_satisfying_funcs(entity, func_or_list)
   return(res$valid)
 }
