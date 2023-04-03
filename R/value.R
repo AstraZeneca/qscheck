@@ -273,7 +273,7 @@ assertthat::on_failure(is_lte_value) <- function(call, env) {
   } else {
     return(paste0(
       call$value,
-      snippet_must_be(paste0("smaller value or equal to ", call$comparator)),
+      snippet_must_be(paste0("value smaller than or equal to ", call$comparator)),
       snippet_na(allow_na),
       snippet_null(allow_null),
       ". ", res$reason
