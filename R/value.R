@@ -112,7 +112,7 @@ inspect_na_value <- function(value) {
 #' less than another specified value.
 #'
 #' @param value the value to check
-#' @param comparator the maximum allowed value, inclusive or exclusive.
+#' @param comparator the maximum allowed value, exclusive.
 #' @param allow_na if true, accept a value that is NA.
 #' @param allow_null if true, accept a value that is NULL.
 #'
@@ -228,7 +228,7 @@ inspect_lt_value <- function(
 #' less than or equal to another specified value.
 #'
 #' @param value the value to check
-#' @param comparator the maximum allowed value, inclusive or exclusive.
+#' @param comparator the maximum allowed value, inclusive.
 #' @param allow_na if true, accept a value that is NA.
 #' @param allow_null if true, accept a value that is NULL.
 #'
