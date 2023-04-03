@@ -212,11 +212,11 @@ inspect_lt_value <- function(
     return(failure("Passed comparator value was NA"))
   }
 
-  if (value > comparator) {
+  if (value >= comparator) {
     return(failure(
       paste0(
         "Passed value ", value,
-        " is above the maximum of ", comparator)
+        " must be lower than ", comparator)
     )
     )
   }
