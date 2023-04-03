@@ -107,3 +107,4 @@ inspect_na_value <- function(value) {
   return(success())
 
 }
+
