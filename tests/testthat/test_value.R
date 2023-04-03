@@ -19,3 +19,42 @@ test_that("passedEntityIsNAValue", {
     "foo must be a NA \\(any type\\). Passed value is not NA"
   )
 })
+
+test_that("lessThanCorrectValue", {
+  expect_true(
+    assertthat::assert_that(is_lt_value(4, 6))
+  )
+})
+
+test_that("lessThanNULLAllowed", {
+  expect_true(
+    assertthat::assert_that(is_lt_value(NULL, 6, allow_null = TRUE))
+  )
+})
+
+test_that("lessThanNumericalNA", {
+  expect_true(
+    assertthat::assert_that(is_lt_value(value = NA_real_ , comparator = 6, allow_na = TRUE))
+  )
+})
+
+test_that("lessThanAssertFails", {
+  expect_error(
+    assertthat::assert_that(is_lt_value(value = 6, comparator = 5)),
+    "6 must be a smaller value than 5. Passed value 6 is above the maximum of 5"
+  )
+})
+
+test_that("lessThanNotNumericalValue", {
+  expect_error(
+    assertthat::assert_that(is_lt_value(value = "hello", comparator = 6)),
+    "hello must be a smaller value than 6. Passed value is not a numerical"
+  )
+})
+
+test_that("lessThanComparatorNotNumerical", {
+  expect_error(
+    assertthat::assert_that(is_lt_value(value = 5, comparator = "hello")),
+    "5 must be a smaller value than hello. Passed comparator value is not a numerical"
+  )
+})
