@@ -216,7 +216,7 @@ inspect_lt_value <- function(
     return(failure(
       paste0(
         "Passed value ", value,
-        " must be lower than ", comparator)
+        " is greater than or equal to the maximum of ", comparator)
     )
     )
   }
