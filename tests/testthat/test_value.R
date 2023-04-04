@@ -136,3 +136,42 @@ test_that("greaterThanComparatorNotNumerical", {
     "5 must be a greater value than hello. Passed comparator value is not a numerical"
   )
 })
+
+test_that("greaterOrEqualThanCorrectValue", {
+  expect_true(
+    assertthat::assert_that(is_gte_value(4, 4))
+  )
+})
+
+test_that("greaterOrEqualThanNULLAllowed", {
+  expect_true(
+    assertthat::assert_that(is_gte_value(NULL, 6, allow_null = TRUE))
+  )
+})
+
+test_that("greaterOrEqualThanNumericalNA", {
+  expect_true(
+    assertthat::assert_that(is_gte_value(value = NA_real_ , comparator = 6, allow_na = TRUE))
+  )
+})
+
+test_that("greaterOrEqualThanAssertFails", {
+  expect_error(
+    assertthat::assert_that(is_gte_value(value = 5, comparator = 6)),
+    "5 must be a value greater than or equal to 6. Passed value 5 is lower than the minimum of 6"
+  )
+})
+
+test_that("greaterOrEqualThanNotNumericalValue", {
+  expect_error(
+    assertthat::assert_that(is_gte_value(value = "hello", comparator = 6)),
+    "hello must be a value greater than or equal to 6. Passed value is not a numerical"
+  )
+})
+
+test_that("greaterOrEqualThanComparatorNotNumerical", {
+  expect_error(
+    assertthat::assert_that(is_gte_value(value = 5, comparator = "hello")),
+    "5 must be a value greater than or equal to hello. Passed comparator value is not a numerical"
+  )
+})
