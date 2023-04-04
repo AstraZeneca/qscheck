@@ -212,3 +212,23 @@ test_that("satisfyingFuncsMultiFails", {
     )
   )
 })
+
+
+test_that("satisfyingFuncsMessage", {
+  expect_error(
+    assert(
+      is_satisfying_funcs(8, list(
+        less_than_five = function(x) {
+          x < 5
+        },
+        more_than_two = function(x) {
+          x > 2
+        })
+      )
+    ),
+    paste0(
+      "Argument '8' must satisfy all conditions in the check\\. ",
+      "Check function number 1 \\(tag: less_than_five\\) failed\\."
+    )
+  )
+})
