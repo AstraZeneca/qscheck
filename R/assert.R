@@ -23,3 +23,16 @@ message <- function(..., env = parent.frame(), msg = NULL) {
   }
   return(res)
 }
+
+#' Returns the error message if fails or TRUE if successful.
+#' Useful in S4 validation.
+#'
+#' @param \dots Condition to test
+#' @param env environment on which to apply the assertion
+#' @param msg overrides the error message, if specified.
+#'
+#' @export
+validate <- function(..., env = parent.frame(), msg = NULL) {
+  res <- assertthat::validate_that(..., env = env, msg = msg)
+  return(res)
+}
