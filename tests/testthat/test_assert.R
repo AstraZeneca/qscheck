@@ -29,3 +29,14 @@ test_that("messageReturnsStringOnFailingAssert", {
 test_that("messageReturnsNULLOnSuccessfulAssert", {
   expect_true(is.null(message(is_integer_value(3))))
 })
+
+test_that("validateMessageOnFailure", {
+  expect_equal(
+    validate(is_string_value(3)),
+    "3 must be a string. Passed value is not a character"
+  )
+})
+
+test_that("validateMessageOnSuccess", {
+  expect_true(validate(is_string_value("hello")))
+})
