@@ -124,7 +124,7 @@ inspect_na_value <- function(value) {
 #' if (qscheck::is_lt_value(value, comparator)) {}
 #' }
 #'
-#' @concept value
+#' @concept real
 #' @export
 is_lt_value <- function(
     value, comparator,
@@ -240,7 +240,7 @@ inspect_lt_value <- function(
 #' if (qscheck::is_lte_value(value, comparator)) {}
 #' }
 #'
-#' @concept value
+#' @concept real
 #' @export
 is_lte_value <- function(
   value, comparator,
@@ -358,7 +358,7 @@ inspect_lte_value <- function(
 #' if (qscheck::is_gt_value(value, comparator)) {}
 #' }
 #'
-#' @concept value
+#' @concept real
 #' @export
 is_gt_value <- function(
     value, comparator,
@@ -474,7 +474,7 @@ inspect_gt_value <- function(
 #' if (qscheck::is_gte_value(value, comparator)) {}
 #' }
 #'
-#' @concept value
+#' @concept real
 #' @export
 is_gte_value <- function(
   value, comparator,

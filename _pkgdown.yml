@@ -36,10 +36,10 @@ reference:
   contents:
   - has_concept("list")
 
-- title: NAs
-  desc: Functions checking NAs
+- title: Matrix
+  desc: Functions checking Matrices
   contents:
-  - has_concept("na")
+  - has_concept("matrix")
 
 - title: Functions
   desc: Functions to check function properties
@@ -74,4 +74,4 @@ reference:
 - title: Other
   desc: Other functions
   contents:
-  - lacks_concepts(c("integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "na", "string"))
+  - lacks_concepts(c("integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "matrix", "string"))

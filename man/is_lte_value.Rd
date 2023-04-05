@@ -29,4 +29,4 @@ if (qscheck::is_lte_value(value, comparator)) {}
 }
 
 }
-\concept{value}
+\concept{real}

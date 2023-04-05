@@ -37,7 +37,7 @@ qscheck::assert(
         }
      )
    )
-))
+)
 }
 
 }
