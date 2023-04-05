@@ -1,6 +1,11 @@
 destination: site
 
 reference:
+- title: Assertions
+  desc: Assertions and error extraction functions
+  contents:
+  - has_concept("assert")
+
 - title: Integers
   desc: Functions checking integer values (NOT integer types)
   contents:
@@ -36,10 +41,10 @@ reference:
   contents:
   - has_concept("list")
 
-- title: NAs
-  desc: Functions checking NAs
+- title: Matrix
+  desc: Functions checking Matrices
   contents:
-  - has_concept("na")
+  - has_concept("matrix")
 
 - title: Functions
   desc: Functions to check function properties
@@ -66,7 +71,7 @@ reference:
   contents:
   - has_concept("string")
 
-- title:
+- title: General
   desc: General checks
   contents:
   - has_concept("general")
@@ -74,4 +79,4 @@ reference:
 - title: Other
   desc: Other functions
   contents:
-  - lacks_concepts(c("integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "na", "string"))
+  - lacks_concepts(c("assert", "integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "matrix", "string", "general"))

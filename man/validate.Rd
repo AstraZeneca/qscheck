@@ -18,3 +18,4 @@ validate(..., env = parent.frame(), msg = NULL)
 Returns the error message if fails or TRUE if successful.
 Useful in S4 validation.
 }
+\concept{assert}
