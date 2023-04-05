@@ -16,3 +16,4 @@ assert(..., env = parent.frame(), msg = NULL)
 \description{
 Shorter version of assertthat::assert_that
 }
+\concept{assert}

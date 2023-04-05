@@ -16,3 +16,4 @@ message(..., env = parent.frame(), msg = NULL)
 \description{
 Returns just the error message or NULL if no error.
 }
+\concept{assert}

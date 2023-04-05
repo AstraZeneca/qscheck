@@ -4,6 +4,7 @@
 #' @param env environment on which to apply the assertion
 #' @param msg overrides the error message, if specified.
 #'
+#' @concept assert
 #' @export
 assert <- function(..., env = parent.frame(), msg = NULL) {
   assertthat::assert_that(..., env = env, msg = msg)
@@ -15,6 +16,7 @@ assert <- function(..., env = parent.frame(), msg = NULL) {
 #' @param env environment on which to apply the assertion
 #' @param msg overrides the error message, if specified.
 #'
+#' @concept assert
 #' @export
 message <- function(..., env = parent.frame(), msg = NULL) {
   res <- assertthat::validate_that(..., env = env, msg = msg)
@@ -31,6 +33,7 @@ message <- function(..., env = parent.frame(), msg = NULL) {
 #' @param env environment on which to apply the assertion
 #' @param msg overrides the error message, if specified.
 #'
+#' @concept assert
 #' @export
 validate <- function(..., env = parent.frame(), msg = NULL) {
   res <- assertthat::validate_that(..., env = env, msg = msg)
