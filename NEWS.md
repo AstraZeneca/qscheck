@@ -1,3 +1,10 @@
+# qscheck 0.25.0
+
+- #103 Added validate function to handle S4 behavior.
+- #101, #100, #99, #96 Added is_gte_value, is_gt_value, is_lte_value, is_lt_value
+- #95 Added general function is_satisfying_funcs
+- #93 Added function message() to extract error message.
+
 # qscheck 0.24.0
 
 - #87, #88 fixed tests to match internal identifiers
