@@ -23,9 +23,8 @@ test_that("anyOfAPossibleSetOfChecksIsSatisfied", {
   expect_equal(
     as.character(err),
     paste(
-      "Error: any_satisfied(is_string_value(list()),",
-      "is_logical_value(list())): none of the possible",
-      "options could be satisfied.\n"
+      "Error: list() must be a string. Passed value is not a character\n",
+      "Error: list() must be a logical value. Passed value is not a logical\n"
     )
   )
 

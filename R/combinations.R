@@ -36,18 +36,35 @@ any_satisfied <- function(...) {
   return(any(as.logical(dots)))
 }
 assertthat::on_failure(any_satisfied) <- function(call, env) {
-dots_pairlist <- match.call(any_satisfied, call, expand.dots = FALSE)$`...`
 
-print(dots_pairlist)
-print("type of dots_pairlist")
-print(typeof(dots_pairlist))
+  dots <- match.call(any_satisfied, call, expand.dots = FALSE)$`...`
 
-print(dots_pairlist[[1]])
-print("type of dots_pairlist[[1]]")
-print(typeof(dots_pairlist[[1]]))
+  errors <- list()
 
-  msg <- paste0(
-    paste(deparse(call), collapse = ""),
-    ": none of the possible options could be satisfied.")
-  return(msg)
+  err1 <- tryCatch({
+    eval(substitute(assertthat::assert_that(x),
+                    list(x = dots[[1]])))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  errors[[1]] <- as.character(err1)
+
+  err2 <- tryCatch({
+    eval(substitute(assertthat::assert_that(x),
+                    list(x = dots[[2]])))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  errors[[2]] <- as.character(err2)
+
+  message <- gsub("^.*?Error: |\n $", "", paste(errors, "", collapse = ""))
+
+  return(message)
+
 }
