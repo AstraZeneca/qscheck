@@ -27,6 +27,7 @@
 #' @concept combined
 #' @export
 any_satisfied <- function(...) {
+
   dots <- list(...)
 
   if (length(dots) == 0) {
@@ -34,34 +35,29 @@ any_satisfied <- function(...) {
   }
 
   return(any(as.logical(dots)))
+
 }
+
 assertthat::on_failure(any_satisfied) <- function(call, env) {
 
   dots <- match.call(any_satisfied, call, expand.dots = FALSE)$`...`
 
   errors <- list()
 
-  err1 <- tryCatch({
-    eval(substitute(assertthat::assert_that(x),
-                    list(x = dots[[1]])))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
+  for (argument in seq_along(dots)) {
 
-  errors[[1]] <- as.character(err1)
+    err <- tryCatch({
+      eval(substitute(assertthat::assert_that(x),
+                      list(x = dots[[argument]])))
+      NULL
+    },
+    error = function(e) {
+      return(e)
+    })
 
-  err2 <- tryCatch({
-    eval(substitute(assertthat::assert_that(x),
-                    list(x = dots[[2]])))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
+    errors[[argument]] <- as.character(err)
 
-  errors[[2]] <- as.character(err2)
+  }
 
   message <- gsub("^.*?Error: |\n $", "", paste(errors, "", collapse = ""))
 
