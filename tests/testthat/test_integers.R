@@ -220,7 +220,10 @@ test_that("variableVectorPositiveIntegers", {
   expect_false(is_positive_integer_vector(NULL))
   expect_false(is_positive_integer_vector(v2))
   expect_false(is_positive_integer_vector(v3))
-
+  expect_true(is_positive_integer_vector(v, min = 1))
+  expect_false(is_positive_integer_vector(v, min = 1, inclusive_min = FALSE))
+  expect_true(is_positive_integer_vector(v, max = 13))
+  expect_false(is_positive_integer_vector(v, max = 13, inclusive_max = FALSE))
   expect_false(is_positive_integer_vector(v, exact_length = 4))
   expect_false(is_positive_integer_vector(v, min_length = 4))
   expect_true(is_positive_integer_vector(v, max_length = 4))
@@ -311,7 +314,6 @@ test_that("variableVectorOfIntegerValues", {
   expect_false(is_integer_vector(v, min = 0, inclusive_min = FALSE))
   expect_true(is_integer_vector(v, max = 13))
   expect_false(is_integer_vector(v, max = 13, inclusive_max = FALSE))
-
   expect_false(is_integer_vector(v, exact_length = 4))
   expect_false(is_integer_vector(v, min_length = 4))
   expect_true(is_integer_vector(v, max_length = 4))

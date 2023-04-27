@@ -114,6 +114,12 @@ inspect_integer_vector <- function(
     return(failure("Passed vector is not a numerical vector"))
   }
 
+  if (any(is.na(value)) && allow_na_values == FALSE) {
+    return(failure("Passed vector contains NAs"))
+  }
+
+  value <- value[!is.na(value)]
+
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
@@ -158,12 +164,6 @@ inspect_integer_vector <- function(
     }
   }
 
-  if (any(is.na(value)) && allow_na_values == FALSE) {
-    return(failure("Passed vector contains NAs"))
-  }
-
-  value <- value[!is.na(value)]
-
   if (!(all(value %% 1 == 0))) {
     return(failure("Passed vector contains non integer values"))
   }
@@ -185,6 +185,14 @@ inspect_integer_vector <- function(
 #'                   is at most the specified length, inclusive
 #'                   Note: if exact_length is specified, this parameter is
 #'                   ignored
+#' @param min the minimum allowed value for each vector element,
+#'            inclusive or exclusive.
+#' @param max the maximum allowed value for each vector element,
+#'            inclusive or exclusive.
+#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
+#'                      If FALSE, the min value will be checked exclusive.
+#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
+#'                      If FALSE, the max value will be checked exclusive
 #' @param allow_na_values boolean: If passed allows vectors containing
 #'                        NAs. The length check is performed including
 #'                        the NA values. Default FALSE.
@@ -203,6 +211,7 @@ inspect_integer_vector <- function(
 #' @export
 is_positive_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE
     ) {
 
@@ -211,6 +220,9 @@ is_positive_integer_vector <- function(
     exact_length = exact_length,
     min_length = min_length,
     max_length = max_length,
+    min = min, max = max,
+    inclusive_min = inclusive_min,
+    inclusive_max = inclusive_max,
     allow_na_values = allow_na_values
   )
 
@@ -221,6 +233,10 @@ assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
+  min <- callget(call, env, "min", NULL)
+  max <- callget(call, env, "max", NULL)
+  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
+  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
 
   res <- inspect_positive_integer_vector(
@@ -228,6 +244,9 @@ assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
     exact_length = exact_length,
     min_length = min_length,
     max_length = max_length,
+    min = min, max = max,
+    inclusive_min = inclusive_min,
+    inclusive_max = inclusive_max,
     allow_na_values = allow_na_values
   )
 
@@ -235,6 +254,7 @@ assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
     deparse(call$value),
     snippet_must_be("vector of positive integer values"),
     snippet_length(exact_length, min_length, max_length),
+    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
     snippet_na_values(allow_na_values),
     ". ", res$reason
   )
@@ -243,6 +263,7 @@ assertthat::on_failure(is_positive_integer_vector) <- function(call, env) {
 
 inspect_positive_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE
 ) {
   res <- inspect_integer_vector(
@@ -255,6 +276,50 @@ inspect_positive_integer_vector <- function(
   }
 
   value <- value[!is.na(value)]
+
+  if (!is.null(min)) {
+    if (inclusive_min) {
+      if (any(value < min)) {
+        return(failure(
+          paste0(
+            "Passed vector contains at least one value below ",
+            "the minimum of ", min)
+          )
+        )
+      }
+    } else {
+      if (any(value <= min)) {
+        return(failure(
+          paste0(
+            "Passed vector contains at least one value ",
+            "below or equal to the minimum of ", min)
+          )
+        )
+      }
+    }
+  }
+
+  if (!is.null(max)) {
+    if (inclusive_max) {
+      if (any(value > max)) {
+        return(failure(
+          paste0(
+            "Passed vector contains at least one value ",
+            "above the maximum of ", max)
+          )
+        )
+      }
+    } else {
+      if (any(value >= max)) {
+        return(failure(
+          paste0(
+            "Passed vector contains at least one value ",
+            "above or equal to the maximum of ", max)
+          )
+        )
+      }
+    }
+  }
 
   if (!(all(value %% 1 == 0) && all(value > 0))) {
     return(failure(
