@@ -307,6 +307,10 @@ test_that("variableVectorOfIntegerValues", {
   expect_true(is_integer_vector(NULL, allow_null = TRUE))
   expect_false(is_integer_vector(v2))
   expect_true(is_integer_vector(v3))
+  expect_true(is_integer_vector(v, min = 0))
+  expect_false(is_integer_vector(v, min = 0, inclusive_min = FALSE))
+  expect_true(is_integer_vector(v, max = 13))
+  expect_false(is_integer_vector(v, max = 13, inclusive_max = FALSE))
 
   expect_false(is_integer_vector(v, exact_length = 4))
   expect_false(is_integer_vector(v, min_length = 4))

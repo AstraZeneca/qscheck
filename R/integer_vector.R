@@ -116,7 +116,7 @@ inspect_integer_vector <- function(
 
   if (!is.null(min)) {
     if (inclusive_min) {
-      if (any(value) < min) {
+      if (any(value < min)) {
         return(failure(
           paste0(
             "Passed vector contains at least one value below ",
@@ -125,7 +125,7 @@ inspect_integer_vector <- function(
         )
       }
     } else {
-      if (any(value) <= min) {
+      if (any(value <= min)) {
         return(failure(
           paste0(
             "Passed vector contains at least one value ",
@@ -138,7 +138,7 @@ inspect_integer_vector <- function(
 
   if (!is.null(max)) {
     if (inclusive_max) {
-      if (any(value) > max) {
+      if (any(value > max)) {
         return(failure(
           paste0(
             "Passed vector contains at least one value ",
@@ -147,7 +147,7 @@ inspect_integer_vector <- function(
         )
       }
     } else {
-      if (any(value) >= max) {
+      if (any(value >= max)) {
         return(failure(
           paste0(
             "Passed vector contains at least one value ",
