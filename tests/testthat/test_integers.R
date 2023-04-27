@@ -210,7 +210,6 @@ test_that("variableVectorNonNegativeIntegers", {
       "Error: v must be a vector of non negative integer values of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4\n"))
-})
 
 test_that("variableVectorPositiveIntegers", {
   v <- c(1, 13, 1)
@@ -326,6 +325,24 @@ test_that("variableVectorOfIntegerValues", {
 
   expect_true(is_integer_vector(v4, allow_na_values = TRUE))
   expect_false(is_integer_vector(v4, allow_na_values = FALSE))
+
+})
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_integer_vector(v, min = 10, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of integer values in the range [10, inf) ",
+      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
+      )
+    )
 
   err <- tryCatch({
     assertthat::assert_that(
