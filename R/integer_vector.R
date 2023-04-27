@@ -268,6 +268,8 @@ inspect_positive_integer_vector <- function(
 ) {
   res <- inspect_integer_vector(
     value, exact_length = exact_length, min_length = min_length,
+    min = min, max = max,
+    inclusive_min = inclusive_min,
     max_length = max_length, allow_na_values = allow_na_values
   )
 
@@ -428,6 +430,8 @@ inspect_non_negative_integer_vector <- function(
 ) {
   res <- inspect_integer_vector(
     value, exact_length = exact_length, min_length = min_length,
+    min = min, max = max,
+    inclusive_min = inclusive_min,
     max_length = max_length, allow_na_values = allow_na_values
   )
 
