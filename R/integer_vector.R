@@ -52,6 +52,8 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
+  min <- callget(call, env, "min", NULL)
+  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
@@ -65,7 +67,7 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
   msg <- paste0(
     deparse(call$value),
     snippet_must_be("vector of integer values"),
-    snippet_length(exact_length, min_length, max_length),
+    snippet_length(exact_length, min_length, max_length), #nolint here
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". ", res$reason
