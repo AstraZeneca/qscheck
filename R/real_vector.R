@@ -259,7 +259,6 @@ inspect_positive_real_vector <- function(
   res <- inspect_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    max_length = max_length,
     min = NULL, max = NULL,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
@@ -414,7 +413,6 @@ inspect_non_negative_real_vector <- function(
   res <- inspect_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    max_length = max_length,
     min = NULL, max = NULL,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
