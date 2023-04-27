@@ -18,6 +18,9 @@
 #'                        the NA values. Default FALSE.
 #' @param allow_null boolean. If TRUE, also accepts a value of NULL.
 #'                   Default FALSE.
+#' @param min the minimum allowed value, inclusive or exclusive.
+#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
+#' If FALSE, the min value will be checked exclusive.
 #'
 #' @examples
 #' \dontrun{
@@ -33,11 +36,13 @@
 #' @export
 is_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    min = NULL, inclusive_min = TRUE,
     allow_na_values = FALSE, allow_null = FALSE
     ) {
   res <- inspect_integer_vector(
     value, exact_length = exact_length, min_length = min_length,
-    max_length = max_length, allow_na_values = allow_na_values,
+    max_length = max_length, min = min, inclusive_min = inclusive_min,
+    allow_na_values = allow_na_values,
     allow_null = allow_null
   )
   return(res$valid)
@@ -52,7 +57,8 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
 
   res <- inspect_integer_vector(
     value, exact_length = exact_length, min_length = min_length,
-    max_length = max_length, allow_na_values = allow_na_values,
+    max_length = max_length, min = min, inclusive_min = inclusive_min,
+    allow_na_values = allow_na_values,
     allow_null = allow_null
   )
 
@@ -69,6 +75,7 @@ assertthat::on_failure(is_integer_vector) <- function(call, env) {
 
 inspect_integer_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
+    min = NULL, inclusive_min = TRUE,
     allow_na_values = FALSE, allow_null = FALSE
 ) {
 
@@ -93,6 +100,28 @@ inspect_integer_vector <- function(
 
   if (!is.numeric(value)) {
     return(failure("Passed vector is not a numerical vector"))
+  }
+
+  if (!is.null(min)) {
+    if (inclusive_min) {
+      if (any(value) < min) {
+        return(failure(
+          paste0(
+            "Passed vector contains at least one value below ",
+            "the minimum of ", min)
+          )
+        )
+      }
+    } else {
+      if (any(value) <= min) {
+        return(failure(
+          paste0(
+            "Passed vector contains at least one value ",
+            "below or equal to the minimum of ", min)
+          )
+        )
+      }
+    }
   }
 
   if (any(is.na(value)) && allow_na_values == FALSE) {
