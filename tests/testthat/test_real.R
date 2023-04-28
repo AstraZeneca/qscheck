@@ -234,6 +234,7 @@ test_that("variableVectorProbabilities", {
   v2 <- c(1.2, -1.3, 3.0)
   v3 <- c(0.2, -0.1, 1.0)
   v4 <- c("hello", "hi")
+  v5 <- 1.0
   expect_true(is_probability_vector(v))
   expect_false(is_probability_vector(v2))
   expect_false(is_probability_vector(v3))
@@ -245,9 +246,23 @@ test_that("variableVectorProbabilities", {
   expect_true(is_probability_vector(v, max_length = 4))
   expect_false(is_probability_vector(v, max_length = 2))
   expect_true(is_probability_vector(v, exact_length = 3, max_length = 2))
+  expect_true(is_probability_vector(v5))
 
-  v2 <- 1.0
-  expect_true(is_probability_vector(v2))
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_probability_vector(v2))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v2 must be a vector of values in the interval [0.0, 1.0] ",
+      "with no NAs. Vector at positions 1, 2, 3 is outside the allowed range [0.0, 1.0]\n"
+      )
+    )
 
   expect_error(
     assertthat::assert_that(is_probability_vector(v, exact_length = 4)),
