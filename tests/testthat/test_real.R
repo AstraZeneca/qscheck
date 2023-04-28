@@ -88,7 +88,6 @@ test_that("variableNonNegativeRealValue", {
       "Passed value -1.5 is below the minimum of 0"))
 })
 
-
 test_that("variableVectorRealValues", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c("hello", "hi")
@@ -108,6 +107,22 @@ test_that("variableVectorRealValues", {
 
   v2 <- 1.0
   expect_true(is_real_vector(v2))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_real_vector(v, min = 2.0, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of real numbers in the range [2, inf) ",
+      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      )
+    )
 
   expect_error(
     assertthat::assert_that(is_real_vector(v, exact_length = 4)),
@@ -163,6 +178,22 @@ test_that("variableVectorPositiveReals", {
   v2 <- 1.0
   expect_true(is_positive_real_vector(v2))
 
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_positive_real_vector(v, min = 2.0, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of positive real numbers in the range [2, inf) ",
+      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      )
+    )
+
   expect_error(
     assertthat::assert_that(is_positive_real_vector(v, exact_length = 4)),
     paste0("v must be a vector of positive real numbers of exact length 4",
@@ -213,6 +244,22 @@ test_that("variableVectorNonNegativeReals", {
 
   v2 <- 1.0
   expect_true(is_non_negative_real_vector(v2))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_positive_real_vector(v, min = 2.0, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of positive real numbers in the range [2, inf) ",
+      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      )
+    )
 
   expect_error(
     assertthat::assert_that(is_non_negative_real_vector(v, exact_length = 4)),
