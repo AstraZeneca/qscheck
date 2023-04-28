@@ -286,26 +286,31 @@ inspect_positive_integer_vector <- function(
     return(res)
   }
 
+  value_all <- value
   value <- value[!is.na(value)]
 
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
+        mask <- value_all[value_all < min]
         return(failure(
           paste0(
-            "Passed vector contains at least one value below ",
-            "the minimum of ", min)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is below the minimum of ", min
           )
-        )
+        ))
       }
     } else {
       if (any(value <= min)) {
+        mask <- value_all[value_all <= min]
         return(failure(
           paste0(
-            "Passed vector contains at least one value ",
-            "below or equal to the minimum of ", min)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is below the minimum of ", min
           )
-        )
+        ))
       }
     }
   }
@@ -313,21 +318,25 @@ inspect_positive_integer_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
+        mask <- value_all[value_all > max]
         return(failure(
           paste0(
-            "Passed vector contains at least one value ",
-            "above the maximum of ", max)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is above the maximum of ", max
           )
-        )
+        ))
       }
     } else {
       if (any(value >= max)) {
+        mask <- value_all[value_all >= max]
         return(failure(
           paste0(
-            "Passed vector contains at least one value ",
-            "above or equal to the maximum of ", max)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is above the maximum of ", max
           )
-        )
+        ))
       }
     }
   }
@@ -448,26 +457,31 @@ inspect_non_negative_integer_vector <- function(
     return(res)
   }
 
+  value_all <- value
   value <- value[!is.na(value)]
 
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
+        mask <- value_all[value_all < min]
         return(failure(
           paste0(
-            "Passed vector contains at least one value below ",
-            "the minimum of ", min)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is below the minimum of ", min
           )
-        )
+        ))
       }
     } else {
       if (any(value <= min)) {
+        mask <- value_all[value_all <= min]
         return(failure(
           paste0(
-            "Passed vector contains at least one value ",
-            "below or equal to the minimum of ", min)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is below the minimum of ", min
           )
-        )
+        ))
       }
     }
   }
@@ -475,21 +489,25 @@ inspect_non_negative_integer_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
+        mask <- value_all[value_all > max]
         return(failure(
           paste0(
-            "Passed vector contains at least one value ",
-            "above the maximum of ", max)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is below the minimum of ", min
           )
-        )
+        ))
       }
     } else {
       if (any(value >= max)) {
+        mask <- value_all[value_all >= max]
         return(failure(
           paste0(
-            "Passed vector contains at least one value ",
-            "above or equal to the maximum of ", max)
+            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
+            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            " is below the minimum of ", min
           )
-        )
+        ))
       }
     }
   }
