@@ -163,7 +163,7 @@ inspect_real_vector <- function(
             paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
-        )
+        ))
       }
     }
   }
