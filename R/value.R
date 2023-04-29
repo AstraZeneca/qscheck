@@ -180,24 +180,24 @@ inspect_lt_value <- function(
     return(failure("Passed comparator value is NULL"))
   }
 
-  if (!is.numeric(value)) {
-    return(failure("Passed value is not a numerical"))
+  res <- inspect_real_value(
+    value,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
+
+  if (!res$valid) {
+    return(res)
   }
 
-  if (!is.numeric(comparator)) {
-    return(failure("Passed comparator value is not a numerical"))
-  }
+  res <- inspect_real_value(
+    comparator,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
 
-  if (length(value) != 1) {
-    return(failure(
-      "Passed value must be a single numerical value, not a vector"
-    ))
-  }
-
-  if (length(comparator) != 1) {
-    return(failure(
-      "Passed comparator value must be a single numerical value, not a vector"
-    ))
+  if (!res$valid) {
+    return(res)
   }
 
   if (is_na_value(value)) {
@@ -298,24 +298,24 @@ inspect_lte_value <- function(
     return(failure("Passed comparator value is NULL"))
   }
 
-  if (!is.numeric(value)) {
-    return(failure("Passed value is not a numerical"))
+  res <- inspect_real_value(
+    value,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
+
+  if (!res$valid) {
+    return(res)
   }
 
-  if (!is.numeric(comparator)) {
-    return(failure("Passed comparator value is not a numerical"))
-  }
+  res <- inspect_real_value(
+    comparator,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
 
-  if (length(value) != 1) {
-    return(failure(
-      "Passed value must be a single numerical value, not a vector"
-    ))
-  }
-
-  if (length(comparator) != 1) {
-    return(failure(
-      "Passed comparator value must be a single numerical value, not a vector"
-    ))
+  if (!res$valid) {
+    return(res)
   }
 
   if (is_na_value(value)) {
@@ -414,24 +414,24 @@ inspect_gt_value <- function(
     return(failure("Passed comparator value is NULL"))
   }
 
-  if (!is.numeric(value)) {
-    return(failure("Passed value is not a numerical"))
+  res <- inspect_real_value(
+    value,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
+
+  if (!res$valid) {
+    return(res)
   }
 
-  if (!is.numeric(comparator)) {
-    return(failure("Passed comparator value is not a numerical"))
-  }
+  res <- inspect_real_value(
+    comparator,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
 
-  if (length(value) != 1) {
-    return(failure(
-      "Passed value must be a single numerical value, not a vector"
-    ))
-  }
-
-  if (length(comparator) != 1) {
-    return(failure(
-      "Passed comparator value must be a single numerical value, not a vector"
-    ))
+  if (!res$valid) {
+    return(res)
   }
 
   if (is_na_value(value)) {
@@ -532,24 +532,24 @@ inspect_gte_value <- function(
     return(failure("Passed comparator value is NULL"))
   }
 
-  if (!is.numeric(value)) {
-    return(failure("Passed value is not a numerical"))
+  res <- inspect_real_value(
+    value,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
+
+  if (!res$valid) {
+    return(res)
   }
 
-  if (!is.numeric(comparator)) {
-    return(failure("Passed comparator value is not a numerical"))
-  }
+  res <- inspect_real_value(
+    comparator,
+    allow_na = allow_na,
+    allow_null = allow_null
+  )
 
-  if (length(value) != 1) {
-    return(failure(
-      "Passed value must be a single numerical value, not a vector"
-    ))
-  }
-
-  if (length(comparator) != 1) {
-    return(failure(
-      "Passed comparator value must be a single numerical value, not a vector"
-    ))
+  if (!res$valid) {
+    return(res)
   }
 
   if (is_na_value(value)) {

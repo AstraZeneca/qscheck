@@ -55,7 +55,7 @@ test_that("lessThanNotNumericalValue", {
 test_that("lessThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = "hello")),
-    "5 must be a smaller value than hello. Passed comparator value is not a numerical"
+    "5 must be a smaller value than hello. Passed value is not a numerical"
   )
 })
 
@@ -94,7 +94,7 @@ test_that("lessOrEqualThanNotNumericalValue", {
 test_that("lessOrEqualThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lte_value(value = 5, comparator = "hello")),
-    "5 must be a value smaller than or equal to hello. Passed comparator value is not a numerical"
+    "5 must be a value smaller than or equal to hello. Passed value is not a numerical"
   )
 })
 
@@ -133,7 +133,7 @@ test_that("greaterThanNotNumericalValue", {
 test_that("greaterThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_gt_value(value = 5, comparator = "hello")),
-    "5 must be a greater value than hello. Passed comparator value is not a numerical"
+    "5 must be a greater value than hello. Passed value is not a numerical"
   )
 })
 
@@ -172,6 +172,6 @@ test_that("greaterOrEqualThanNotNumericalValue", {
 test_that("greaterOrEqualThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_gte_value(value = 5, comparator = "hello")),
-    "5 must be a value greater than or equal to hello. Passed comparator value is not a numerical"
+    "5 must be a value greater than or equal to hello. Passed value is not a numerical"
   )
 })
