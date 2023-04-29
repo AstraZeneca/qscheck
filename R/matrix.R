@@ -197,32 +197,6 @@ inspect_diagonal_matrix <- function(
     return(res)
   }
 
-# nolint start
-#  # We might have NULL here that passed, but we can't check if it's square.
-#  # If we got to here, it means that inspect_matrix was successful because
-#  # allow_null was specified, and the value is actually NULL.
-#  if (is.null(value)) {
-#    return(success())
-#  }
-#
-#  if (nrow(value) != ncol(value)) {
-#    return(failure(
-#      paste0(
-#        "Passed non-square matrix with dimensions (", nrow(value), ", ",
-#        ncol(value), ")"
-#      ))
-#    )
-#  }
-
-#if () {
-#  return(failure(
-#    paste0(
-#      "Passed matrix is not a diagonal matrix"
-#    )
-#  ))
-#}
-# nolint end
-
   if (
     any(is.na(value[!diag(nrow(value))])) ||
     !(all(value[!diag(nrow(value))] == 0))
