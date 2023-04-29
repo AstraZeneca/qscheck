@@ -16,3 +16,22 @@ test_that("variableIsAFile", {
   )
 
 })
+
+test_that("variableIsADirectory", {
+
+  f1 <- "./../testthat/"
+  f2 <- "./../testthatnot/"
+  f3 <- NULL
+
+  expect_true(is_path(f1))
+  expect_false(is_path(f2))
+  expect_true(is_path(f3, allow_null = TRUE))
+
+  expect_error(
+    assertthat::assert_that(is_path(f2)),
+    paste(
+      "f2 must be a valid directory. Passed value is not a valid directory"
+    )
+  )
+
+})
