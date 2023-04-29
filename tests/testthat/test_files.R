@@ -15,19 +15,4 @@ test_that("variableIsAFile", {
     )
   )
 
-if (FALSE) {
-
-
-
-
-  expect_error(
-    assertthat::assert_that(is_function(foo, num_args = 2)),
-    paste0(
-      "foo must be a function with 2 arguments. ",
-      "Passed function has an incorrect number of arguments \\(3\\)"
-    )
-  )
-
-}
-
 })
