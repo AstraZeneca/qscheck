@@ -210,3 +210,69 @@ inspect_diagonal_matrix <- function(
 
   return(success())
 }
+
+#' Check if the passed entity is an identity matrix
+#'
+#' @param value the value to check
+#' @param exact_dimension If specified, the matrix must have the specified
+#'        exact dimension
+#' @param allow_null If TRUE, allow NULL as a value
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_identity_matrix(value))
+#' # For check
+#' if (qscheck::is_identity_matrix(value)) {}
+#' }
+#'
+#' @concept matrix
+#' @export
+is_identity_matrix <- function(
+  value, exact_dimension = NULL, allow_null = FALSE) {
+    res <- inspect_identity_matrix(
+      value, exact_dimension, allow_null
+    )
+  return(res$valid)
+}
+assertthat::on_failure(is_identity_matrix) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+  exact_dimension <- callget(call, env, "exact_dimension", NULL)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_identity_matrix(
+    value, exact_dimension, allow_null
+  )
+  return(paste0(
+    deparse(call$value),
+    snippet_must_be("identity matrix"),
+    snippet_exact_matrix_dimension(exact_dimension, exact_dimension),
+    snippet_null(allow_null),
+    ". ", res$reason
+  ))
+}
+inspect_identity_matrix <- function(
+  value, exact_dimension = NULL, allow_null = FALSE) {
+
+  res <- inspect_diagonal_matrix(
+    value,
+    exact_dimension = exact_dimension,
+    allow_null = allow_null
+  )
+
+  if (!res$valid) {
+    return(res)
+  }
+
+  if (
+    !(all(diag(value)) == 1)
+    ) {
+    return(failure(
+      paste0(
+        "Passed matrix is not an identity matrix"
+      )
+    ))
+  }
+
+  return(success())
+}
