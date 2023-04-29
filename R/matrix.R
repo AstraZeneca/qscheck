@@ -197,10 +197,15 @@ inspect_diagonal_matrix <- function(
     return(res)
   }
 
-  if (
-    any(is.na(value[!diag(nrow(value))])) ||
-    !(all(value[!diag(nrow(value))] == 0))
-    ) {
+  if (any(is.na(value[!diag(nrow(value))]))) {
+    return(failure(
+      paste0(
+        "Passed matrix is not a diagonal matrix: it contains non-diagonal NAs"
+      )
+    ))
+  }
+
+  if (!(all(value[!diag(nrow(value))] == 0))) {
     return(failure(
       paste0(
         "Passed matrix is not a diagonal matrix"

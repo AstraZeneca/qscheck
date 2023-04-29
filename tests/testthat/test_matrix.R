@@ -105,8 +105,9 @@ test_that("passedEntityIsSquaredMatrix", {
 })
 
 test_that("passedEntityIsDiagonalMatrix", {
-  m1 <- matrix(c(1, 0 , 0, 0, 2, 0, 0, 0, 3), 3, 3)
-  m2 <- matrix(c(1, 2 , 0, 0, 0, 0, 0, 0, 3), 3, 3)
+  m1 <- matrix(c(1, 0, 0, 0, 2, 0, 0, 0, 3), 3, 3)
+  m2 <- matrix(c(1, 2, 0, 0, 0, 0, 0, 0, 3), 3, 3)
+  m3 <- matrix(c(1, 0, NA, 0, 2, 0, 0, 0, 3), 3, 3)
 
   expect_false(is_diagonal_matrix(matrix(nrow = 3, ncol = 3)))
   expect_false(is_diagonal_matrix(matrix(nrow = 4, ncol = 3)))
@@ -152,6 +153,16 @@ test_that("passedEntityIsDiagonalMatrix", {
     ),
     paste(
       "m2 must be a diagonal matrix. Passed matrix is not a diagonal matrix"
+    )
+  )
+
+    expect_error(
+    assertthat::assert_that(
+      is_diagonal_matrix(m3)
+    ),
+    paste0(
+      "m3 must be a diagonal matrix. Passed matrix is not a diagonal matrix: ",
+      "it contains non-diagonal NAs"
     )
   )
 
