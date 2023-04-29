@@ -103,3 +103,56 @@ test_that("passedEntityIsSquaredMatrix", {
     )
   )
 })
+
+test_that("passedEntityIsDiagonalMatrix", {
+  m1 <- matrix(c(1, 0 , 0, 0, 2, 0, 0, 0, 3), 3, 3)
+  m2 <- matrix(c(1, 2 , 0, 0, 0, 0, 0, 0, 3), 3, 3)
+
+  expect_false(is_diagonal_matrix(matrix(nrow = 3, ncol = 3)))
+  expect_false(is_diagonal_matrix(matrix(nrow = 4, ncol = 3)))
+  expect_false(is_diagonal_matrix(matrix(nrow = 3, ncol = 3), exact_dimension = 3))
+  expect_false(is_diagonal_matrix(matrix(nrow = 3, ncol = 3), exact_dimension = 4))
+  expect_true(is_diagonal_matrix(m1))
+  expect_true(is_diagonal_matrix(m1, exact_dimension = 3))
+  expect_false(is_diagonal_matrix(m1, exact_dimension = 4))
+  expect_false(is_diagonal_matrix(m2))
+  expect_true(is_diagonal_matrix(NULL, allow_null = TRUE))
+  expect_false(is_diagonal_matrix(c(FALSE, FALSE)))
+  expect_false(is_diagonal_matrix(""))
+
+  foo <- -1.5
+
+  expect_error(
+    assertthat::assert_that(is_diagonal_matrix(foo)),
+    "foo must be a diagonal matrix. Passed value is not a matrix")
+
+  foo <- matrix(nrow = 3, ncol = 3)
+  expect_error(
+    assertthat::assert_that(is_diagonal_matrix(foo, exact_dimension = 5)),
+    paste0(
+      "foo must be a diagonal matrix with exactly 5 rows and 5 columns. ",
+      "Passed matrix has 3 rows"
+    )
+  )
+
+  foo <- matrix(nrow = 4, ncol = 3)
+  expect_error(
+    assertthat::assert_that(
+      is_diagonal_matrix(foo)
+    ),
+    paste0(
+      "foo must be a diagonal matrix. Passed non-square matrix ",
+      "with dimensions \\(4, 3\\)"
+    )
+  )
+
+  expect_error(
+    assertthat::assert_that(
+      is_diagonal_matrix(m2)
+    ),
+    paste(
+      "m2 must be a diagonal matrix. Passed matrix is not a diagonal matrix"
+    )
+  )
+
+})

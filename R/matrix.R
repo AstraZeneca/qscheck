@@ -143,3 +143,96 @@ inspect_square_matrix <- function(
   }
   return(success())
 }
+
+#' Check if the passed entity is a diagonal matrix
+#'
+#' @param value the value to check
+#' @param exact_dimension If specified, the matrix must have the specified
+#'        exact dimension
+#' @param allow_null If TRUE, allow NULL as a value
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::is_diagonal_matrix(value))
+#' # For check
+#' if (qscheck::is_diagonal_matrix(value)) {}
+#' }
+#'
+#' @concept matrix
+#' @export
+is_diagonal_matrix <- function(
+  value, exact_dimension = NULL, allow_null = FALSE) {
+    res <- inspect_diagonal_matrix(
+      value, exact_dimension, allow_null
+    )
+  return(res$valid)
+}
+assertthat::on_failure(is_diagonal_matrix) <- function(call, env) {
+  value <- callget(call, env, "value", NULL)
+  exact_dimension <- callget(call, env, "exact_dimension", NULL)
+  allow_null <- callget(call, env, "allow_null", FALSE)
+
+  res <- inspect_diagonal_matrix(
+    value, exact_dimension, allow_null
+  )
+  return(paste0(
+    deparse(call$value),
+    snippet_must_be("diagonal matrix"),
+    snippet_exact_matrix_dimension(exact_dimension, exact_dimension),
+    snippet_null(allow_null),
+    ". ", res$reason
+  ))
+}
+inspect_diagonal_matrix <- function(
+  value, exact_dimension = NULL, allow_null = FALSE) {
+
+  res <- inspect_square_matrix(
+    value,
+    exact_dimension = exact_dimension,
+    allow_null = allow_null
+  )
+
+  if (!res$valid) {
+    return(res)
+  }
+
+# nolint start
+#  # We might have NULL here that passed, but we can't check if it's square.
+#  # If we got to here, it means that inspect_matrix was successful because
+#  # allow_null was specified, and the value is actually NULL.
+#  if (is.null(value)) {
+#    return(success())
+#  }
+#
+#  if (nrow(value) != ncol(value)) {
+#    return(failure(
+#      paste0(
+#        "Passed non-square matrix with dimensions (", nrow(value), ", ",
+#        ncol(value), ")"
+#      ))
+#    )
+#  }
+
+#if () {
+#  return(failure(
+#    paste0(
+#      "Passed matrix is not a diagonal matrix"
+#    )
+#  ))
+#}
+# nolint end
+
+  if (
+    any(is.na(value[!diag(nrow(value))])) ||
+    !(all(value[!diag(nrow(value))] == 0))
+    ) {
+    return(failure(
+      paste0(
+        "Passed matrix is not a diagonal matrix"
+      )
+    ))
+  }
+
+  return(success())
+}
