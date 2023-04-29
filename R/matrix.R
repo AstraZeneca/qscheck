@@ -205,9 +205,7 @@ inspect_diagonal_matrix <- function(
     ))
   }
 
-    if (
-    !(all(value[!diag(nrow(value))] == 0))
-    ) {
+  if (!(all(value[!diag(nrow(value))] == 0))) {
     return(failure(
       paste0(
         "Passed matrix is not a diagonal matrix"
