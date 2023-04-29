@@ -269,9 +269,16 @@ inspect_identity_matrix <- function(
     return(res)
   }
 
-  if (
-    !(all(diag(value)) == 1)
-    ) {
+  if (any(is.na(diag(value)))) {
+    return(failure(
+      paste0(
+        "Passed matrix is not an identity matrix: ",
+        "it contains diagonal NAs"
+      )
+    ))
+  }
+
+  if (!(all(diag(value) == 1))) {
     return(failure(
       paste0(
         "Passed matrix is not an identity matrix"

@@ -167,3 +167,67 @@ test_that("passedEntityIsDiagonalMatrix", {
   )
 
 })
+
+test_that("passedEntityIsIdentityMatrix", {
+  m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1), 3, 3)
+  m3 <- matrix(c(1, 0, 0, 0, NA, 0, 0, 0, 1), 3, 3)
+
+  expect_false(is_identity_matrix(matrix(nrow = 3, ncol = 3)))
+  expect_false(is_identity_matrix(matrix(nrow = 4, ncol = 3)))
+  expect_false(is_identity_matrix(matrix(nrow = 3, ncol = 3), exact_dimension = 3))
+  expect_false(is_identity_matrix(matrix(nrow = 3, ncol = 3), exact_dimension = 4))
+  expect_true(is_identity_matrix(m1))
+  expect_true(is_identity_matrix(m1, exact_dimension = 3))
+  expect_false(is_identity_matrix(m1, exact_dimension = 4))
+  expect_false(is_identity_matrix(m2))
+  expect_true(is_identity_matrix(NULL, allow_null = TRUE))
+  expect_false(is_identity_matrix(c(FALSE, FALSE)))
+  expect_false(is_identity_matrix(""))
+
+  foo <- -1.5
+
+  expect_error(
+    assertthat::assert_that(is_identity_matrix(foo)),
+    "foo must be an identity matrix. Passed value is not a matrix")
+
+  foo <- matrix(nrow = 3, ncol = 3)
+  expect_error(
+    assertthat::assert_that(is_identity_matrix(foo, exact_dimension = 5)),
+    paste0(
+      "foo must be an identity matrix with exactly 5 rows and 5 columns. ",
+      "Passed matrix has 3 rows"
+    )
+  )
+
+  foo <- matrix(nrow = 4, ncol = 3)
+  expect_error(
+    assertthat::assert_that(
+      is_identity_matrix(foo)
+    ),
+    paste0(
+      "foo must be an identity matrix. Passed non-square matrix ",
+      "with dimensions \\(4, 3\\)"
+    )
+  )
+
+  expect_error(
+    assertthat::assert_that(
+      is_identity_matrix(m2)
+    ),
+    paste(
+      "m2 must be an identity matrix. Passed matrix is not a diagonal matrix"
+    )
+  )
+
+    expect_error(
+    assertthat::assert_that(
+      is_identity_matrix(m3)
+    ),
+    paste0(
+      "m3 must be an identity matrix. Passed matrix is not an identity matrix: ",
+      "it contains diagonal NAs"
+    )
+  )
+
+})
