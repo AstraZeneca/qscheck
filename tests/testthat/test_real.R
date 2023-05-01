@@ -61,7 +61,6 @@ test_that("variablePositiveRealValue", {
       "Passed value -1.5 is below or equal to the minimum of 0"))
 })
 
-
 test_that("variableNonNegativeRealValue", {
   expect_true(is_non_negative_real_value(1))
   expect_true(is_non_negative_real_value(0))
@@ -95,10 +94,6 @@ test_that("variableVectorRealValues", {
   expect_false(is_real_vector(NULL))
   expect_true(is_real_vector(NULL, allow_null = TRUE))
   expect_false(is_real_vector(v2))
-  expect_true(is_real_vector(v, min = 1.2))
-  expect_false(is_real_vector(v, min = 1.2, inclusive_min = FALSE))
-  expect_true(is_real_vector(v, max = 3.0))
-  expect_false(is_real_vector(v, max = 3.0, inclusive_max = FALSE))
   expect_false(is_real_vector(v, exact_length = 4))
   expect_false(is_real_vector(v, min_length = 4))
   expect_true(is_real_vector(v, max_length = 4))
@@ -107,22 +102,6 @@ test_that("variableVectorRealValues", {
 
   v2 <- 1.0
   expect_true(is_real_vector(v2))
-
-  err <- tryCatch({
-    assertthat::assert_that(
-      is_real_vector(v, min = 2.0, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
-    paste0(
-      "Error: v must be a vector of real numbers in the range [2, inf) ",
-      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
-      )
-    )
 
   expect_error(
     assertthat::assert_that(is_real_vector(v, exact_length = 4)),
@@ -154,6 +133,31 @@ test_that("variableVectorRealValues", {
       "Passed vector length is 3 but must be at least 4"))
 })
 
+test_that("variableVectorRealValuesMinMax", {
+  v <- c(1.2, 1.3, 3.0)
+  expect_true(is_real_vector(v, min = 1.2))
+  expect_false(is_real_vector(v, min = 1.2, inclusive_min = FALSE))
+  expect_true(is_real_vector(v, max = 3.0))
+  expect_false(is_real_vector(v, max = 3.0, inclusive_max = FALSE))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_real_vector(v, min = 2.0, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of real numbers in the range [2, inf) ",
+      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      )
+    )
+
+})
+
 test_that("variableVectorPositiveReals", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c(1.2, -1.3, 3.0)
@@ -165,10 +169,6 @@ test_that("variableVectorPositiveReals", {
   expect_false(is_positive_real_vector(v4))
   expect_false(is_positive_real_vector(NULL))
   expect_true(is_positive_real_vector(NULL, allow_null = TRUE))
-  expect_true(is_positive_real_vector(v, min = 1.2))
-  expect_false(is_positive_real_vector(v, min = 1.2, inclusive_min = FALSE))
-  expect_true(is_positive_real_vector(v, max = 3.0))
-  expect_false(is_positive_real_vector(v, max = 3.0, inclusive_max = FALSE))
   expect_false(is_positive_real_vector(v, exact_length = 4))
   expect_false(is_positive_real_vector(v, min_length = 4))
   expect_true(is_positive_real_vector(v, max_length = 4))
@@ -177,22 +177,6 @@ test_that("variableVectorPositiveReals", {
 
   v2 <- 1.0
   expect_true(is_positive_real_vector(v2))
-
-  err <- tryCatch({
-    assertthat::assert_that(
-      is_positive_real_vector(v, min = 2.0, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
-    paste0(
-      "Error: v must be a vector of positive real numbers in the range [2, inf) ",
-      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
-      )
-    )
 
   expect_error(
     assertthat::assert_that(is_positive_real_vector(v, exact_length = 4)),
@@ -221,29 +205,12 @@ test_that("variableVectorPositiveReals", {
       "Passed vector length is 3 but must be at least 4"))
 })
 
-test_that("variableVectorNonNegativeReals", {
+test_that("variableVectorPositiveRealsMinMax", {
   v <- c(1.2, 1.3, 3.0)
-  v2 <- c(1.2, -1.3, 3.0)
-  v3 <- c(1.2, 1.3, 0.0)
-  v4 <- c("hello", "hi")
-  expect_true(is_non_negative_real_vector(v))
-  expect_false(is_non_negative_real_vector(v2))
-  expect_true(is_non_negative_real_vector(v3))
-  expect_false(is_non_negative_real_vector(v4))
-  expect_false(is_non_negative_real_vector(NULL))
-  expect_true(is_non_negative_real_vector(NULL, allow_null = TRUE))
-  expect_true(is_non_negative_real_vector(v, min = 1.2))
-  expect_false(is_non_negative_real_vector(v, min = 1.2, inclusive_min = FALSE))
-  expect_true(is_non_negative_real_vector(v, max = 3.0))
-  expect_false(is_non_negative_real_vector(v, max = 3.0, inclusive_max = FALSE))
-  expect_false(is_non_negative_real_vector(v, exact_length = 4))
-  expect_false(is_non_negative_real_vector(v, min_length = 4))
-  expect_true(is_non_negative_real_vector(v, max_length = 4))
-  expect_false(is_non_negative_real_vector(v, max_length = 2))
-  expect_true(is_non_negative_real_vector(v, exact_length = 3, max_length = 2))
-
-  v2 <- 1.0
-  expect_true(is_non_negative_real_vector(v2))
+  expect_true(is_positive_real_vector(v, min = 1.2))
+  expect_false(is_positive_real_vector(v, min = 1.2, inclusive_min = FALSE))
+  expect_true(is_positive_real_vector(v, max = 3.0))
+  expect_false(is_positive_real_vector(v, max = 3.0, inclusive_max = FALSE))
 
   err <- tryCatch({
     assertthat::assert_that(
@@ -260,6 +227,28 @@ test_that("variableVectorNonNegativeReals", {
       "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
       )
     )
+
+})
+
+test_that("variableVectorNonNegativeReals", {
+  v <- c(1.2, 1.3, 3.0)
+  v2 <- c(1.2, -1.3, 3.0)
+  v3 <- c(1.2, 1.3, 0.0)
+  v4 <- c("hello", "hi")
+  expect_true(is_non_negative_real_vector(v))
+  expect_false(is_non_negative_real_vector(v2))
+  expect_true(is_non_negative_real_vector(v3))
+  expect_false(is_non_negative_real_vector(v4))
+  expect_false(is_non_negative_real_vector(NULL))
+  expect_true(is_non_negative_real_vector(NULL, allow_null = TRUE))
+  expect_false(is_non_negative_real_vector(v, exact_length = 4))
+  expect_false(is_non_negative_real_vector(v, min_length = 4))
+  expect_true(is_non_negative_real_vector(v, max_length = 4))
+  expect_false(is_non_negative_real_vector(v, max_length = 2))
+  expect_true(is_non_negative_real_vector(v, exact_length = 3, max_length = 2))
+
+  v2 <- 1.0
+  expect_true(is_non_negative_real_vector(v2))
 
   expect_error(
     assertthat::assert_that(is_non_negative_real_vector(v, exact_length = 4)),
@@ -286,6 +275,31 @@ test_that("variableVectorNonNegativeReals", {
       "v must be a vector of non-negative real numbers of length ",
       "between 4 and 8 inclusive with no NAs. ",
       "Passed vector length is 3 but must be at least 4"))
+})
+
+test_that("variableVectorNonNegativeRealsMinMax", {
+  v <- c(1.2, 1.3, 3.0)
+  expect_true(is_non_negative_real_vector(v, min = 1.2))
+  expect_false(is_non_negative_real_vector(v, min = 1.2, inclusive_min = FALSE))
+  expect_true(is_non_negative_real_vector(v, max = 3.0))
+  expect_false(is_non_negative_real_vector(v, max = 3.0, inclusive_max = FALSE))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_positive_real_vector(v, min = 2.0, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of positive real numbers in the range [2, inf) ",
+      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      )
+    )
+
 })
 
 test_that("variableVectorProbabilities", {
