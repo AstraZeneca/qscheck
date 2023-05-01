@@ -134,10 +134,6 @@ test_that("variableVectorNonNegativeIntegers", {
   expect_false(is_non_negative_integer_vector(NULL))
   expect_false(is_non_negative_integer_vector(v2))
   expect_false(is_non_negative_integer_vector(v3))
-  expect_true(is_non_negative_integer_vector(v, min = 0))
-  expect_false(is_non_negative_integer_vector(v, min = 0, inclusive_min = FALSE))
-  expect_true(is_non_negative_integer_vector(v, max = 13))
-  expect_false(is_non_negative_integer_vector(v, max = 13, inclusive_max = FALSE))
   expect_false(is_non_negative_integer_vector(v, exact_length = 4))
   expect_false(is_non_negative_integer_vector(v, min_length = 4))
   expect_true(is_non_negative_integer_vector(v, max_length = 4))
@@ -149,22 +145,6 @@ test_that("variableVectorNonNegativeIntegers", {
 
   expect_false(is_non_negative_integer_vector(v4))
   expect_true(is_non_negative_integer_vector(v4, allow_na_values = TRUE))
-
-  err <- tryCatch({
-    assertthat::assert_that(
-      is_non_negative_integer_vector(v, min = 10, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
-    paste0(
-      "Error: v must be a vector of non negative integer values in the range [10, inf) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
-      )
-    )
 
   err <- tryCatch({
     assertthat::assert_that(
@@ -229,6 +209,32 @@ test_that("variableVectorNonNegativeIntegers", {
 
 })
 
+test_that("variableVectorNonNegativeIntegersMinMax", {
+  v <- c(1, 13, 0)
+
+  expect_true(is_non_negative_integer_vector(v, min = 0))
+  expect_false(is_non_negative_integer_vector(v, min = 0, inclusive_min = FALSE))
+  expect_true(is_non_negative_integer_vector(v, max = 13))
+  expect_false(is_non_negative_integer_vector(v, max = 13, inclusive_max = FALSE))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_non_negative_integer_vector(v, min = 10, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of non negative integer values in the range [10, inf) ",
+      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
+      )
+    )
+
+})
+
 test_that("variableVectorPositiveIntegers", {
   v <- c(1, 13, 1)
   v1 <- c(1, 13, 0)
@@ -240,32 +246,12 @@ test_that("variableVectorPositiveIntegers", {
   expect_false(is_positive_integer_vector(NULL))
   expect_false(is_positive_integer_vector(v2))
   expect_false(is_positive_integer_vector(v3))
-  expect_true(is_positive_integer_vector(v, min = 1))
-  expect_false(is_positive_integer_vector(v, min = 1, inclusive_min = FALSE))
-  expect_true(is_positive_integer_vector(v, max = 13))
-  expect_false(is_positive_integer_vector(v, max = 13, inclusive_max = FALSE))
   expect_false(is_positive_integer_vector(v, exact_length = 4))
   expect_false(is_positive_integer_vector(v, min_length = 4))
   expect_true(is_positive_integer_vector(v, max_length = 4))
   expect_false(is_positive_integer_vector(v, max_length = 2))
   expect_true(is_positive_integer_vector(
     v, exact_length = 3, max_length = 2))
-
-  err <- tryCatch({
-    assertthat::assert_that(
-      is_positive_integer_vector(v, min = 10, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
-    paste0(
-      "Error: v must be a vector of positive integer values in the range [10, inf) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
-      )
-    )
 
   err <- tryCatch({
     assertthat::assert_that(
@@ -335,6 +321,32 @@ test_that("variableVectorPositiveIntegers", {
 
 })
 
+test_that("variableVectorPositiveIntegersMinMax", {
+  v <- c(1, 13, 1)
+
+  expect_true(is_positive_integer_vector(v, min = 1))
+  expect_false(is_positive_integer_vector(v, min = 1, inclusive_min = FALSE))
+  expect_true(is_positive_integer_vector(v, max = 13))
+  expect_false(is_positive_integer_vector(v, max = 13, inclusive_max = FALSE))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_positive_integer_vector(v, min = 10, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of positive integer values in the range [10, inf) ",
+      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
+      )
+    )
+
+})
+
 test_that("variableVectorOfIntegerValues", {
   v <- c(1, 13, 0)
   v2 <- c(1, 5.2, 3)
@@ -346,10 +358,6 @@ test_that("variableVectorOfIntegerValues", {
   expect_true(is_integer_vector(NULL, allow_null = TRUE))
   expect_false(is_integer_vector(v2))
   expect_true(is_integer_vector(v3))
-  expect_true(is_integer_vector(v, min = 0))
-  expect_false(is_integer_vector(v, min = 0, inclusive_min = FALSE))
-  expect_true(is_integer_vector(v, max = 13))
-  expect_false(is_integer_vector(v, max = 13, inclusive_max = FALSE))
   expect_false(is_integer_vector(v, exact_length = 4))
   expect_false(is_integer_vector(v, min_length = 4))
   expect_true(is_integer_vector(v, max_length = 4))
@@ -359,22 +367,6 @@ test_that("variableVectorOfIntegerValues", {
 
   expect_true(is_integer_vector(v4, allow_na_values = TRUE))
   expect_false(is_integer_vector(v4, allow_na_values = FALSE))
-
-  err <- tryCatch({
-    assertthat::assert_that(
-      is_integer_vector(v, min = 10, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
-    paste0(
-      "Error: v must be a vector of integer values in the range [10, inf) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
-      )
-    )
 
   err <- tryCatch({
     assertthat::assert_that(
@@ -448,6 +440,31 @@ test_that("variableVectorOfIntegerValues", {
 
 
 
+})
+
+test_that("variableVectorOfIntegerValuesMinMax", {
+  v <- c(1, 13, 0)
+
+  expect_true(is_integer_vector(v, min = 0))
+  expect_false(is_integer_vector(v, min = 0, inclusive_min = FALSE))
+  expect_true(is_integer_vector(v, max = 13))
+  expect_false(is_integer_vector(v, max = 13, inclusive_max = FALSE))
+
+  err <- tryCatch({
+    assertthat::assert_that(
+      is_integer_vector(v, min = 10, inclusive_min = TRUE))
+    NULL
+  },
+  error = function(e) {
+    return(e)
+  })
+
+  expect_equal(as.character(err),
+    paste0(
+      "Error: v must be a vector of integer values in the range [10, inf) ",
+      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
+      )
+    )
 })
 
 test_that("variableVectorBinary", {
