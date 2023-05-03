@@ -210,11 +210,7 @@ inspect_diagonal_matrix <- function(
   }
 
   if (is.null(value)) {
-    if (allow_null == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value is NULL"))
-    }
+    return(success())
   }
 
   off_diag_mask <- !diag(nrow(value))
