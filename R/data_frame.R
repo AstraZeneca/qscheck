@@ -12,8 +12,6 @@
 #'                      has NULL assigned to it, it counts as not present.
 #'                      If exact_rownames is present, this option is ignored.
 #' @param required_colnames as required_rownames, but for column names
-#' @param allow_na if TRUE, NA is accepted as a valid value for df.
-#'                 if FALSE (default) do not accept it.
 #' @param allow_null if TRUE, NULL is accepted as a valid value.
 #'                   If FALSE (default) do not accept it.
 #'
@@ -91,10 +89,6 @@ inspect_data_frame <- function(
     } else {
       return(failure("passed value is NULL"))
     }
-  }
-
-  if (is_na_value(df)) {
-      return(failure("passed value is NA"))
   }
 
   if (!is.data.frame(df)) {
