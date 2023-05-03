@@ -12,8 +12,6 @@
 #'                      has NULL assigned to it, it counts as not present.
 #'                      If exact_rownames is present, this option is ignored.
 #' @param required_colnames as required_rownames, but for column names
-#' @param allow_na if TRUE, NA is accepted as a valid value for df.
-#'                 if FALSE (default) do not accept it.
 #' @param allow_null if TRUE, NULL is accepted as a valid value.
 #'                   If FALSE (default) do not accept it.
 #'
@@ -32,7 +30,6 @@ is_data_frame <- function(df,
                           exact_colnames = NULL,
                           required_rownames = NULL,
                           required_colnames = NULL,
-                          allow_na = FALSE,
                           allow_null = FALSE
                           ) {
 
@@ -42,7 +39,6 @@ is_data_frame <- function(df,
     exact_colnames,
     required_rownames,
     required_colnames,
-    allow_na,
     allow_null
   )
   return(res$valid)
@@ -54,7 +50,6 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
   exact_colnames <- callget(call, env, "exact_colnames", NULL)
   required_rownames <- callget(call, env, "required_rownames", NULL)
   required_colnames <- callget(call, env, "required_colnames", NULL)
-  allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_data_frame(
@@ -73,7 +68,6 @@ assertthat::on_failure(is_data_frame) <- function(call, env) {
       required_rownames,
       required_colnames
     ),
-    snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
   )
@@ -86,7 +80,6 @@ inspect_data_frame <- function(
   exact_colnames = NULL,
   required_rownames = NULL,
   required_colnames = NULL,
-  allow_na = FALSE,
   allow_null = FALSE
 ) {
 
@@ -95,14 +88,6 @@ inspect_data_frame <- function(
       return(success())
     } else {
       return(failure("passed value is NULL"))
-    }
-  }
-
-  if (is_na_value(df)) {
-    if (allow_na == TRUE) {
-      return(success())
-    } else {
-      return(failure("passed value is NA"))
     }
   }
 
