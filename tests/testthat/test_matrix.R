@@ -185,6 +185,8 @@ test_that("passedEntityIsIdentityMatrix", {
   m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
   m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1), 3, 3)
   m3 <- matrix(c(1, 0, 0, 0, NA, 0, 0, 0, 1), 3, 3)
+  m4 <- matrix(c(1, 0, 0, 0, 1 + 1e-7, 0, 0, 0, 1), 3, 3)
+  m5 <- matrix(c(1, 0, 0, 0, 1 + 1e-8, 0, 0, 0, 1), 3, 3)
 
   expect_false(is_identity_matrix(matrix(nrow = 3, ncol = 3)))
   expect_false(is_identity_matrix(matrix(nrow = 4, ncol = 3)))
@@ -219,7 +221,7 @@ test_that("passedEntityIsIdentityMatrix", {
       is_identity_matrix(foo)
     ),
     paste0(
-      "foo must be an identity matrix. Passed non-square matrix ",
+      "foo must be an identity matrix\\. Passed non-square matrix ",
       "with dimensions \\(4, 3\\)"
     )
   )
@@ -228,19 +230,31 @@ test_that("passedEntityIsIdentityMatrix", {
     assertthat::assert_that(
       is_identity_matrix(m2)
     ),
-    paste(
-      "m2 must be an identity matrix. Passed matrix is not a diagonal matrix"
+    paste0(
+      "m2 must be an identity matrix\\. ",
+      "Passed matrix has non-zero off-diagonal values"
     )
   )
 
-    expect_error(
+  expect_error(
     assertthat::assert_that(
       is_identity_matrix(m3)
     ),
     paste0(
-      "m3 must be an identity matrix. Passed matrix is not an identity matrix: ",
-      "it contains diagonal NAs"
+      "m3 must be an identity matrix. ",
+      "Passed matrix cannot contain NAs on the diagonal"
     )
   )
+
+  expect_error(
+    assertthat::assert_that(is_identity_matrix(m4)),
+    paste0(
+      "m4 must be an identity matrix\\. ",
+      "Passed matrix have values other than 1 on the diagonal"
+    )
+  )
+
+  expect_true(is_identity_matrix(m4, tol = 1e-6))
+  expect_true(is_diagonal_matrix(m5))
 
 })

@@ -243,19 +243,22 @@ inspect_diagonal_matrix <- function(
 #' @concept matrix
 #' @export
 is_identity_matrix <- function(
-  value, exact_dimension = NULL, allow_null = FALSE) {
-    res <- inspect_identity_matrix(
-      value, exact_dimension, allow_null
-    )
+    value, exact_dimension = NULL, allow_null = FALSE,
+    tol = sqrt(.Machine$double.eps)
+    ) {
+  res <- inspect_identity_matrix(
+    value, exact_dimension, allow_null, tol
+  )
   return(res$valid)
 }
 assertthat::on_failure(is_identity_matrix) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
   exact_dimension <- callget(call, env, "exact_dimension", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
+  tol <- callget(call, env, "tol", sqrt(.Machine$double.eps))
 
   res <- inspect_identity_matrix(
-    value, exact_dimension, allow_null
+    value, exact_dimension, allow_null, tol
   )
   return(paste0(
     deparse(call$value),
@@ -266,33 +269,32 @@ assertthat::on_failure(is_identity_matrix) <- function(call, env) {
   ))
 }
 inspect_identity_matrix <- function(
-  value, exact_dimension = NULL, allow_null = FALSE) {
+    value, exact_dimension = NULL, allow_null = FALSE,
+    tol = sqrt(.Machine$double.eps)
+  ) {
 
   res <- inspect_diagonal_matrix(
     value,
     exact_dimension = exact_dimension,
-    allow_null = allow_null
+    allow_null = allow_null,
+    tol = tol
   )
 
   if (!res$valid) {
     return(res)
   }
 
-  if (any(is.na(diag(value)))) {
-    return(failure(
-      paste0(
-        "Passed matrix is not an identity matrix: ",
-        "it contains diagonal NAs"
-      )
-    ))
+  if (is.null(value)) {
+    return(success())
   }
 
-  if (!(all(diag(value) == 1))) {
-    return(failure(
-      paste0(
-        "Passed matrix is not an identity matrix"
-      )
-    ))
+  diagonal <- diag(value)
+  if (any(is.na(diagonal))) {
+    return(failure("Passed matrix cannot contain NAs on the diagonal"))
+  }
+
+  if (any(abs(diagonal - 1.0) > tol)) {
+    return(failure("Passed matrix have values other than 1 on the diagonal"))
   }
 
   return(success())
