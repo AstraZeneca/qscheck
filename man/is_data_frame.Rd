@@ -10,7 +10,6 @@ is_data_frame(
   exact_colnames = NULL,
   required_rownames = NULL,
   required_colnames = NULL,
-  allow_na = FALSE,
   allow_null = FALSE
 )
 }
@@ -31,9 +30,6 @@ has NULL assigned to it, it counts as not present.
 If exact_rownames is present, this option is ignored.}
 
 \item{required_colnames}{as required_rownames, but for column names}
-
-\item{allow_na}{if TRUE, NA is accepted as a valid value for df.
-if FALSE (default) do not accept it.}
 
 \item{allow_null}{if TRUE, NULL is accepted as a valid value.
 If FALSE (default) do not accept it.}
