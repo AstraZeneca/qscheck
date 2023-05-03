@@ -144,12 +144,15 @@ inspect_square_matrix <- function(
   return(success())
 }
 
-#' Check if the passed entity is a diagonal matrix
+#' Check if the passed entity is a diagonal matrix. Elements outside of
+#' the diagonal are checked against a given tolerance.
 #'
-#' @param value the value to check
+#' @param value The value to check.
 #' @param exact_dimension If specified, the matrix must have the specified
-#'        exact dimension
-#' @param allow_null If TRUE, allow NULL as a value
+#'        exact dimension.
+#' @param allow_null If TRUE, allow NULL as a value.
+#' @param tol The tolerance to verify if the off-diagonal elements are
+#'            zero. Default is sqrt(.Machine$double.eps).
 #'
 #' @examples
 #' \dontrun{
@@ -162,19 +165,26 @@ inspect_square_matrix <- function(
 #' @concept matrix
 #' @export
 is_diagonal_matrix <- function(
-  value, exact_dimension = NULL, allow_null = FALSE) {
-    res <- inspect_diagonal_matrix(
-      value, exact_dimension, allow_null
-    )
+    value,
+    exact_dimension = NULL,
+    allow_null = FALSE,
+    tol = sqrt(.Machine$double.eps)
+    ) {
+
+  res <- inspect_diagonal_matrix(
+    value, exact_dimension, allow_null,
+    tol
+  )
   return(res$valid)
 }
 assertthat::on_failure(is_diagonal_matrix) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
   exact_dimension <- callget(call, env, "exact_dimension", NULL)
   allow_null <- callget(call, env, "allow_null", FALSE)
+  tol <- callget(call, env, "tol", sqrt(.Machine$double.eps))
 
   res <- inspect_diagonal_matrix(
-    value, exact_dimension, allow_null
+    value, exact_dimension = exact_dimension, allow_null = allow_null, tol = tol
   )
   return(paste0(
     deparse(call$value),
@@ -185,7 +195,9 @@ assertthat::on_failure(is_diagonal_matrix) <- function(call, env) {
   ))
 }
 inspect_diagonal_matrix <- function(
-  value, exact_dimension = NULL, allow_null = FALSE) {
+    value, exact_dimension = NULL, allow_null = FALSE,
+    tol = sqrt(.Machine$double.eps)
+    ) {
 
   res <- inspect_square_matrix(
     value,
@@ -197,20 +209,21 @@ inspect_diagonal_matrix <- function(
     return(res)
   }
 
-  if (any(is.na(value[!diag(nrow(value))]))) {
-    return(failure(
-      paste0(
-        "Passed matrix is not a diagonal matrix: it contains non-diagonal NAs"
-      )
-    ))
+  if (is.null(value)) {
+    if (allow_null == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value is NULL"))
+    }
   }
 
-  if (!(all(value[!diag(nrow(value))] == 0))) {
-    return(failure(
-      paste0(
-        "Passed matrix is not a diagonal matrix"
-      )
-    ))
+  off_diag_mask <- !diag(nrow(value))
+  if (any(is.na(value[off_diag_mask]))) {
+    return(failure("Passed matrix cannot contain non-diagonal NAs"))
+  }
+
+  if (any(abs(value[off_diag_mask]) > tol)) {
+    return(failure("Passed matrix has non-zero off-diagonal values"))
   }
 
   return(success())
