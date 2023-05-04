@@ -91,7 +91,7 @@ assertthat::on_failure(is_existing_dir) <- function(call, env) {
   res <- inspect_is_existing_dir(path, allow_null)
 
   msg <- paste0(
-    deparse(call$value),
+    deparse(call$path),
     snippet_must_be("path to an existing directory"),
     snippet_null(allow_null),
     ". ", res$reason
@@ -111,12 +111,23 @@ inspect_is_existing_dir <- function(path, allow_null) {
     return(success())
   }
 
-  if (!(dir.exists(value))) {
+  # Help the user by differentiating the error in case the directory does not
+  # exist vs the path is referring to a file instead.
+  # file.exists returns true also for directories (although the documentation
+  # is very undecided on that)
+
+  if (!(file.exists(path))) {
     return(failure(
-      paste(
-        "Passed value is not a valid directory"
+      paste0("Path '", path, "' does not refer to an existing directory")
       )
-    ))
+    )
+  }
+
+  if (!(dir.exists(path))) {
+    return(failure(
+      paste0("Path '", path, "' refers to an existing file instead")
+      )
+    )
   }
 
   return(success())
