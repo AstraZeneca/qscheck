@@ -357,11 +357,11 @@ inspect_probability_vector <- function(
   value <- value[!is.na(value)]
 
   if (!(all(value >= 0) && all(value <= 1))) {
-    mask <- value_all[value_all < 0 | value_all > 1]
+    mask <- (value_all < 0 | value_all > 1)
     return(failure(
       paste0(
         "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-        paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+        paste(which(mask), sep = "' '", collapse = ", "),
         " is outside the allowed range [0.0, 1.0]"
       )
     ))

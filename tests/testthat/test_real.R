@@ -290,21 +290,16 @@ test_that("variableVectorProbabilitiesMinMax", {
   expect_true(is_probability_vector(v))
   expect_false(is_probability_vector(v2))
 
-  err <- tryCatch({
+  expect_error(
     assertthat::assert_that(
-      is_probability_vector(v2))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
+      is_probability_vector(v2)
+    ),
     paste0(
-      "Error: v2 must be a vector of values in the interval [0.0, 1.0] ",
-      "with no NAs. Vector at positions 1, 2, 3 is outside the allowed range [0.0, 1.0]\n"
-      )
+      "v2 must be a vector of values in the interval \\[0.0, 1.0\\] ",
+      "with no NAs. Vector at positions 1, 2, 3 is outside the allowed ",
+      "range \\[0.0, 1.0\\]"
     )
+  )
 
 })
 
