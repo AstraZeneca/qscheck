@@ -56,10 +56,17 @@ assertthat::on_failure(any_satisfied) <- function(call, env) {
     })
 
     errors[[argument]] <- as.character(err)
+    errors[[argument]] <- paste(
+        strsplit(gsub(".*must be (.+) Passed.*", "\\1", errors[[argument]]), ".", fixed = TRUE)
+        , collapse = ',')
 
   }
 
-  message <- gsub("^.*?Error: |\n $", "", paste(errors, "", collapse = ""))
+  message <- paste0(gsub("^.*?Error: |; \n $", "", paste(
+    "None of the following options are satisfied:",
+  paste0(errors, "; ", collapse = "")))
+  )
+
 
   return(message)
 
