@@ -62,7 +62,7 @@ assertthat::on_failure(any_satisfied) <- function(call, env) {
 
   }
 
-  message <- paste0(gsub("^.*?Error: |; \n $", "", paste(
+  message <- paste0(gsub("^.*?Error:", "", paste(
     "None of the following options are satisfied:",
     paste0(errors, "; ", collapse = "")))
   )
