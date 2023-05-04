@@ -217,21 +217,15 @@ test_that("variableVectorNonNegativeIntegersMinMax", {
   expect_true(is_non_negative_integer_vector(v, max = 13))
   expect_false(is_non_negative_integer_vector(v, max = 13, inclusive_max = FALSE))
 
-  err <- tryCatch({
+  expect_error(
     assertthat::assert_that(
-      is_non_negative_integer_vector(v, min = 10, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
+      is_non_negative_integer_vector(v, min = 10, inclusive_min = TRUE)
+    ),
     paste0(
-      "Error: v must be a vector of non negative integer values in the range [10, inf) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
-      )
+      "v must be a vector of non negative integer values in the range \\[10, inf\\) ",
+      "with no NAs. Vector at positions 1, 3 is below the minimum of 10"
     )
+  )
 
 })
 
