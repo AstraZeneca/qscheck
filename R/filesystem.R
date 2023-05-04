@@ -123,6 +123,8 @@ inspect_is_existing_dir <- function(path, allow_null) {
     )
   }
 
+  # If we arrive here, something exist, and it's either a file or a directory.
+  # Check if it's actually a directory
   if (!(dir.exists(path))) {
     return(failure(
       paste0("Path '", path, "' refers to an existing file instead")
