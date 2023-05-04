@@ -119,22 +119,22 @@ inspect_real_vector <- function(
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
-        mask <- value_all[value_all < min]
+        mask <- (value_all < min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
       }
     } else {
       if (any(value <= min)) {
-        mask <- value_all[value_all <= min]
+        mask <- (value_all <= min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
@@ -145,22 +145,22 @@ inspect_real_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
-        mask <- value_all[value_all > min]
+        mask <- (value_all > min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
       }
     } else {
       if (any(value >= max)) {
-        mask <- value_all[value_all >= min]
+        mask <- (value_all >= min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
@@ -281,22 +281,22 @@ inspect_positive_real_vector <- function(
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
-        mask <- value_all[value_all < min]
+        mask <- (value_all < min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
       }
     } else {
       if (any(value <= min)) {
-        mask <- value_all[value_all <= min]
+        mask <- (value_all <= min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
@@ -307,22 +307,22 @@ inspect_positive_real_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
-        mask <- value_all[value_all > min]
+        mask <- (value_all > min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
       }
     } else {
       if (any(value >= max)) {
-        mask <- value_all[value_all >= min]
+        mask <- (value_all >= min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
@@ -445,22 +445,22 @@ inspect_non_negative_real_vector <- function(
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
-        mask <- value_all[value_all < min]
+        mask <- (value_all < min)
         return(failure(
           paste0(
            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
       }
     } else {
       if (any(value <= min)) {
-        mask <- value_all[value_all <= min]
+        mask <- (value_all <= min)
         return(failure(
           paste0(
            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
@@ -471,22 +471,22 @@ inspect_non_negative_real_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
-        mask <- value_all[value_all > min]
+        mask <- (value_all > min)
         return(failure(
           paste0(
            "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
           )
         ))
       }
     } else {
       if (any(value >= max)) {
-        mask <- value_all[value_all >= min]
+        mask <- (value_all >= min)
         return(failure(
           paste0(
             "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-            paste(which(value_all %in% mask), sep = "' '", collapse = ", "),
+            paste(which(mask), sep = "' '", collapse = ", "),
             " is below the minimum of ", min
             )
           )

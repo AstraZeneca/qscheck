@@ -140,21 +140,15 @@ test_that("variableVectorRealValuesMinMax", {
   expect_true(is_real_vector(v, max = 3.0))
   expect_false(is_real_vector(v, max = 3.0, inclusive_max = FALSE))
 
-  err <- tryCatch({
+  expect_error(
     assertthat::assert_that(
-      is_real_vector(v, min = 2.0, inclusive_min = TRUE))
-    NULL
-  },
-  error = function(e) {
-    return(e)
-  })
-
-  expect_equal(as.character(err),
+      is_real_vector(v, min = 2.0, inclusive_min = TRUE)
+    ),
     paste0(
-      "Error: v must be a vector of real numbers in the range [2, inf) ",
-      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
-      )
+      "v must be a vector of real numbers in the range \\[2, inf\\) ",
+      "with no NAs. Vector at positions 1, 2 is below the minimum of 2"
     )
+  )
 
 })
 
