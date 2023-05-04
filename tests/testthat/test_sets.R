@@ -10,8 +10,9 @@ test_that("anyOfAPossibleSetOfChecksIsSatisfied", {
   err <- tryCatch({
     assertthat::assert_that(
       any_satisfied(
-        is_string_value(list()),
-        is_logical_value(list())
+        is_logical_value(list()),
+        is_real_vector(list(), exact_length = 3),
+        is_positive_integer_value(list())
       )
     )
     NULL
@@ -22,9 +23,10 @@ test_that("anyOfAPossibleSetOfChecksIsSatisfied", {
 
   expect_equal(
     as.character(err),
-    paste(
-      "Error: list() must be a string. Passed value is not a character\n",
-      "Error: list() must be a logical value. Passed value is not a logical\n"
+    paste0(
+      "Error: None of the following options is satisfied: a logical value; ",
+      "a vector of real numbers of exact length 3 with no NAs; a positive ",
+      "integer value. Passed value must satisfy at least one of the above.\n"
     )
   )
 
