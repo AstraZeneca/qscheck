@@ -1,5 +1,4 @@
 test_that("variableIsAFile", {
-
   f1 <- root_path("tests", "testthat", "test_filesystem.R")
   f2 <- root_path("tests", "testthat", "unexistent.R")
   f3 <- NULL
