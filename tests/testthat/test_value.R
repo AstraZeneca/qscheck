@@ -55,7 +55,21 @@ test_that("lessThanNotNumericalValue", {
 test_that("lessThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = "hello")),
-    "5 must be a smaller value than hello. Passed value is not a numerical"
+    "5 must be a smaller value than hello. Passed comparator is not a numerical"
+  )
+})
+
+test_that("lessThanComparatorNULL", {
+  expect_error(
+    assertthat::assert_that(is_lt_value(value = 5, comparator = NULL)),
+    "Passed comparator is NULL"
+  )
+})
+
+test_that("lessThanComparatorNA", {
+  expect_error(
+    assertthat::assert_that(is_lt_value(value = 5, comparator = NA_real_)),
+    "Passed comparator is NA"
   )
 })
 

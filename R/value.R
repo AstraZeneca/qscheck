@@ -126,9 +126,10 @@ inspect_na_value <- function(value) {
 #'
 #' @concept real
 #' @export
+
 is_lt_value <- function(
-    value, comparator,
-    allow_na = FALSE, allow_null = FALSE) {
+  value, comparator,
+  allow_na = FALSE, allow_null = FALSE) {
 
   res <- inspect_lt_value(
     value, comparator,
@@ -138,6 +139,7 @@ is_lt_value <- function(
 
   return(res$valid)
 }
+
 assertthat::on_failure(is_lt_value) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
   comparator <- callget(call, env, "comparator", NULL)
@@ -150,23 +152,18 @@ assertthat::on_failure(is_lt_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-  if (is.null(value) || is.null(comparator)) {
-    return(
-      res$reason
-    )
-  } else {
-    return(paste0(
-      call$value,
-      snippet_must_be(paste0("smaller value than ", call$comparator)),
-      snippet_na(allow_na),
-      snippet_null(allow_null),
-      ". ", res$reason
-    ))
-  }
+  return(paste0(
+    call$value,
+    snippet_must_be(paste0("smaller value than ", call$comparator)),
+    snippet_na(allow_na),
+    snippet_null(allow_null),
+    ". ", res$reason
+  ))
 }
+
 inspect_lt_value <- function(
-    value, comparator,
-    allow_na = FALSE, allow_null = FALSE) {
+  value, comparator,
+  allow_na = FALSE, allow_null = FALSE) {
 
   if (is.null(value)) {
     if (allow_null == TRUE) {
@@ -177,7 +174,7 @@ inspect_lt_value <- function(
   }
 
   if (is.null(comparator)) {
-    return(failure("Passed comparator value is NULL"))
+    return(failure("Passed comparator is NULL"))
   }
 
   res <- inspect_real_value(
@@ -190,26 +187,28 @@ inspect_lt_value <- function(
     return(res)
   }
 
-  res <- inspect_real_value(
-    comparator,
-    allow_na = allow_na,
-    allow_null = allow_null
-  )
+  # extract relevant functions from inspect_real_value
+  # and apply them to the comparator
+  if (!is.numeric(comparator)) {
+    return(failure("Passed comparator is not a numerical"))
+  }
 
-  if (!res$valid) {
-    return(res)
+  if (length(comparator) != 1) {
+    return(failure(
+      "Passed comparator must be a single numerical value, not a vector"
+    ))
   }
 
   if (is_na_value(value)) {
     if (allow_na == TRUE) {
       return(success())
     } else {
-      return(failure("Passed value was NA"))
+      return(failure("Passed value is NA"))
     }
   }
 
   if (is_na_value(comparator)) {
-    return(failure("Passed comparator value was NA"))
+    return(failure("Passed comparator is NA"))
   }
 
   if (value >= comparator) {
@@ -295,7 +294,7 @@ inspect_lte_value <- function(
   }
 
   if (is.null(comparator)) {
-    return(failure("Passed comparator value is NULL"))
+    return(failure("Passed comparator is NULL"))
   }
 
   res <- inspect_real_value(
@@ -327,7 +326,7 @@ inspect_lte_value <- function(
   }
 
   if (is_na_value(comparator)) {
-    return(failure("Passed comparator value was NA"))
+    return(failure("Passed comparator was NA"))
   }
 
   if (value > comparator) {
@@ -411,7 +410,7 @@ inspect_gt_value <- function(
   }
 
   if (is.null(comparator)) {
-    return(failure("Passed comparator value is NULL"))
+    return(failure("Passed comparator is NULL"))
   }
 
   res <- inspect_real_value(
@@ -443,7 +442,7 @@ inspect_gt_value <- function(
   }
 
   if (is_na_value(comparator)) {
-    return(failure("Passed comparator value was NA"))
+    return(failure("Passed comparator was NA"))
   }
 
   if (value <= comparator) {
@@ -529,7 +528,7 @@ inspect_gte_value <- function(
   }
 
   if (is.null(comparator)) {
-    return(failure("Passed comparator value is NULL"))
+    return(failure("Passed comparator is NULL"))
   }
 
   res <- inspect_real_value(
@@ -561,7 +560,7 @@ inspect_gte_value <- function(
   }
 
   if (is_na_value(comparator)) {
-    return(failure("Passed comparator value was NA"))
+    return(failure("Passed comparator was NA"))
   }
 
   if (value < comparator) {
