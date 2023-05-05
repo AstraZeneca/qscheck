@@ -235,3 +235,58 @@ snippet_function_args <- function(num_args, args) {
 
   return(msg)
 }
+
+snippet_outbound_min_inclusive <- function(...) {
+  outbounds <- which(value_all < min)
+  len_outbounds <- length(outbounds)
+  msg <-
+  paste0(
+    "Value", ifelse(len_outbounds > 1, "s ", " "),
+    "at position", ifelse(len_outbounds > 1, "s ", " "),
+    paste(outbounds, sep = "' '", collapse = ", "),
+    ifelse(len_outbounds > 1, " are", " is"),
+    " below the minimum of ", min
+  )
+  return(msg)
+}
+
+snippet_outbound_min <- function(...) {
+  outbounds <- which(value_all <= min)
+  len_outbounds <- length(outbounds)
+  msg <-
+  paste0(
+    "Value", ifelse(len_outbounds > 1, "s ", " "),
+    "at position", ifelse(len_outbounds > 1, "s ", " "),
+    paste(outbounds, sep = "' '", collapse = ", "),
+    ifelse(len_outbounds > 1, " are", " is"),
+    " below or equal to the non-inclusive minimum of ", min
+  )
+  return(msg)
+}
+
+snippet_outbound_max_inclusive <- function(...) {
+  outbounds <- which(value_all > max)
+  len_outbounds <- length(outbounds)
+  msg <-
+  paste0(
+    "Value", ifelse(len_outbounds > 1, "s ", " "),
+    "at position", ifelse(len_outbounds > 1, "s ", " "),
+    paste(outbounds, sep = "' '", collapse = ", "),
+    ifelse(len_outbounds > 1, " are", " is"),
+    " above the maximum of ", max
+  )
+  return(msg)
+}
+
+snippet_outbound_max <- function(...) {
+  outbounds <- which(value_all >= max)
+  len_outbounds <- length(outbounds)
+  msg <-
+  paste0(
+    "Value", ifelse(len_outbounds > 1, "s ", " "),
+    "at position", ifelse(len_outbounds > 1, "s ", " "),
+    paste(outbounds, sep = "' '", collapse = ", "),
+    ifelse(len_outbounds > 1, " are", " is"),
+    " above or equal to the non-inclusive maximum of ", max
+  )
+}

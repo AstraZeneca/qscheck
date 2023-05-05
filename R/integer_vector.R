@@ -124,27 +124,17 @@ inspect_integer_vector <- function(
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
-        outbounds <- which(value_all < min)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below the minimum of ", min
-        )))
+        environment(snippet_outbound_min_inclusive) <- environment()
+        return(failure(
+          snippet_outbound_min_inclusive()
+        ))
       }
     } else {
       if (any(value <= min)) {
-        outbounds <- which(value_all <= min)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below or equal to the non-inclusive minimum of ", min
-        )))
+        environment(snippet_outbound_min) <- environment()
+        return(failure(
+          snippet_outbound_min()
+        ))
       }
     }
   }
@@ -152,27 +142,17 @@ inspect_integer_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
-        outbounds <- which(value_all > max)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " above the maximum of ", max
-        )))
+        environment(snippet_outbound_max_inclusive) <- environment()
+        return(failure(
+          snippet_outbound_max_inclusive()
+        ))
       }
     } else {
       if (any(value >= max)) {
-        outbounds <- which(value_all >= max)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " above or equal to the non-inclusive maximum of ", max
-        )))
+        environment(snippet_outbound_max) <- environment()
+        return(failure(
+          snippet_outbound_max()
+        ))
       }
     }
   }
@@ -296,27 +276,17 @@ inspect_positive_integer_vector <- function(
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
-        outbounds <- which(value_all < min)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below the minimum of ", min
-        )))
+        environment(snippet_outbound_min_inclusive) <- environment()
+        return(failure(
+          snippet_outbound_min_inclusive()
+        ))
       }
     } else {
       if (any(value <= min)) {
-        outbounds <- which(value_all <= min)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below or equal to the non-inclusive minimum of ", min
-        )))
+        environment(snippet_outbound_min) <- environment()
+        return(failure(
+          snippet_outbound_min()
+        ))
       }
     }
   }
@@ -324,27 +294,17 @@ inspect_positive_integer_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
-        outbounds <- which(value_all > max)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " above the maximum of ", max
-        )))
+        environment(snippet_outbound_max_inclusive) <- environment()
+        return(failure(
+          snippet_outbound_max_inclusive()
+        ))
       }
     } else {
       if (any(value >= max)) {
-        outbounds <- which(value_all >= max)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " above or equal to the non-inclusive maximum of ", max
-        )))
+        environment(snippet_outbound_max) <- environment()
+        return(failure(
+          snippet_outbound_max()
+        ))
       }
     }
   }
@@ -471,28 +431,16 @@ inspect_non_negative_integer_vector <- function(
   if (!is.null(min)) {
     if (inclusive_min) {
       if (any(value < min)) {
-        outbounds <- which(value_all < min)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below the minimum of ", min
-        )))
+        environment(snippet_outbound_min_inclusive) <- environment()
+        return(failure(
+          snippet_outbound_min_inclusive()
+        ))
       }
     } else {
       if (any(value <= min)) {
-        outbounds <- which(value_all <= min)
-        len_outbounds <- length(outbounds)
+        environment(snippet_outbound_min) <- environment()
         return(failure(
-          paste0(
-            "Value", ifelse(len_outbounds > 1, "s ", " "),
-            "at position", ifelse(len_outbounds > 1, "s ", " "),
-            paste(outbounds, sep = "' '", collapse = ", "),
-            ifelse(len_outbounds > 1, " are", " is"),
-            " below or equal to the non-inclusive minimum of ", min
-          )
+          snippet_outbound_min()
         ))
       }
     }
@@ -501,27 +449,17 @@ inspect_non_negative_integer_vector <- function(
   if (!is.null(max)) {
     if (inclusive_max) {
       if (any(value > max)) {
-        outbounds <- which(value_all > max)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below the minimum of ", min
-        )))
+        environment(snippet_outbound_max_inclusive) <- environment()
+        return(failure(
+          snippet_outbound_max_inclusive()
+        ))
       }
     } else {
       if (any(value >= max)) {
-        outbounds <- (value_all >= max)
-        len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below of equal to the non-inclusive minimum of ", min
-        )))
+        environment(snippet_outbound_max) <- environment()
+        return(failure(
+          snippet_outbound_max()
+        ))
       }
     }
   }
