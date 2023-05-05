@@ -223,7 +223,7 @@ test_that("variableVectorNonNegativeIntegersMinMax", {
     ),
     paste0(
       "v must be a vector of non negative integer values in the range \\[10, inf\\) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10"
+      "with no NAs. Values at positions 1, 3 are below the minimum of 10"
     )
   )
 
@@ -335,7 +335,7 @@ test_that("variableVectorPositiveIntegersMinMax", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of positive integer values in the range [10, inf) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
+      "with no NAs. Values at positions 1, 3 are below the minimum of 10\n"
       )
     )
 
@@ -456,7 +456,7 @@ test_that("variableVectorOfIntegerValuesMinMax", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of integer values in the range [10, inf) ",
-      "with no NAs. Vector at positions 1, 3 is below the minimum of 10\n"
+      "with no NAs. Values at positions 1, 3 are below the minimum of 10\n"
       )
     )
 })
