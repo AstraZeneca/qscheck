@@ -235,3 +235,15 @@ snippet_function_args <- function(num_args, args) {
 
   return(msg)
 }
+
+snippet_outbound_min <- function(...) {
+  return(
+  paste0(
+    "Value", ifelse(len_outbounds > 1, "s ", " "),
+    "at position", ifelse(len_outbounds > 1, "s ", " "),
+    paste(outbounds, sep = "' '", collapse = ", "),
+    ifelse(len_outbounds > 1, " are", " is"),
+    " below the minimum of ", min
+  )
+  )
+}

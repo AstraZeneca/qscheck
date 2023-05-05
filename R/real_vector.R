@@ -121,13 +121,10 @@ inspect_real_vector <- function(
       if (any(value < min)) {
         outbounds <- which(value_all < min)
         len_outbounds <- length(outbounds)
-        return(failure(paste0(
-          "Value", ifelse(len_outbounds > 1, "s ", " "),
-          "at position", ifelse(len_outbounds > 1, "s ", " "),
-          paste(outbounds, sep = "' '", collapse = ", "),
-          ifelse(len_outbounds > 1, " are", " is"),
-          " below the minimum of ", min
-        )))
+        environment(snippet_outbound_min) <- environment()
+        return(failure(
+          snippet_outbound_min()
+        ))
       }
     } else {
       if (any(value <= min)) {
