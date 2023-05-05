@@ -443,77 +443,57 @@ assertthat::on_failure(is_gte_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-  if (is.null(value) || is.null(comparator)) {
-    return(
-      res$reason
-    )
-  } else {
-    return(paste0(
-      call$value,
-      snippet_must_be(
-        paste0("value greater than or equal to ", call$comparator)
-      ),
-      snippet_na(allow_na),
-      snippet_null(allow_null),
-      ". ", res$reason
-    ))
-  }
+  return(paste0(
+    call$value,
+    snippet_must_be(
+      paste0("value greater than or equal to ", call$comparator)
+    ),
+    snippet_na(allow_na),
+    snippet_null(allow_null),
+    ". ", res$reason
+  ))
 }
+
 inspect_gte_value <- function(
     value, comparator,
     allow_na = FALSE, allow_null = FALSE) {
-
-  if (is.null(value)) {
-    if (allow_null == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value is NULL"))
-    }
-  }
 
   if (is.null(comparator)) {
     return(failure("Passed comparator is NULL"))
   }
 
-  res <- inspect_real_value(
+  res_value <- inspect_real_value(
     value,
     allow_na = allow_na,
     allow_null = allow_null
   )
 
-  if (!res$valid) {
-    return(res)
+  res_comparator <- inspect_real_value(comparator)
+
+  if (!res_value$valid) {
+    return(res_value)
   }
 
-  res <- inspect_real_value(
-    comparator,
-    allow_na = allow_na,
-    allow_null = allow_null
-  )
+  if (!res_comparator$valid) {
+    res_comparator$reason <- paste(
+      "Invalid comparator value:", res_comparator$reason
+    )
+    return(res_comparator)
+  }
 
-  if (!res$valid) {
-    return(res)
+  if (is.null(value)) {
+    return(success())
   }
 
   if (is_na_value(value)) {
-    if (allow_na == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value was NA"))
-    }
-  }
-
-  if (is_na_value(comparator)) {
-    return(failure("Passed comparator was NA"))
+    return(success())
   }
 
   if (value < comparator) {
-    return(failure(
-      paste0(
-        "Passed value ", value,
-        " is lower than the minimum of ", comparator)
-    )
-    )
+    return(failure(paste0(
+      "Passed value ", value,
+      " is lower than the minimum of ", comparator
+    )))
   }
 
   return(success())
