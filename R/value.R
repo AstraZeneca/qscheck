@@ -165,59 +165,42 @@ inspect_lt_value <- function(
   value, comparator,
   allow_na = FALSE, allow_null = FALSE) {
 
-  if (is.null(value)) {
-    if (allow_null == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value is NULL"))
-    }
-  }
-
   if (is.null(comparator)) {
     return(failure("Passed comparator is NULL"))
   }
 
-  res <- inspect_real_value(
+  res_value <- inspect_real_value(
     value,
     allow_na = allow_na,
     allow_null = allow_null
   )
 
-  if (!res$valid) {
-    return(res)
+  res_comparator <- inspect_real_value(comparator)
+
+  if (!res_value$valid) {
+    return(res_value)
   }
 
-  # extract relevant functions from inspect_real_value
-  # and apply them to the comparator
-  if (!is.numeric(comparator)) {
-    return(failure("Passed comparator is not a numerical"))
+  if (!res_comparator$valid) {
+    res_comparator$reason <- paste(
+      "Invalid comparator value:", res_comparator$reason
+    )
+    return(res_comparator)
   }
 
-  if (length(comparator) != 1) {
-    return(failure(
-      "Passed comparator must be a single numerical value, not a vector"
-    ))
+  if (is.null(value)) {
+    return(success())
   }
 
   if (is_na_value(value)) {
-    if (allow_na == TRUE) {
-      return(success())
-    } else {
-      return(failure("Passed value is NA"))
-    }
-  }
-
-  if (is_na_value(comparator)) {
-    return(failure("Passed comparator is NA"))
+    return(success())
   }
 
   if (value >= comparator) {
-    return(failure(
-      paste0(
+    return(failure(paste0(
         "Passed value ", value,
         " is greater than or equal to the maximum of ", comparator)
-    )
-    )
+    ))
   }
 
   return(success())

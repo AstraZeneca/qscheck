@@ -90,7 +90,7 @@ inspect_real_value <- function(value,
     if (allow_na == TRUE) {
       return(success())
     } else {
-      return(failure("Passed value was NA"))
+      return(failure("Passed value is NA"))
     }
   }
 
