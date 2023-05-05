@@ -286,6 +286,7 @@ test_that("variableVectorProbabilitiesMinMax", {
 
   v <- c(0.2, 0.0, 1.0)
   v2 <- c(1.2, -1.3, 3.0)
+  v3 <- c(0.2, 0.3, 3.0)
 
   expect_true(is_probability_vector(v))
   expect_false(is_probability_vector(v2))
@@ -296,7 +297,18 @@ test_that("variableVectorProbabilitiesMinMax", {
     ),
     paste0(
       "v2 must be a vector of values in the interval \\[0.0, 1.0\\] ",
-      "with no NAs. Vector at positions 1, 2, 3 is outside the allowed ",
+      "with no NAs. Values at positions 1, 2, 3 are outside the allowed ",
+      "range \\[0.0, 1.0\\]"
+    )
+  )
+
+  expect_error(
+    assertthat::assert_that(
+      is_probability_vector(v3)
+    ),
+    paste0(
+      "v3 must be a vector of values in the interval \\[0.0, 1.0\\] ",
+      "with no NAs. Value at position 3 is outside the allowed ",
       "range \\[0.0, 1.0\\]"
     )
   )
