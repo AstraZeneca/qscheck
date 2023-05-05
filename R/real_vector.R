@@ -357,12 +357,15 @@ inspect_probability_vector <- function(
   value <- value[!is.na(value)]
 
   if (!(all(value >= 0) && all(value <= 1))) {
-    mask <- (value_all < 0 | value_all > 1)
+    outbounds <- which(value_all < 0 | value_all > 1)
+    len_outbounds <- length(outbounds)
     return(failure(
       paste0(
-        "Vector at position", ifelse(length(mask) > 1, "s ", " "),
-        paste(which(mask), sep = "' '", collapse = ", "),
-        " is outside the allowed range [0.0, 1.0]"
+        "Value", ifelse(len_outbounds > 1, "s ", " "),
+        "at position", ifelse(len_outbounds > 1, "s ", " "),
+        paste(outbounds, sep = "' '", collapse = ", "),
+        ifelse(len_outbounds > 1, " are", " is"),
+        " outside the allowed range [0.0, 1.0]"
       )
     ))
   }
