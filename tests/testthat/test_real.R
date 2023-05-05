@@ -175,20 +175,26 @@ test_that("variableVectorPositiveReals", {
   expect_error(
     assertthat::assert_that(is_positive_real_vector(v, exact_length = 4)),
     paste0("v must be a vector of positive real numbers of exact length 4",
-    " with no NAs. Passed vector length is 3 instead of the expected 4"))
+    " with no NAs. Passed vector length is 3 instead of the expected 4"
+    )
+  )
 
   expect_error(
     assertthat::assert_that(is_positive_real_vector(v, min_length = 4)),
     paste0(
       "v must be a vector of positive real numbers of length not less than 4",
-      " with no NAs. Passed vector length is 3 but must be at least 4"))
+      " with no NAs. Passed vector length is 3 but must be at least 4"
+    )
+  )
 
   expect_error(
     assertthat::assert_that(is_positive_real_vector(v, max_length = 2)),
     paste0(
       "v must be a vector of positive real numbers of length not ",
       "greater than 2 with no NAs. Passed vector length is 3 but ",
-      "must be at most 2"))
+      "must be at most 2"
+    )
+  )
 
   expect_error(
     assertthat::assert_that(is_positive_real_vector(v,
@@ -196,7 +202,9 @@ test_that("variableVectorPositiveReals", {
     paste0(
       "v must be a vector of positive real numbers of length ",
       "between 4 and 8 inclusive with no NAs. ",
-      "Passed vector length is 3 but must be at least 4"))
+      "Passed vector length is 3 but must be at least 4"
+    )
+  )
 })
 
 test_that("variableVectorPositiveRealsMinMax", {
@@ -219,8 +227,8 @@ test_that("variableVectorPositiveRealsMinMax", {
     paste0(
       "Error: v must be a vector of positive real numbers in the range [2, inf) ",
       "with no NAs. Values at positions 1, 2 are below the minimum of 2\n"
-      )
     )
+  )
 
 })
 
