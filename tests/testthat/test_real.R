@@ -146,7 +146,7 @@ test_that("variableVectorRealValuesMinMax", {
     ),
     paste0(
       "v must be a vector of real numbers in the range \\[2, inf\\) ",
-      "with no NAs. Vector at positions 1, 2 is below the minimum of 2"
+      "with no NAs. Values at positions 1, 2 are below the minimum of 2"
     )
   )
 
@@ -218,7 +218,7 @@ test_that("variableVectorPositiveRealsMinMax", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of positive real numbers in the range [2, inf) ",
-      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      "with no NAs. Values at positions 1, 2 are below the minimum of 2\n"
       )
     )
 
@@ -290,7 +290,7 @@ test_that("variableVectorNonNegativeRealsMinMax", {
   expect_equal(as.character(err),
     paste0(
       "Error: v must be a vector of positive real numbers in the range [2, inf) ",
-      "with no NAs. Vector at positions 1, 2 is below the minimum of 2\n"
+      "with no NAs. Values at positions 1, 2 are below the minimum of 2\n"
       )
     )
 
