@@ -302,8 +302,8 @@ inspect_identity_matrix <- function(
 
 #' Check if the passed entities are matrixes with the same dimensionality
 #'
-#' @param m1 the first matrix
-#' @param m2 the second matrix
+#' @param m1 The first matrix
+#' @param m2 The second matrix
 #'
 #' @examples
 #' \dontrun{
@@ -350,6 +350,79 @@ inspect_matrixes_same_dims <- function(m1, m2) {
         "and the second has ", nrow(m2), " rows")
       )
     )
+  }
+  return(success())
+}
+
+#' Check if the passed entities are matrixes that can multiply together
+#'
+#' @param m1 The first matrix
+#' @param m2 The second matrix
+#' @param result_num_rows The expected number of rows of the result. Optional.
+#' @param result_num_cols The expected number of cols of the result. Optional.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::matrixes_can_multiply(m1, m2))
+#' # For check
+#' if (qscheck::matrixes_can_multiply(m1, m2)) {}
+#' }
+#'
+#' @concept matrix
+#' @export
+matrixes_can_multiply <- function(
+    m1, m2, result_num_rows = NULL, result_num_cols = NULL
+    ) {
+  res <- inspect_matrixes_can_multiply(m1, m2, result_num_rows, result_num_cols)
+  return(res$valid)
+}
+assertthat::on_failure(matrixes_can_multiply) <- function(call, env) {
+  m1 <- callget(call, env, "m1", NULL)
+  m2 <- callget(call, env, "m2", NULL)
+  result_num_rows <- callget(call, env, "result_num_rows", NULL)
+  result_num_cols <- callget(call, env, "result_num_cols", NULL)
+  res <- inspect_matrixes_can_multiply(m1, m2, result_num_rows, result_num_cols)
+
+  return(paste0(
+    deparse(call$m1), " and ", deparse(call$m2),
+    " must be matrixes that can multiply",
+    snippet_matmult_result(result_num_rows, result_num_cols),
+    ". ",
+    res$reason
+    )
+  )
+}
+inspect_matrixes_can_multiply <- function(
+    m1, m2, result_num_rows, result_num_cols) {
+  if (!is_matrix(m1)) {
+    return(failure("The first element is not a matrix"))
+  }
+  if (!is_matrix(m2)) {
+    return(failure("The second element is not a matrix"))
+  }
+  if (ncol(m1) != nrow(m2)) {
+    return(failure(
+      paste0(
+        "The first matrix has ", ncol(m1), " columns ",
+        "and the second has ", nrow(m2), " rows")
+      )
+    )
+  }
+
+  mult_result_str <- paste0(
+    "The multiplication would give ", nrow(m1), " rows and ",
+    ncol(m2), " columns but ",
+    snippet_matmult_expected(result_num_rows, result_num_cols),
+    " are expected"
+  )
+
+  if (!is.null(result_num_rows) && nrow(m1) != result_num_rows) {
+    return(failure(mult_result_str))
+  }
+
+  if (!is.null(result_num_cols) && ncol(m2) != result_num_cols) {
+    return(failure(mult_result_str))
   }
   return(success())
 }

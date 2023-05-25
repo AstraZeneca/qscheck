@@ -235,3 +235,30 @@ snippet_function_args <- function(num_args, args) {
 
   return(msg)
 }
+
+snippet_matmult_result <- function(result_num_rows, result_num_cols) {
+  prefix <- " to give a result with exactly"
+
+  expected <- snippet_matmult_expected(result_num_rows, result_num_cols)
+  if (expected == "") {
+    return("")
+  }
+  return(paste0(prefix, " ", expected))
+}
+
+snippet_matmult_expected <- function(result_num_rows, result_num_cols) {
+  if (!is.null(result_num_rows) && !is.null(result_num_cols)) {
+    return(paste0(
+      result_num_rows, " rows and ", result_num_cols, " columns")
+    )
+  } else if (is.null(result_num_rows) && !is.null(result_num_cols)) {
+    return(paste0(result_num_cols, " columns"))
+  } else if (!is.null(result_num_rows) && is.null(result_num_cols)) {
+    return(paste0(result_num_rows, " rows"))
+  } else {
+    return("")
+  }
+
+  # unreachable
+  return("")
+}
