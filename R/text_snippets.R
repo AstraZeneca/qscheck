@@ -235,3 +235,14 @@ snippet_function_args <- function(num_args, args) {
 
   return(msg)
 }
+
+# The most naive pluralization function
+pluralize_if <- function(word, num) {
+  if (num <= 1) {
+    return(word)
+  }
+  if (word == "is") {
+    return("are")
+  }
+  return(paste0(word, "s"))
+}
