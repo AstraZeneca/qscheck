@@ -12,14 +12,6 @@
 #'                   is at most the specified length, inclusive
 #'                   Note: if exact_length is specified, this parameter is
 #'                   ignored
-#' @param min the minimum allowed value for each vector element,
-#'            inclusive or exclusive.
-#' @param max the maximum allowed value for each vector element,
-#'            inclusive or exclusive.
-#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
-#'                      If FALSE, the min value will be checked exclusive.
-#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
-#'                      If FALSE, the max value will be checked exclusive
 #' @param allow_na_values boolean. If passed allows vectors containing
 #'                        NAs. The length check is performed including
 #'                        the NA values. Default FALSE.
@@ -38,14 +30,11 @@
 #' @export
 is_real_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
-    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE, allow_null = FALSE) {
 
   res <- inspect_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    min = min, max = max, inclusive_min = inclusive_min,
-    inclusive_max = inclusive_max,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
 
@@ -56,18 +45,12 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
-  min <- callget(call, env, "min", NULL)
-  max <- callget(call, env, "max", NULL)
-  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
-  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    min = min, max = max, inclusive_min = inclusive_min,
-    inclusive_max = inclusive_max,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
 
@@ -75,7 +58,6 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
     deparse(call$value),
     snippet_must_be("vector of real numbers"),
     snippet_length(exact_length, min_length, max_length),
-    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". ", res$reason
@@ -84,7 +66,6 @@ assertthat::on_failure(is_real_vector) <- function(call, env) {
 }
 inspect_real_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
-    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE, allow_null = FALSE) {
 
   if (is.null(value)) {
@@ -113,45 +94,6 @@ inspect_real_vector <- function(
     return(failure("Vector contains NA values, but they are not allowed"))
   }
 
-  value_all <- value
-  value <- value[!is.na(value)]
-
-  if (!is.null(min)) {
-    if (inclusive_min) {
-      if (any(value < min)) {
-        environment(snippet_outbound_min_inclusive) <- environment()
-        return(failure(
-          snippet_outbound_min_inclusive()
-        ))
-      }
-    } else {
-      if (any(value <= min)) {
-        environment(snippet_outbound_min) <- environment()
-        return(failure(
-          snippet_outbound_min()
-        ))
-      }
-    }
-  }
-
-  if (!is.null(max)) {
-    if (inclusive_max) {
-      if (any(value > max)) {
-        environment(snippet_outbound_max_inclusive) <- environment()
-        return(failure(
-          snippet_outbound_max_inclusive()
-        ))
-      }
-    } else {
-      if (any(value >= max)) {
-        environment(snippet_outbound_max) <- environment()
-        return(failure(
-          snippet_outbound_max()
-        ))
-      }
-    }
-  }
-
   return(success())
 }
 
@@ -170,14 +112,6 @@ inspect_real_vector <- function(
 #'                   is at most the specified length, inclusive
 #'                   Note: if exact_length is specified, this parameter is
 #'                   ignored
-#' @param min the minimum allowed value for each vector element,
-#'            inclusive or exclusive.
-#' @param max the maximum allowed value for each vector element,
-#'            inclusive or exclusive.
-#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
-#'                      If FALSE, the min value will be checked exclusive.
-#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
-#'                      If FALSE, the max value will be checked exclusive
 #' @param allow_na_values boolean. If passed allows vectors containing
 #'                        NAs. The length check is performed including
 #'                        the NA values. Default FALSE.
@@ -196,15 +130,11 @@ inspect_real_vector <- function(
 #' @export
 is_positive_real_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
-    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE, allow_null = FALSE) {
 
   res <- inspect_positive_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    min = min, max = max,
-    inclusive_min = inclusive_min,
-    inclusive_max = inclusive_max,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
 
@@ -215,19 +145,12 @@ assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
-  min <- callget(call, env, "min", NULL)
-  max <- callget(call, env, "max", NULL)
-  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
-  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_positive_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    min = min, max = max,
-    inclusive_min = inclusive_min,
-    inclusive_max = inclusive_max,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
 
@@ -235,7 +158,6 @@ assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
     deparse(call$value),
     snippet_must_be("vector of positive real numbers"),
     snippet_length(exact_length, min_length, max_length),
-    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". ", res$reason
@@ -245,59 +167,18 @@ assertthat::on_failure(is_positive_real_vector) <- function(call, env) {
 inspect_positive_real_vector <- function(
   value, exact_length = exact_length,
   min_length = min_length, max_length = max_length,
-  min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
   allow_na_values = allow_na_values, allow_null = allow_null
 ) {
 
   res <- inspect_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    min = NULL, max = NULL,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
   if (!res$valid) {
     return(res)
   }
-
-  value_all <- value
   value <- value[!is.na(value)]
-
-  if (!is.null(min)) {
-    if (inclusive_min) {
-      if (any(value < min)) {
-        environment(snippet_outbound_min_inclusive) <- environment()
-        return(failure(
-          snippet_outbound_min_inclusive()
-        ))
-      }
-    } else {
-      if (any(value <= min)) {
-        environment(snippet_outbound_min) <- environment()
-        return(failure(
-          snippet_outbound_min()
-        ))
-      }
-    }
-  }
-
-  if (!is.null(max)) {
-    if (inclusive_max) {
-      if (any(value > max)) {
-        environment(snippet_outbound_max_inclusive) <- environment()
-        return(failure(
-          snippet_outbound_max_inclusive()
-        ))
-      }
-    } else {
-      if (any(value >= max)) {
-        environment(snippet_outbound_max) <- environment()
-        return(failure(
-          snippet_outbound_max()
-        ))
-      }
-    }
-  }
-
 
   if (!(all(value > 0))) {
     return(failure("Some values are not positive"))
@@ -320,14 +201,6 @@ inspect_positive_real_vector <- function(
 #'                   is at most the specified length, inclusive
 #'                   Note: if exact_length is specified, this parameter is
 #'                   ignored
-#' @param min the minimum allowed value for each vector element,
-#'            inclusive or exclusive.
-#' @param max the maximum allowed value for each vector element,
-#'            inclusive or exclusive.
-#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
-#'                      If FALSE, the min value will be checked exclusive.
-#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
-#'                      If FALSE, the max value will be checked exclusive
 #' @param allow_na_values boolean. If passed allows vectors containing
 #'                        NAs. The length check is performed including
 #'                        the NA values. Default FALSE.
@@ -346,14 +219,10 @@ inspect_positive_real_vector <- function(
 #' @export
 is_non_negative_real_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
-    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE, allow_null = FALSE) {
 
   res <- inspect_non_negative_real_vector(
     value, exact_length = exact_length, min_length = min_length,
-    min = min, max = max,
-    inclusive_min = inclusive_min,
-    inclusive_max = inclusive_max,
     max_length = max_length, allow_na_values = allow_na_values,
     allow_null = allow_null
   )
@@ -365,19 +234,12 @@ assertthat::on_failure(is_non_negative_real_vector) <- function(call, env) {
   exact_length <- callget(call, env, "exact_length", NULL)
   min_length <- callget(call, env, "min_length", NULL)
   max_length <- callget(call, env, "max_length", NULL)
-  min <- callget(call, env, "min", NULL)
-  max <- callget(call, env, "max", NULL)
-  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
-  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
   allow_na_values <- callget(call, env, "allow_na_values", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_non_negative_real_vector(
     value, exact_length = exact_length, min_length = min_length,
     max_length = max_length, allow_na_values = allow_na_values,
-    min = min, max = max,
-    inclusive_min = inclusive_min,
-    inclusive_max = inclusive_max,
     allow_null = allow_null
   )
 
@@ -385,7 +247,6 @@ assertthat::on_failure(is_non_negative_real_vector) <- function(call, env) {
     deparse(call$value),
     snippet_must_be("vector of non-negative real numbers"),
     snippet_length(exact_length, min_length, max_length),
-    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
     ". ", res$reason
@@ -394,57 +255,18 @@ assertthat::on_failure(is_non_negative_real_vector) <- function(call, env) {
 }
 inspect_non_negative_real_vector <- function(
     value, exact_length = NULL, min_length = NULL, max_length = NULL,
-    min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na_values = FALSE, allow_null = FALSE) {
 
   res <- inspect_real_vector(
     value, exact_length = exact_length,
     min_length = min_length, max_length = max_length,
-    min = NULL, max = NULL,
     allow_na_values = allow_na_values, allow_null = allow_null
   )
   if (!res$valid) {
     return(res)
   }
 
-  value_all <- value
   value <- value[!is.na(value)]
-
-  if (!is.null(min)) {
-    if (inclusive_min) {
-      if (any(value < min)) {
-        environment(snippet_outbound_min_inclusive) <- environment()
-        return(failure(
-          snippet_outbound_min_inclusive()
-        ))
-      }
-    } else {
-      if (any(value <= min)) {
-        environment(snippet_outbound_min) <- environment()
-        return(failure(
-          snippet_outbound_min()
-        ))
-      }
-    }
-  }
-
-  if (!is.null(max)) {
-    if (inclusive_max) {
-      if (any(value > max)) {
-        environment(snippet_outbound_max_inclusive) <- environment()
-        return(failure(
-          snippet_outbound_max_inclusive()
-        ))
-      }
-    } else {
-      if (any(value >= max)) {
-        environment(snippet_outbound_max) <- environment()
-        return(failure(
-          snippet_outbound_max()
-        ))
-      }
-    }
-  }
 
   if (!(all(value >= 0))) {
     return(failure("Some values are negative"))
@@ -699,6 +521,105 @@ inspect_decreasing_vector <- function(
   if (is.unsorted(rev(v), na.rm = TRUE, strictly = strictly)) {
     return(failure(
       paste0("Passed vector is not", strictly_msg, " decreasing")))
+  }
+
+  return(success())
+}
+
+#' Checks if the values in the vector are between specified min and max values.
+#'
+#' The interval by default is intended as inclusive [min, max].
+#'
+#' @param v the vector to check
+#' @param min the minimum allowed value for each vector element, inclusive
+#'        or exclusive. -Inf is accepted.
+#' @param max the maximum allowed value for each vector element, inclusive
+#'        or exclusive. Inf is accepted.
+#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
+#'        If FALSE, the min value will be checked exclusive.
+#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
+#'        If FALSE, the max value will be checked exclusive
+#' @param allow_na If TRUE, accept values that are NA. Default FALSE.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::vector_values_between(vec, 3, 5))
+#' # For check
+#' if (qscheck::vector_values_between(vec, 3, 5)) {}
+#' }
+#'
+#' @concept vector
+#' @export
+vector_values_between <- function(v,
+  min, max, inclusive_min = TRUE, inclusive_max = TRUE, allow_na = FALSE
+  ) {
+
+  res <- inspect_vector_values_between(
+    v, min, max, inclusive_min, inclusive_max, allow_na
+  )
+
+  return(res$valid)
+}
+assertthat::on_failure(vector_values_between) <- function(call, env) {
+  v <- callget(call, env, "v", NULL)
+  min <- callget(call, env, "min", -Inf)
+  max <- callget(call, env, "max", Inf)
+  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
+  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
+  allow_na <- callget(call, env, "allow_na", FALSE)
+
+  res <- inspect_vector_values_between(
+    v, min, max, inclusive_min, inclusive_max, allow_na
+  )
+
+  msg <- paste0(
+    deparse(call$v),
+    snippet_must_be("vector"),
+    " of values",
+    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
+    snippet_na_values(allow_na),
+    ". ", res$reason
+  )
+
+  return(msg)
+}
+inspect_vector_values_between <- function(
+  v, min, max, inclusive_min, inclusive_max, allow_na
+) {
+  res <- inspect_real_vector(v, allow_na_values = allow_na)
+
+  if (!res$valid) {
+    return(res)
+  }
+
+  # If any value is less than the minimum or more than the max
+  # it's guaranteed fail. Note that the checks are also made
+  # to communicate the nature of the failure, they are not much concerned
+  # with performance.
+  violators <- (v < min)
+  if (any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  violators <- (v > max)
+  if (any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  # If we don't have to check for exclusive, we are done.
+  if (inclusive_min && inclusive_max) {
+    return(success())
+  }
+
+  violators <- (v == min)
+  if (!inclusive_min && any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  violators <- (v == max)
+  if (!inclusive_max && any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
   }
 
   return(success())

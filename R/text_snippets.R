@@ -67,25 +67,40 @@ snippet_exact_levels <- function(exact_levels) {
 snippet_numerical_range <- function(
     min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE
   ) {
-  msg <- ""
-  if (!is.null(min) || !is.null(max)) {
-    msg <- " in the range "
-    if (is.null(min)) {
-      msg <- paste0(msg, "(-inf, ")
-    } else {
-      msg <- paste0(
-        msg,
-        ifelse(inclusive_min, "[", "("),
-        min, ", ")
-    }
+  if (is.null(min)) {
+    min <- -Inf
+  }
+  if (is.null(max)) {
+    max <- Inf
+  }
 
-    if (is.null(max)) {
-      msg <- paste0(msg, "inf)")
-    } else {
-      msg <- paste0(
-        msg, max,
-        ifelse(inclusive_max, "]", ")"))
-    }
+  is_neg_infinite <- function(x) {
+    is.infinite(x) && x < 0
+  }
+  is_pos_infinite <- function(x) {
+    is.infinite(x) && x > 0
+  }
+
+  if (is_neg_infinite(min) && is_pos_infinite(max)) {
+    return("")
+  }
+
+  msg <- " in the range "
+  if (is.infinite(min)) {
+    msg <- paste0(msg, "(", min, ", ")
+  } else {
+    msg <- paste0(
+      msg,
+      ifelse(inclusive_min, "[", "("),
+      min, ", ")
+  }
+
+  if (is.infinite(max)) {
+    msg <- paste0(msg, max, ")")
+  } else {
+    msg <- paste0(
+      msg, max,
+      ifelse(inclusive_max, "]", ")"))
   }
   return(msg)
 }
@@ -236,59 +251,21 @@ snippet_function_args <- function(num_args, args) {
   return(msg)
 }
 
-snippet_outbound_min_inclusive <- function(...) {
-  outbounds <- which(value_all < min)
-  len_outbounds <- length(outbounds)
-  msg <-
-  paste0(
-    "Value", ifelse(len_outbounds > 1, "s ", " "),
-    "at position", ifelse(len_outbounds > 1, "s ", " "),
-    paste(outbounds, sep = "' '", collapse = ", "),
-    ifelse(len_outbounds > 1, " are", " is"),
-    " below the minimum of ", min
+snippet_violator_indexes <- function(indexes) {
+  howmany <- length(indexes)
+  msg <- paste0(
+    pluralize_if("Value", howmany),
+    " at ",
+    pluralize_if("position", howmany),
+    " ",
+    flatten_vector(indexes),
+    " ",
+    pluralize_if("is", howmany),
+    " not complying with the requirement"
   )
   return(msg)
 }
 
-snippet_outbound_min <- function(...) {
-  outbounds <- which(value_all <= min)
-  len_outbounds <- length(outbounds)
-  msg <-
-  paste0(
-    "Value", ifelse(len_outbounds > 1, "s ", " "),
-    "at position", ifelse(len_outbounds > 1, "s ", " "),
-    paste(outbounds, sep = "' '", collapse = ", "),
-    ifelse(len_outbounds > 1, " are", " is"),
-    " below or equal to the non-inclusive minimum of ", min
-  )
-  return(msg)
-}
-
-snippet_outbound_max_inclusive <- function(...) {
-  outbounds <- which(value_all > max)
-  len_outbounds <- length(outbounds)
-  msg <-
-  paste0(
-    "Value", ifelse(len_outbounds > 1, "s ", " "),
-    "at position", ifelse(len_outbounds > 1, "s ", " "),
-    paste(outbounds, sep = "' '", collapse = ", "),
-    ifelse(len_outbounds > 1, " are", " is"),
-    " above the maximum of ", max
-  )
-  return(msg)
-}
-
-snippet_outbound_max <- function(...) {
-  outbounds <- which(value_all >= max)
-  len_outbounds <- length(outbounds)
-  msg <-
-  paste0(
-    "Value", ifelse(len_outbounds > 1, "s ", " "),
-    "at position", ifelse(len_outbounds > 1, "s ", " "),
-    paste(outbounds, sep = "' '", collapse = ", "),
-    ifelse(len_outbounds > 1, " are", " is"),
-    " above or equal to the non-inclusive maximum of ", max
-  )
 snippet_comparison <- function(operator, comparator) {
   if (identical(operator, base::`<`)) {
     msg <- "smaller than"

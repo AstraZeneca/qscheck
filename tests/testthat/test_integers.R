@@ -21,7 +21,7 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: foo must be an integer value in the range [3, inf). ",
+      "Error: foo must be an integer value in the range [3, Inf). ",
       "Passed value 2 must be greater than the minimum value 3\n")
     )
 
@@ -35,7 +35,7 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
   expect_equal(
     as.character(err),
     paste0(
-      "Error: foo must be an integer value in the range (-inf, 1]. ",
+      "Error: foo must be an integer value in the range (-Inf, 1]. ",
       "Passed value 2 must be less than the maximum value 1\n"
     )
   )
