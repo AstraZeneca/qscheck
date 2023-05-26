@@ -43,7 +43,8 @@ assertthat::on_failure(is_lt_value) <- function(call, env) {
 
   return(paste0(
     call$value,
-    snippet_must_be(paste0("value smaller than ", call$comparator)),
+    snippet_must_be(paste0("numerical value")),
+    snippet_comparison(base::`<`, call$comparator),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -94,9 +95,8 @@ assertthat::on_failure(is_lte_value) <- function(call, env) {
 
   return(paste0(
     call$value,
-    snippet_must_be(
-      paste0("value smaller than or equal to ", call$comparator)
-    ),
+    snippet_must_be(paste0("numerical value")),
+    snippet_comparison(base::`<=`, call$comparator),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -147,7 +147,8 @@ assertthat::on_failure(is_gt_value) <- function(call, env) {
 
   return(paste0(
     call$value,
-    snippet_must_be(paste0("value greater than ", call$comparator)),
+    snippet_must_be(paste0("numerical value")),
+    snippet_comparison(base::`>`, call$comparator),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -197,9 +198,8 @@ assertthat::on_failure(is_gte_value) <- function(call, env) {
 
   return(paste0(
     call$value,
-    snippet_must_be(
-      paste0("value greater than or equal to ", call$comparator)
-    ),
+    snippet_must_be(paste0("numerical value")),
+    snippet_comparison(base::`>=`, call$comparator),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -247,25 +247,27 @@ inspect_comparison <- function(
   }
 
   if (!operator(value, comparator)) {
-    msg <- ""
-    if (identical(operator, base::`<`)) {
-      msg <- "greater than or equal to"
-    } else if (identical(operator, base::`<=`)) {
-      msg <- "greater than"
-    } else if (identical(operator, base::`>`)) {
-      msg <- "less than or equal to"
-    } else if (identical(operator, base::`>=`)) {
-      msg <- "less than"
-    } else {
-      stop("Comparison failed for operator. This is a programming error.")
-    }
     return(failure(
       paste0(
-        "Passed value ", value, " is ",
-        msg, " ", comparator)
-    )
-    )
+        "Passed value ", value, " is",
+        snippet_comparison(.reciprocal_op(operator), comparator)
+      )
+    ))
   }
 
   return(success())
+}
+
+.reciprocal_op <- function(operator) {
+  if (identical(operator, base::`<`)) {
+    return(base::`>=`)
+  } else if (identical(operator, base::`<=`)) {
+    return(base::`>`)
+  } else if (identical(operator, base::`>`)) {
+    return(base::`<=`)
+  } else if (identical(operator, base::`>=`)) {
+    return(base::`<`)
+  }
+
+  stop("Invalid operator in .reciprocal_op")
 }
