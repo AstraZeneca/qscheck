@@ -309,3 +309,88 @@ test_that("matrixesSameDimsSameDimensions", {
 
   expect_true(matrixes_same_dims(m1, m2))
 })
+
+test_that("matrixesMultNotMatrixes", {
+  m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1), 3, 3)
+  expect_false(matrixes_can_multiply(1, 3))
+  expect_false(matrixes_can_multiply(m1, 3))
+  expect_false(matrixes_can_multiply(1, m2))
+  expect_error(assert(matrixes_can_multiply(1, 3)),
+    paste0(
+      "1 and 3 must be matrixes that can multiply\\. ",
+      "The first element is not a matrix"
+    )
+  )
+  expect_error(assert(matrixes_can_multiply(m1, 3)),
+    paste0(
+      "m1 and 3 must be matrixes that can multiply\\. ",
+      "The second element is not a matrix"
+    )
+  )
+  expect_error(assert(matrixes_can_multiply(1, m2)),
+    paste0(
+      "1 and m2 must be matrixes that can multiply\\. ",
+      "The first element is not a matrix"
+    )
+  )
+
+})
+
+test_that("matrixesMultNotCompatible", {
+  m1 <- matrix(rep(1, 12), 4, 3)
+  m2 <- matrix(rep(1, 24), 4, 6)
+  expect_false(matrixes_can_multiply(m1, m2))
+  expect_error(assert(matrixes_can_multiply(m1, m2)),
+    paste0(
+      "m1 and m2 must be matrixes that can multiply\\. ",
+      "The first matrix has 3 columns and the second has 4 rows"
+    )
+  )
+})
+
+test_that("matrixesMultCompatible", {
+  m1 <- matrix(rep(1, 12), 4, 3)
+  m2 <- matrix(rep(1, 24), 3, 6)
+  expect_true(matrixes_can_multiply(m1, m2))
+})
+
+test_that("matrixesMultIncorrectResult", {
+  m1 <- matrix(rep(1, 12), 4, 3)
+  m2 <- matrix(rep(1, 24), 3, 6)
+  expect_true(matrixes_can_multiply(m1, m2))
+  expect_false(matrixes_can_multiply(m1, m2, result_num_cols = 5))
+  expect_false(matrixes_can_multiply(m1, m2, result_num_rows = 2))
+  expect_false(
+    matrixes_can_multiply(m1, m2, result_num_rows = 2, result_num_cols = 5)
+  )
+  expect_true(matrixes_can_multiply(
+    m1, m2, result_num_rows = 4, result_num_cols = 6)
+  )
+  expect_error(
+    assert(matrixes_can_multiply(m1, m2, result_num_cols = 5)),
+    paste0(
+      "m1 and m2 must be matrixes that can multiply to give a result ",
+      "with exactly 5 columns\\. The multiplication would give ",
+      "4 rows and 6 columns but 5 columns are expected"
+    )
+  )
+  expect_error(
+    assert(matrixes_can_multiply(m1, m2, result_num_rows = 2)),
+    paste0(
+      "m1 and m2 must be matrixes that can multiply to give a result ",
+      "with exactly 2 rows\\. The multiplication would give ",
+      "4 rows and 6 columns but 2 rows are expected"
+    )
+  )
+  expect_error(
+    assert(
+      matrixes_can_multiply(m1, m2, result_num_rows = 2, result_num_cols = 5)
+    ),
+    paste0(
+      "m1 and m2 must be matrixes that can multiply to give a result ",
+      "with exactly 2 rows and 5 columns\\. The multiplication would give ",
+      "4 rows and 6 columns but 2 rows and 5 columns are expected"
+    )
+  )
+})

@@ -7,9 +7,9 @@
 matrixes_same_dims(m1, m2)
 }
 \arguments{
-\item{m1}{the first matrix}
+\item{m1}{The first matrix}
 
-\item{m2}{the second matrix}
+\item{m2}{The second matrix}
 }
 \description{
 Check if the passed entities are matrixes with the same dimensionality
