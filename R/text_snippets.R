@@ -236,6 +236,21 @@ snippet_function_args <- function(num_args, args) {
   return(msg)
 }
 
+snippet_comparison <- function(operator, comparator) {
+  if (identical(operator, base::`<`)) {
+    msg <- "smaller than"
+  } else if (identical(operator, base::`<=`)) {
+    msg <- "smaller than or equal to"
+  } else if (identical(operator, base::`>`)) {
+    msg <- "greater than"
+  } else if (identical(operator, base::`>=`)) {
+    msg <- "greater than or equal to"
+  } else {
+    stop("Comparison failed for operator. This is a programming error.")
+  }
+  return(paste0(" ", msg, " ", comparator))
+}
+
 snippet_matmult_result <- function(result_num_rows, result_num_cols) {
   prefix <- " to give a result with exactly"
 
