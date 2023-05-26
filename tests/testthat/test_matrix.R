@@ -258,3 +258,54 @@ test_that("passedEntityIsIdentityMatrix", {
   expect_true(is_diagonal_matrix(m5))
 
 })
+
+test_that("matrixesSameDimsNotMatrixes", {
+  m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1), 3, 3)
+  expect_false(matrixes_same_dims(1, 3))
+  expect_false(matrixes_same_dims(m1, 3))
+  expect_false(matrixes_same_dims(1, m2))
+  expect_error(assert(matrixes_same_dims(1, 3)),
+    paste0(
+      "1 and 3 must be matrixes with the exact same dimensions\\. ",
+      "The first element is not a matrix"
+    )
+  )
+  expect_error(assert(matrixes_same_dims(m1, 3)),
+    paste0(
+      "m1 and 3 must be matrixes with the exact same dimensions\\. ",
+      "The second element is not a matrix"
+    )
+  )
+  expect_error(assert(matrixes_same_dims(1, m2)),
+    paste0(
+      "1 and m2 must be matrixes with the exact same dimensions\\. ",
+      "The first element is not a matrix"
+    )
+  )
+})
+
+test_that("matrixesSameDimsDifferentDimensions", {
+  m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 4, 3)
+  m3 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 3, 4)
+  expect_false(matrixes_same_dims(m1, m2))
+  expect_false(matrixes_same_dims(m1, m3))
+  expect_error(assert(matrixes_same_dims(m1, m2)),
+    paste0(
+      "m1 and m2 must be matrixes with the exact same dimensions. ",
+      "The first matrix has 3 rows and the second has 4 rows"
+    ))
+  expect_error(assert(matrixes_same_dims(m1, m3)),
+    paste0(
+    "m1 and m3 must be matrixes with the exact same dimensions. ",
+    "The first matrix has 3 columns and the second has 4 columns"
+  ))
+})
+
+test_that("matrixesSameDimsSameDimensions", {
+  m1 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 4, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 4, 3)
+
+  expect_true(matrixes_same_dims(m1, m2))
+})
