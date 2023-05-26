@@ -50,11 +50,11 @@ inspect_s4_instance <- function(value, class_name, allow_null = FALSE) {
     return(failure("Passed class name cannot be NULL"))
   }
 
-  if (!(isS4(value))) {
+  if (!(base::isS4(value))) {
     return(failure("Passed value is not an S4 instance"))
   }
 
-  if (!(is(value, class_name))) {
+  if (!(methods::is(value, class_name))) {
     return(
       failure("Passed value is not an instance of the specified S4 class"))
   }

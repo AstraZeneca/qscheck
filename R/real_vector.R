@@ -510,7 +510,7 @@ assertthat::on_failure(is_probability_vector) <- function(call, env) {
 
   msg <- paste0(
     deparse(call$value),
-    snippet_must_be("vector of values in the interval [0.0, 1.0]"),
+    snippet_must_be("vector of probability values in the interval [0.0, 1.0]"),
     snippet_length(exact_length, min_length, max_length),
     snippet_na_values(allow_na_values),
     snippet_null(allow_null),
@@ -531,10 +531,24 @@ inspect_probability_vector <- function(
     return(res)
   }
 
+  value_all <- value
   value <- value[!is.na(value)]
 
   if (!(all(value >= 0) && all(value <= 1))) {
-    return(failure("Some values were outside the allowed range"))
+    outbounds <- which(value_all < 0 | value_all > 1)
+    len_outbounds <- length(outbounds)
+    return(failure(
+      paste0(
+        pluralize_if("Value", len_outbounds),
+        " at ",
+        pluralize_if("position", len_outbounds),
+        " ",
+        flatten_vector(outbounds),
+        " ",
+        pluralize_if("is", len_outbounds),
+        " outside the allowed range"
+      )
+    ))
   }
 
   return(success())
