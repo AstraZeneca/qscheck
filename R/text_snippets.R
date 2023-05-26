@@ -262,3 +262,14 @@ snippet_matmult_expected <- function(result_num_rows, result_num_cols) {
   # unreachable
   return("")
 }
+
+# The most naive pluralization function
+pluralize_if <- function(word, num) {
+  if (num <= 1) {
+    return(word)
+  }
+  if (word == "is") {
+    return("are")
+  }
+  return(paste0(word, "s"))
+}
