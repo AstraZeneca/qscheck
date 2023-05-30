@@ -67,25 +67,40 @@ snippet_exact_levels <- function(exact_levels) {
 snippet_numerical_range <- function(
     min = NULL, max = NULL, inclusive_min = TRUE, inclusive_max = TRUE
   ) {
-  msg <- ""
-  if (!is.null(min) || !is.null(max)) {
-    msg <- " in the range "
-    if (is.null(min)) {
-      msg <- paste0(msg, "(-inf, ")
-    } else {
-      msg <- paste0(
-        msg,
-        ifelse(inclusive_min, "[", "("),
-        min, ", ")
-    }
+  if (is.null(min)) {
+    min <- -Inf
+  }
+  if (is.null(max)) {
+    max <- Inf
+  }
 
-    if (is.null(max)) {
-      msg <- paste0(msg, "inf)")
-    } else {
-      msg <- paste0(
-        msg, max,
-        ifelse(inclusive_max, "]", ")"))
-    }
+  is_neg_infinite <- function(x) {
+    is.infinite(x) && x < 0
+  }
+  is_pos_infinite <- function(x) {
+    is.infinite(x) && x > 0
+  }
+
+  if (is_neg_infinite(min) && is_pos_infinite(max)) {
+    return("")
+  }
+
+  msg <- " in the range "
+  if (is.infinite(min)) {
+    msg <- paste0(msg, "(", min, ", ")
+  } else {
+    msg <- paste0(
+      msg,
+      ifelse(inclusive_min, "[", "("),
+      min, ", ")
+  }
+
+  if (is.infinite(max)) {
+    msg <- paste0(msg, max, ")")
+  } else {
+    msg <- paste0(
+      msg, max,
+      ifelse(inclusive_max, "]", ")"))
   }
   return(msg)
 }
@@ -233,6 +248,21 @@ snippet_function_args <- function(num_args, args) {
     msg <- paste0(msg, " with arguments named ", flatten_vector(args))
   }
 
+  return(msg)
+}
+
+snippet_violator_indexes <- function(indexes) {
+  howmany <- length(indexes)
+  msg <- paste0(
+    pluralize_if("Value", howmany),
+    " at ",
+    pluralize_if("position", howmany),
+    " ",
+    flatten_vector(indexes),
+    " ",
+    pluralize_if("is", howmany),
+    " not complying with the requirement"
+  )
   return(msg)
 }
 

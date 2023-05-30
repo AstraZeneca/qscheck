@@ -525,3 +525,102 @@ inspect_decreasing_vector <- function(
 
   return(success())
 }
+
+#' Checks if the values in the vector are between specified min and max values.
+#'
+#' The interval by default is intended as inclusive [min, max].
+#'
+#' @param v the vector to check
+#' @param min the minimum allowed value for each vector element, inclusive
+#'        or exclusive. -Inf is accepted.
+#' @param max the maximum allowed value for each vector element, inclusive
+#'        or exclusive. Inf is accepted.
+#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
+#'        If FALSE, the min value will be checked exclusive.
+#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
+#'        If FALSE, the max value will be checked exclusive
+#' @param allow_na If TRUE, accept values that are NA. Default FALSE.
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::vector_values_between(vec, 3, 5))
+#' # For check
+#' if (qscheck::vector_values_between(vec, 3, 5)) {}
+#' }
+#'
+#' @concept vector
+#' @export
+vector_values_between <- function(v,
+  min, max, inclusive_min = TRUE, inclusive_max = TRUE, allow_na = FALSE
+  ) {
+
+  res <- inspect_vector_values_between(
+    v, min, max, inclusive_min, inclusive_max, allow_na
+  )
+
+  return(res$valid)
+}
+assertthat::on_failure(vector_values_between) <- function(call, env) {
+  v <- callget(call, env, "v", NULL)
+  min <- callget(call, env, "min", -Inf)
+  max <- callget(call, env, "max", Inf)
+  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
+  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
+  allow_na <- callget(call, env, "allow_na", FALSE)
+
+  res <- inspect_vector_values_between(
+    v, min, max, inclusive_min, inclusive_max, allow_na
+  )
+
+  msg <- paste0(
+    deparse(call$v),
+    snippet_must_be("vector"),
+    " of values",
+    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
+    snippet_na_values(allow_na),
+    ". ", res$reason
+  )
+
+  return(msg)
+}
+inspect_vector_values_between <- function(
+  v, min, max, inclusive_min, inclusive_max, allow_na
+) {
+  res <- inspect_real_vector(v, allow_na_values = allow_na)
+
+  if (!res$valid) {
+    return(res)
+  }
+
+  # If any value is less than the minimum or more than the max
+  # it's guaranteed fail. Note that the checks are also made
+  # to communicate the nature of the failure, they are not much concerned
+  # with performance.
+  violators <- (v < min)
+  if (any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  violators <- (v > max)
+  if (any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  # If we don't have to check for exclusive, we are done.
+  if (inclusive_min && inclusive_max) {
+    return(success())
+  }
+
+  violators <- (v == min)
+  if (!inclusive_min && any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  violators <- (v == max)
+  if (!inclusive_max && any(violators, na.rm = TRUE)) {
+    return(failure(snippet_violator_indexes(which(violators))))
+  }
+
+  return(success())
+}
