@@ -16,6 +16,7 @@ buildtools$
 ^bootstrap-venv$
 ^bootstrap\.sh$
 ^files/
+^tests$
 ^invoke\.yaml$
 ^rip\.lock$
 ^roo\.lock$

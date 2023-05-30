@@ -235,3 +235,56 @@ snippet_function_args <- function(num_args, args) {
 
   return(msg)
 }
+
+snippet_comparison <- function(operator, comparator) {
+  if (identical(operator, base::`<`)) {
+    msg <- "smaller than"
+  } else if (identical(operator, base::`<=`)) {
+    msg <- "smaller than or equal to"
+  } else if (identical(operator, base::`>`)) {
+    msg <- "greater than"
+  } else if (identical(operator, base::`>=`)) {
+    msg <- "greater than or equal to"
+  } else {
+    stop("Comparison failed for operator. This is a programming error.")
+  }
+  return(paste0(" ", msg, " ", comparator))
+}
+
+snippet_matmult_result <- function(result_num_rows, result_num_cols) {
+  prefix <- " to give a result with exactly"
+
+  expected <- snippet_matmult_expected(result_num_rows, result_num_cols)
+  if (expected == "") {
+    return("")
+  }
+  return(paste0(prefix, " ", expected))
+}
+
+snippet_matmult_expected <- function(result_num_rows, result_num_cols) {
+  if (!is.null(result_num_rows) && !is.null(result_num_cols)) {
+    return(paste0(
+      result_num_rows, " rows and ", result_num_cols, " columns")
+    )
+  } else if (is.null(result_num_rows) && !is.null(result_num_cols)) {
+    return(paste0(result_num_cols, " columns"))
+  } else if (!is.null(result_num_rows) && is.null(result_num_cols)) {
+    return(paste0(result_num_rows, " rows"))
+  } else {
+    return("")
+  }
+
+  # unreachable
+  return("")
+}
+
+# The most naive pluralization function
+pluralize_if <- function(word, num) {
+  if (abs(num) == 1) {
+    return(word)
+  }
+  if (word == "is") {
+    return("are")
+  }
+  return(paste0(word, "s"))
+}
