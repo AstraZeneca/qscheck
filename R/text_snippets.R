@@ -152,25 +152,6 @@ snippet_occurrences <- function(
   return(msg)
 }
 
-flatten_vector <- function(vector, quotes = TRUE, parenthesis = FALSE) {
-  v <- lapply(vector, function(x) {
-    if (is.character(x) && is.na(x)) {
-        return(NA_character_)
-    } else if (is.numeric(x)) {
-      return(as.character(x))
-    } else {
-      quotes_str <- ifelse(quotes, "'", "")
-      return(paste0(quotes_str, x, quotes_str))
-    }
-  })
-  msg <- paste0(
-    ifelse(parenthesis, "(", ""),
-    paste0(v, collapse = ", "),
-    ifelse(parenthesis, ")", "")
-  )
-
-  return(msg)
-}
 
 snippet_rowcolnames <- function(
     exact_rownames, exact_colnames, required_rownames, required_colnames
@@ -276,15 +257,4 @@ snippet_matmult_expected <- function(result_num_rows, result_num_cols) {
 
   # unreachable
   return("")
-}
-
-# The most naive pluralization function
-pluralize_if <- function(word, num) {
-  if (abs(num) == 1) {
-    return(word)
-  }
-  if (word == "is") {
-    return("are")
-  }
-  return(paste0(word, "s"))
 }
