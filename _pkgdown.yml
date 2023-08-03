@@ -76,7 +76,12 @@ reference:
   contents:
   - has_concept("general")
 
+- title: NAs
+  desc: Functions checking NA typers
+  contents:
+  - has_concept("na")
+
 - title: Other
   desc: Other functions
   contents:
-  - lacks_concepts(c("assert", "integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "matrix", "string", "general"))
+  - lacks_concepts(c("assert", "integer", "real", "vector", "logical", "string", "oop", "function", "set", "combined", "data_frame", "list", "factor", "matrix", "string", "general", "na"))
