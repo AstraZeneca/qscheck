@@ -96,6 +96,14 @@ test_that("passedEntityExistsWithinElementsOfVectorOptions", {
       "Value 'x' is not one of the allowed options"
      ))
 
+  expect_error(
+    assertthat::assert_that(is_one_of(val, c(1, 2, 3))),
+    paste0(
+      "val must be one of the following: 1, 2, 3\\. ",
+      "Value is a character and is incompatible with options, ",
+      "which is a numeric"
+     ))
+
   val <- 3
   expect_error(
     assertthat::assert_that(is_one_of(

@@ -43,15 +43,15 @@ inspect_is_one_of <- function(value, options, allow_null = FALSE) {
     if (allow_null == TRUE) {
       return(success())
     } else {
-      return(failure("Passed value cannot be NULL"))
+      return(failure("Passed value is NULL"))
     }
   }
 
-  if (typeof(value) != typeof(options)) {
+  if (mode(value) != mode(options)) {
     return(failure(
       paste0(
-        "Options is of type ", typeof(options),
-        " and value is of incompatible type ", typeof(value))
+        "Value is a ", mode(value),
+        " and is incompatible with options, which is a ", mode(options))
       )
     )
   }
