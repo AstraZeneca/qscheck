@@ -4,10 +4,12 @@
 \alias{is_positive_integer_value}
 \title{Checks if the value is a single positive integer value (not type)}
 \usage{
-is_positive_integer_value(value, allow_null = FALSE)
+is_positive_integer_value(value, allow_na = FALSE, allow_null = FALSE)
 }
 \arguments{
 \item{value}{the value to verify}
+
+\item{allow_na}{accepts a NA value}
 
 \item{allow_null}{accepts a null value}
 }

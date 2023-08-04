@@ -4,7 +4,13 @@
 \alias{is_integer_value}
 \title{Checks if the passed value is a single integer value (not type).}
 \usage{
-is_integer_value(value, min = NULL, max = NULL, allow_null = FALSE)
+is_integer_value(
+  value,
+  min = NULL,
+  max = NULL,
+  allow_na = FALSE,
+  allow_null = FALSE
+)
 }
 \arguments{
 \item{value}{the value to verify}
@@ -12,6 +18,8 @@ is_integer_value(value, min = NULL, max = NULL, allow_null = FALSE)
 \item{min}{minimum value to constraint the integer, inclusive}
 
 \item{max}{maximum value to constraint the integer, inclusive}
+
+\item{allow_na}{if TRUE, accepts a NA value}
 
 \item{allow_null}{if TRUE, accepts a null value}
 }
