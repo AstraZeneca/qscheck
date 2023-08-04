@@ -106,8 +106,8 @@ inspect_integer_value <- function(value,
 #' Checks if the value is a single positive integer value (not type)
 #'
 #' @param value the value to verify
-#' @param allow_na accepts a NA value
-#' @param allow_null accepts a null value
+#' @param allow_na if TRUE, accepts a NA value
+#' @param allow_null if True, accepts a NULL value
 #'
 #' @examples
 #' \dontrun{
@@ -148,8 +148,8 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 #' Checks if the value is a single non negative integer value (not type)
 #'
 #' @param value the value to verify
-#' @param allow_na accepts a NA value
-#' @param allow_null accepts a null value
+#' @param allow_na if TRUE, accepts a NA value
+#' @param allow_null if TRUE, accepts a NULL value
 #'
 #' @examples
 #' \dontrun{
