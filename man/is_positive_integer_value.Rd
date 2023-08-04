@@ -11,7 +11,7 @@ is_positive_integer_value(value, allow_na = FALSE, allow_null = FALSE)
 
 \item{allow_na}{if TRUE, accepts a NA value}
 
-\item{allow_null}{if True, accepts a NULL value}
+\item{allow_null}{if TRUE, accepts a NULL value}
 }
 \description{
 Checks if the value is a single positive integer value (not type)
