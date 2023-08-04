@@ -86,13 +86,6 @@ test_that("passedEntityExistsWithinElementsOfVectorOptions", {
   expect_false(is_one_of(c(1, 2), c(1, 2, 3)))
 
   val <- "x"
-  err <- tryCatch({
-      NULL
-    },
-    error = function(e) {
-      return(e)
-    }
-  )
   expect_error(
     assertthat::assert_that(is_one_of(
       val,
@@ -100,6 +93,17 @@ test_that("passedEntityExistsWithinElementsOfVectorOptions", {
       allow_null = TRUE)),
     paste0(
       "val must be one of the following: 'foo', 'quux', NA or NULL. ",
-      "Value x is not one of the allowed options"
+      "Value 'x' is not one of the allowed options"
+     ))
+
+  val <- 3
+  expect_error(
+    assertthat::assert_that(is_one_of(
+      val,
+      c(1, 2, 4, NA_real_),
+    )),
+    paste0(
+      "val must be one of the following: 1, 2, 4, NA. ",
+      "Value 3 is not one of the allowed options"
      ))
 })

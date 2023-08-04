@@ -62,8 +62,10 @@ inspect_is_one_of <- function(value, options, allow_null = FALSE) {
 
   if (!(value %in% options)) {
     return(failure(
-      paste0("Value ", value, " is not one of the allowed options"))
-    )
+      paste0(
+        "Value ", quote_if_char(value), " is not one of the allowed options"
+      )
+    ))
   }
 
   return(success())
