@@ -82,6 +82,26 @@ test_that("variablePositiveIntegerValue", {
   )
 })
 
+test_that("variablePositiveIntegerValueNAAccepted", {
+  expect_false(is_positive_integer_value(NA))
+  expect_false(is_positive_integer_value(NA_real_))
+  expect_false(is_positive_integer_value(NA_character_, allow_na = TRUE))
+  expect_true(is_positive_integer_value(NA_real_, allow_na = TRUE))
+
+  expect_error(
+    assertthat::assert_that(
+      is_positive_integer_value(NA_character_, allow_na = TRUE)),
+    paste(
+      "NA_character_ must be a positive integer value or NA\\.",
+      "Passed value is not a numerical"
+    )
+  )
+  expect_error(
+    assertthat::assert_that(is_positive_integer_value(NA_real_)),
+    "NA_real_ must be a positive integer value\\. Passed value is NA"
+  )
+})
+
 test_that("variableNonNegativeIntegerValue", {
   expect_true(is_non_negative_integer_value(3))
   expect_true(is_non_negative_integer_value(3.0))
@@ -99,5 +119,25 @@ test_that("variableNonNegativeIntegerValue", {
       "-1 must be a non negative integer value\\. ",
       "Passed value -1 must be greater than the minimum value 0"
     )
+  )
+})
+
+test_that("variableNonNegativeIntegerValueNAAccepted", {
+  expect_false(is_non_negative_integer_value(NA))
+  expect_false(is_non_negative_integer_value(NA_real_))
+  expect_false(is_non_negative_integer_value(NA_character_, allow_na = TRUE))
+  expect_true(is_non_negative_integer_value(NA_real_, allow_na = TRUE))
+
+  expect_error(
+    assertthat::assert_that(
+      is_non_negative_integer_value(NA_character_, allow_na = TRUE)),
+    paste(
+      "NA_character_ must be a non negative integer value or NA\\.",
+      "Passed value is not a numerical"
+    )
+  )
+  expect_error(
+    assertthat::assert_that(is_non_negative_integer_value(NA_real_)),
+    "NA_real_ must be a non negative integer value\\. Passed value is NA"
   )
 })
