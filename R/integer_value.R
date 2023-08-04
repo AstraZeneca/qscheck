@@ -107,7 +107,7 @@ inspect_integer_value <- function(value,
 #'
 #' @param value the value to verify
 #' @param allow_na if TRUE, accepts a NA value
-#' @param allow_null if True, accepts a NULL value
+#' @param allow_null if TRUE, accepts a NULL value
 #'
 #' @examples
 #' \dontrun{
