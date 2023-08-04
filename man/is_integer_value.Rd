@@ -8,6 +8,8 @@ is_integer_value(
   value,
   min = NULL,
   max = NULL,
+  inclusive_min = TRUE,
+  inclusive_max = TRUE,
   allow_na = FALSE,
   allow_null = FALSE
 )
@@ -18,6 +20,12 @@ is_integer_value(
 \item{min}{minimum value to constraint the integer, inclusive}
 
 \item{max}{maximum value to constraint the integer, inclusive}
+
+\item{inclusive_min}{if TRUE (default) the min value is checked inclusive.
+If FALSE, the min value will be checked exclusive.}
+
+\item{inclusive_max}{if TRUE (default) the max value is checked inclusive.
+If FALSE, the max value will be checked exclusive}
 
 \item{allow_na}{if TRUE, accepts a NA value}
 
