@@ -94,49 +94,13 @@ inspect_real_value <- function(value,
     }
   }
 
-  if (!is.null(min)) {
-    if (inclusive_min) {
-      if (value < min) {
-        return(failure(
-          paste0(
-            "Passed value ", value, " is below the minimum of ", min)
-          )
-        )
-      }
-    } else {
-      if (value <= min) {
-        return(failure(
-          paste0(
-            "Passed value ", value,
-            " is below or equal to the minimum of ", min)
-          )
-        )
-      }
-    }
-  }
+  return(
+    check_limits(
+      value, min = min, max = max,
+      inclusive_min = inclusive_min, inclusive_max = inclusive_max
+    )
+  )
 
-  if (!is.null(max)) {
-    if (inclusive_max) {
-      if (value > max) {
-        return(failure(
-          paste0(
-            "Passed value ", value, " is above the maximum of ", max)
-          )
-        )
-      }
-    } else {
-      if (value >= max) {
-        return(failure(
-          paste0(
-            "Passed value ", value,
-            " is above or equal to the maximum of ", max)
-          )
-        )
-      }
-    }
-  }
-
-  return(success())
 }
 #' Check if the passed entity is a single floating point positive value.
 #'
