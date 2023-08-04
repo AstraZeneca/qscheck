@@ -3,6 +3,10 @@
 #' @param value the value to verify
 #' @param min minimum value to constraint the integer, inclusive
 #' @param max maximum value to constraint the integer, inclusive
+#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
+#'        If FALSE, the min value will be checked exclusive.
+#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
+#'        If FALSE, the max value will be checked exclusive
 #' @param allow_na if TRUE, accepts a NA value
 #' @param allow_null if TRUE, accepts a null value
 #'
@@ -18,10 +22,15 @@
 #' @export
 is_integer_value <- function(value,
     min = NULL, max = NULL,
+    inclusive_min = TRUE, inclusive_max = TRUE,
     allow_na = FALSE, allow_null = FALSE) {
 
   res <- inspect_integer_value(
-    value, min = min, max = max, allow_na = allow_na, allow_null = allow_null
+    value, min = min, max = max,
+    inclusive_min = inclusive_min,
+    inclusive_max = inclusive_max,
+    allow_na = allow_na,
+    allow_null = allow_null
   )
 
   return(res$valid)
@@ -30,6 +39,8 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
   min <- callget(call, env, "min", NULL)
   max <- callget(call, env, "max", NULL)
+  inclusive_min <- callget(call, env, "inclusive_min", TRUE)
+  inclusive_max <- callget(call, env, "inclusive_max", TRUE)
   allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
@@ -37,6 +48,8 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
     value,
     min = min,
     max = max,
+    inclusive_min = inclusive_min,
+    inclusive_max = inclusive_max,
     allow_na = allow_na,
     allow_null = allow_null
   )
@@ -44,7 +57,7 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
   return(paste0(
     deparse(call$value),
     snippet_must_be("integer value"),
-    snippet_numerical_range(min, max),
+    snippet_numerical_range(min, max, inclusive_min, inclusive_max),
     snippet_na(allow_na),
     snippet_null(allow_null),
     ". ", res$reason
@@ -52,7 +65,9 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
 }
 
 inspect_integer_value <- function(value,
-    min = NULL, max = NULL, allow_na = FALSE, allow_null = FALSE) {
+    min = NULL, max = NULL,
+    inclusive_min = TRUE, inclusive_max = TRUE,
+    allow_na = FALSE, allow_null = FALSE) {
 
   if (is.null(value)) {
     if (allow_null == TRUE) {
@@ -84,23 +99,13 @@ inspect_integer_value <- function(value,
     return(failure("Passed value must be a whole number (integer)"))
   }
 
-  if (!is.null(min) && value < min) {
-    return(failure(
-      paste0(
-        "Passed value ", value,
-        " must be greater than the minimum value ", min
-      )
-    ))
-  }
+  return(
+    check_limits(
+      value, min = min, max = max,
+      inclusive_min = inclusive_min, inclusive_max = inclusive_max
+    )
+  )
 
-  if (!is.null(max) && value > max) {
-    return(failure(
-      paste0("Passed value ", value,
-        " must be less than the maximum value ", max
-      )))
-  }
-
-  return(success())
 }
 
 #' Checks if the value is a single positive integer value (not type)

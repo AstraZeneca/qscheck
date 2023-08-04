@@ -27,6 +27,10 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
   expect_true(is_integer_value(2, min = 1, max = 3))
   expect_false(is_integer_value(5, min = 1, max = 3))
   expect_false(is_integer_value(0, min = 1, max = 3))
+  expect_true(is_integer_value(1, min = 1, max = 3, inclusive_min = TRUE))
+  expect_true(is_integer_value(3, min = 1, max = 3, inclusive_max = TRUE))
+  expect_false(is_integer_value(1, min = 1, max = 3, inclusive_min = FALSE))
+  expect_false(is_integer_value(3, min = 1, max = 3, inclusive_max = FALSE))
   expect_true(is_integer_value(NULL, allow_null = TRUE))
 
   foo <- 2
@@ -34,14 +38,28 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
     assertthat::assert_that(is_integer_value(foo, min = 3)),
     paste0(
       "foo must be an integer value in the range \\[3, Inf\\)\\. ",
-      "Passed value 2 must be greater than the minimum value 3")
+      "Passed value 2 is below the minimum of 3")
+    )
+
+  expect_error(
+    assertthat::assert_that(is_integer_value(foo, min = 2, inclusive_min = FALSE)),
+    paste0(
+      "foo must be an integer value in the range \\(2, Inf\\)\\. ",
+      "Passed value 2 is below or equal to the minimum of 2")
+    )
+
+  expect_error(
+    assertthat::assert_that(is_integer_value(foo, max = 2, inclusive_max = FALSE)),
+    paste0(
+      "foo must be an integer value in the range \\(-Inf, 2\\)\\. ",
+      "Passed value 2 is above or equal to the maximum of 2")
     )
 
   expect_error(
     assertthat::assert_that(is_integer_value(foo, max = 1)),
     paste0(
       "foo must be an integer value in the range \\(-Inf, 1\\]\\. ",
-      "Passed value 2 must be less than the maximum value 1"
+      "Passed value 2 is above the maximum of 1"
     )
   )
 
@@ -49,7 +67,7 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
     assertthat::assert_that(is_integer_value(foo, min = 3, max = 5)),
     paste0(
       "foo must be an integer value in the range \\[3, 5\\]\\. ",
-      "Passed value 2 must be greater than the minimum value 3"
+      "Passed value 2 is below the minimum of 3"
     )
   )
 
@@ -77,7 +95,7 @@ test_that("variablePositiveIntegerValue", {
     assertthat::assert_that(is_positive_integer_value(-1)),
     paste0(
       "-1 must be a positive integer value\\. ",
-      "Passed value -1 must be greater than the minimum value 1"
+      "Passed value -1 is below the minimum of 1"
     )
   )
 })
@@ -117,7 +135,7 @@ test_that("variableNonNegativeIntegerValue", {
     assertthat::assert_that(is_non_negative_integer_value(-1)),
     paste0(
       "-1 must be a non negative integer value\\. ",
-      "Passed value -1 must be greater than the minimum value 0"
+      "Passed value -1 is below the minimum of 0"
     )
   )
 })
