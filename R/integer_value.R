@@ -3,6 +3,7 @@
 #' @param value the value to verify
 #' @param min minimum value to constraint the integer, inclusive
 #' @param max maximum value to constraint the integer, inclusive
+#' @param allow_na if TRUE, accepts a NA value
 #' @param allow_null if TRUE, accepts a null value
 #'
 #' @examples
@@ -16,10 +17,11 @@
 #' @concept integer
 #' @export
 is_integer_value <- function(value,
-    min = NULL, max = NULL, allow_null = FALSE) {
+    min = NULL, max = NULL,
+    allow_na = FALSE, allow_null = FALSE) {
 
   res <- inspect_integer_value(
-    value, min = min, max = max, allow_null = allow_null
+    value, min = min, max = max, allow_na = allow_na, allow_null = allow_null
   )
 
   return(res$valid)
@@ -28,22 +30,30 @@ assertthat::on_failure(is_integer_value) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
   min <- callget(call, env, "min", NULL)
   max <- callget(call, env, "max", NULL)
+  allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
   res <- inspect_integer_value(
-    value, min = min, max = max, allow_null = allow_null
+    value,
+    min = min,
+    max = max,
+    allow_na = allow_na,
+    allow_null = allow_null
   )
 
-  return(paste0(deparse(call$value),
-                snippet_must_be("integer value"),
-                snippet_numerical_range(min, max),
-                snippet_null(allow_null),
-                ". ", res$reason
-                ))
+  return(paste0(
+    deparse(call$value),
+    snippet_must_be("integer value"),
+    snippet_numerical_range(min, max),
+    snippet_na(allow_na),
+    snippet_null(allow_null),
+    ". ", res$reason
+  ))
 }
 
 inspect_integer_value <- function(value,
-    min = NULL, max = NULL, allow_null = FALSE) {
+    min = NULL, max = NULL, allow_na = FALSE, allow_null = FALSE) {
+
   if (is.null(value)) {
     if (allow_null == TRUE) {
       return(success())
@@ -60,6 +70,14 @@ inspect_integer_value <- function(value,
     return(failure(
       "Passed value must be a single numerical value, not a vector"
     ))
+  }
+
+  if (is_na_value(value)) {
+    if (allow_na == TRUE) {
+      return(success())
+    } else {
+      return(failure("Passed value is NA"))
+    }
   }
 
   if ((value %% 1) != 0) {
@@ -88,7 +106,8 @@ inspect_integer_value <- function(value,
 #' Checks if the value is a single positive integer value (not type)
 #'
 #' @param value the value to verify
-#' @param allow_null accepts a null value
+#' @param allow_na if TRUE, accepts a NA value
+#' @param allow_null if TRUE, accepts a NULL value
 #'
 #' @examples
 #' \dontrun{
@@ -100,20 +119,26 @@ inspect_integer_value <- function(value,
 #'
 #' @concept integer
 #' @export
-is_positive_integer_value <- function(value, allow_null = FALSE) {
-  res <- inspect_integer_value(value, min = 1, allow_null = allow_null)
+is_positive_integer_value <- function(
+    value, allow_na = FALSE, allow_null = FALSE) {
+  res <- inspect_integer_value(
+    value, min = 1, allow_na = allow_na, allow_null = allow_null
+    )
   return(res$valid)
 }
 assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
+  allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  res <- inspect_integer_value(value, min = 1, allow_null = allow_null)
+  res <- inspect_integer_value(value, min = 1,
+    allow_na = allow_na, allow_null = allow_null)
 
   return(
     paste0(
       deparse(call$value),
       snippet_must_be("positive integer value"),
+      snippet_na(allow_na),
       snippet_null(allow_null),
       ". ", res$reason
     )
@@ -123,7 +148,8 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 #' Checks if the value is a single non negative integer value (not type)
 #'
 #' @param value the value to verify
-#' @param allow_null accepts a null value
+#' @param allow_na if TRUE, accepts a NA value
+#' @param allow_null if TRUE, accepts a NULL value
 #'
 #' @examples
 #' \dontrun{
@@ -135,19 +161,25 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 #'
 #' @concept integer
 #' @export
-is_non_negative_integer_value <- function(value, allow_null = FALSE) {
-  res <- inspect_integer_value(value, min = 0, allow_null = allow_null)
+is_non_negative_integer_value <- function(
+    value, allow_na = FALSE, allow_null = FALSE) {
+  res <- inspect_integer_value(
+    value, min = 0, allow_na = allow_na, allow_null = allow_null)
   return(res$valid)
 }
 assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
   value <- callget(call, env, "value", NULL)
+  allow_na <- callget(call, env, "allow_na", FALSE)
   allow_null <- callget(call, env, "allow_null", FALSE)
 
-  res <- inspect_integer_value(value, min = 0, allow_null = allow_null)
+  res <- inspect_integer_value(
+    value, min = 0, allow_na = allow_na, allow_null = allow_null)
+
   return(
     paste0(
       deparse(call$value),
       snippet_must_be("non negative integer value"),
+      snippet_na(allow_na),
       snippet_null(allow_null),
       ". ", res$reason
     )
