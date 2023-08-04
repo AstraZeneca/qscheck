@@ -27,6 +27,10 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
   expect_true(is_integer_value(2, min = 1, max = 3))
   expect_false(is_integer_value(5, min = 1, max = 3))
   expect_false(is_integer_value(0, min = 1, max = 3))
+  expect_true(is_integer_value(1, min = 1, max = 3, inclusive_min = TRUE))
+  expect_true(is_integer_value(3, min = 1, max = 3, inclusive_max = TRUE))
+  expect_false(is_integer_value(1, min = 1, max = 3, inclusive_min = FALSE))
+  expect_false(is_integer_value(3, min = 1, max = 3, inclusive_max = FALSE))
   expect_true(is_integer_value(NULL, allow_null = TRUE))
 
   foo <- 2
@@ -35,6 +39,20 @@ test_that("variableIntegerValueWithinSpecifiedLimits", {
     paste0(
       "foo must be an integer value in the range \\[3, Inf\\)\\. ",
       "Passed value 2 is below the minimum of 3")
+    )
+
+  expect_error(
+    assertthat::assert_that(is_integer_value(foo, min = 2, inclusive_min = FALSE)),
+    paste0(
+      "foo must be an integer value in the range \\(2, Inf\\)\\. ",
+      "Passed value 2 is below or equal to the minimum of 2")
+    )
+
+  expect_error(
+    assertthat::assert_that(is_integer_value(foo, max = 2, inclusive_max = FALSE)),
+    paste0(
+      "foo must be an integer value in the range \\(-Inf, 2\\)\\. ",
+      "Passed value 2 is above or equal to the maximum of 2")
     )
 
   expect_error(
