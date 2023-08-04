@@ -127,7 +127,8 @@ inspect_integer_value <- function(value,
 is_positive_integer_value <- function(
     value, allow_na = FALSE, allow_null = FALSE) {
   res <- inspect_integer_value(
-    value, min = 1, allow_na = allow_na, allow_null = allow_null
+    value, min = 1, inclusive_min = TRUE,
+    allow_na = allow_na, allow_null = allow_null
     )
   return(res$valid)
 }
@@ -169,7 +170,9 @@ assertthat::on_failure(is_positive_integer_value) <- function(call, env) {
 is_non_negative_integer_value <- function(
     value, allow_na = FALSE, allow_null = FALSE) {
   res <- inspect_integer_value(
-    value, min = 0, allow_na = allow_na, allow_null = allow_null)
+    value, min = 0,
+    inclusive_min = TRUE,
+    allow_na = allow_na, allow_null = allow_null)
   return(res$valid)
 }
 assertthat::on_failure(is_non_negative_integer_value) <- function(call, env) {
