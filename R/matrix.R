@@ -389,6 +389,37 @@ inspect_matrixes_same_rows <- function(m1, m2) {
   }
   return(success())
 }
+
+#' Check if the passed entities are matrixes with the same number of columns
+#'
+#' @param m1 The first matrix
+#' @param m2 The second matrix
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::matrixes_same_cols(m1, m2))
+#' # For check
+#' if (qscheck::matrixes_same_cols(m1, m2)) {}
+#' }
+#'
+#' @concept matrix
+#' @export
+matrixes_same_cols <- function(m1, m2) {
+  res <- inspect_matrixes_same_cols(m1, m2)
+  return(res$valid)
+}
+assertthat::on_failure(matrixes_same_cols) <- function(call, env) {
+  m1 <- callget(call, env, "m1", NULL)
+  m2 <- callget(call, env, "m2", NULL)
+  res <- inspect_matrixes_same_cols(m1, m2)
+  return(paste0(
+    deparse(call$m1), " and ", deparse(call$m2),
+    snippet_must_be("matrixes", article = FALSE),
+    " with the exact same number of columns. ",
+    res$reason
+  ))
+}
 inspect_matrixes_same_cols <- function(m1, m2) {
   if (!is_matrix(m1)) {
     return(failure("The first element is not a matrix"))

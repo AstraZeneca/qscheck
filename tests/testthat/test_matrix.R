@@ -415,3 +415,24 @@ test_that("matrixesSameRows", {
       "The first matrix has 3 rows and the second has 4 rows"
     ))
 })
+
+test_that("matrixesSameCols", {
+  v <- 3
+  m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 4, 3)
+  m3 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 3, 4)
+  expect_true(matrixes_same_cols(m1, m2))
+  expect_false(matrixes_same_cols(m1, m3))
+  expect_false(matrixes_same_cols(v, m2))
+  expect_false(matrixes_same_cols(m1, v))
+  expect_error(assert(matrixes_same_cols(v, m2)),
+    paste0(
+      "v and m2 must be matrixes with the exact same number of columns. ",
+      "The first element is not a matrix"
+    ))
+  expect_error(assert(matrixes_same_cols(m1, m3)),
+    paste0(
+      "m1 and m3 must be matrixes with the exact same number of columns. ",
+      "The first matrix has 3 columns and the second has 4 columns"
+    ))
+})
