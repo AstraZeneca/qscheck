@@ -1,3 +1,23 @@
+# qscheck 0.26.0
+
+- #128 Ensure that some incorrect params are checked
+- #126 Added matrixes_same_cols
+- #125 Added matrixes_same_rows
+- #124 Produce better error messages for is_one_of
+- #123 Add inclusive min max to integer
+- #122 Add allow na to is integer
+- #121 Add check for NAs of different types
+- #120 Quoted string values in is_one_of
+- #119 Added matrixes_can_multiply
+- #118 Added matrixes_same_dims
+- #116 Added is_existing_dir
+- #115 Added is_existing_file
+- #114 Added is_identity_matrix
+- #113 Added is_diagonal_matrix
+- #112 Added positions to is_probability_vector error message
+- #111 Added vector_values_between
+- #108 Removed allow_na_from_is_data_frame
+
 # qscheck 0.25.0
 
 - #103 Added validate function to handle S4 behavior.

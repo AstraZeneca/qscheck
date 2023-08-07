@@ -70,6 +70,10 @@ test_that("variableVectorRealValuesMinMaxNAValues", {
   expect_error(
     assertthat::assert_that(
       vector_values_between(v, min = 2.0, max = Inf)
+    ),
+    paste0(
+      "v must be a vector of values in the range \\[2, Inf\\) with no NAs\\. ",
+      "Vector contains NA values, but they are not allowed"
     )
   )
 })
