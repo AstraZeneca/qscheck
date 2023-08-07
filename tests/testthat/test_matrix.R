@@ -394,3 +394,24 @@ test_that("matrixesMultIncorrectResult", {
     )
   )
 })
+
+test_that("matrixesSameRows", {
+  v <- 3
+  m1 <- matrix(c(1, 0, 0, 0, 1, 0, 0, 0, 1), 3, 3)
+  m2 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 4, 3)
+  m3 <- matrix(c(1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0), 3, 4)
+  expect_true(matrixes_same_rows(m1, m3))
+  expect_false(matrixes_same_rows(m1, m2))
+  expect_false(matrixes_same_rows(v, m2))
+  expect_false(matrixes_same_rows(m1, v))
+  expect_error(assert(matrixes_same_rows(v, m2)),
+    paste0(
+      "v and m2 must be matrixes with the exact same number of rows. ",
+      "The first element is not a matrix"
+    ))
+  expect_error(assert(matrixes_same_rows(m1, m2)),
+    paste0(
+      "m1 and m2 must be matrixes with the exact same number of rows. ",
+      "The first matrix has 3 rows and the second has 4 rows"
+    ))
+})

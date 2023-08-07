@@ -325,10 +325,71 @@ assertthat::on_failure(matrixes_same_dims) <- function(call, env) {
   res <- inspect_matrixes_same_dims(m1, m2)
   return(paste0(
     deparse(call$m1), " and ", deparse(call$m2),
-    " must be matrixes with the exact same dimensions. ",
+    snippet_must_be("matrixes", article = FALSE),
+    " with the exact same dimensions. ",
     res$reason))
 }
 inspect_matrixes_same_dims <- function(m1, m2) {
+  res <- inspect_matrixes_same_rows(m1, m2)
+  if (!res$valid) {
+    return(res)
+  }
+  res <- inspect_matrixes_same_cols(m1, m2)
+  if (!res$valid) {
+    return(res)
+  }
+  return(success())
+}
+
+
+#' Check if the passed entities are matrixes with the same number of rows
+#'
+#' @param m1 The first matrix
+#' @param m2 The second matrix
+#'
+#' @examples
+#' \dontrun{
+#' # For assertion
+#' assertthat::assert_that(qscheck::matrixes_same_rows(m1, m2))
+#' # For check
+#' if (qscheck::matrixes_same_rows(m1, m2)) {}
+#' }
+#'
+#' @concept matrix
+#' @export
+matrixes_same_rows <- function(m1, m2) {
+  res <- inspect_matrixes_same_rows(m1, m2)
+  return(res$valid)
+}
+assertthat::on_failure(matrixes_same_rows) <- function(call, env) {
+  m1 <- callget(call, env, "m1", NULL)
+  m2 <- callget(call, env, "m2", NULL)
+  res <- inspect_matrixes_same_rows(m1, m2)
+  return(paste0(
+    deparse(call$m1), " and ", deparse(call$m2),
+    snippet_must_be("matrixes", article = FALSE),
+    " with the exact same number of rows. ",
+    res$reason
+  ))
+}
+inspect_matrixes_same_rows <- function(m1, m2) {
+  if (!is_matrix(m1)) {
+    return(failure("The first element is not a matrix"))
+  }
+  if (!is_matrix(m2)) {
+    return(failure("The second element is not a matrix"))
+  }
+  if (nrow(m1) != nrow(m2)) {
+    return(failure(
+      paste0(
+        "The first matrix has ", nrow(m1), " rows ",
+        "and the second has ", nrow(m2), " rows")
+      )
+    )
+  }
+  return(success())
+}
+inspect_matrixes_same_cols <- function(m1, m2) {
   if (!is_matrix(m1)) {
     return(failure("The first element is not a matrix"))
   }
@@ -343,16 +404,9 @@ inspect_matrixes_same_dims <- function(m1, m2) {
       )
     )
   }
-  if (nrow(m1) != nrow(m2)) {
-    return(failure(
-      paste0(
-        "The first matrix has ", nrow(m1), " rows ",
-        "and the second has ", nrow(m2), " rows")
-      )
-    )
-  }
   return(success())
 }
+
 
 #' Check if the passed entities are matrixes that can multiply together
 #'
