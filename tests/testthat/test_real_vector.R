@@ -63,6 +63,18 @@ test_that("variableVectorRealValuesMinMax", {
 
 })
 
+test_that("variableVectorRealValuesMinMaxNAValues", {
+  v <- c(1.2, 1.3, NA, 3.0)
+  expect_true(vector_values_between(v, min = 1.2, max = Inf, allow_na_values = TRUE))
+  expect_false(vector_values_between(v, min = 1.2, max = Inf))
+  expect_error(
+    assertthat::assert_that(
+      vector_values_between(v, min = 2.0, max = Inf)
+    )
+  )
+})
+
+
 test_that("variableVectorPositiveReals", {
   v <- c(1.2, 1.3, 3.0)
   v2 <- c(1.2, -1.3, 3.0)
