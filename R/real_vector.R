@@ -530,16 +530,17 @@ inspect_decreasing_vector <- function(
 #'
 #' The interval by default is intended as inclusive [min, max].
 #'
-#' @param v the vector to check
-#' @param min the minimum allowed value for each vector element, inclusive
+#' @param v The vector to check.
+#' @param min The minimum allowed value for each vector element, inclusive
 #'        or exclusive. -Inf is accepted.
-#' @param max the maximum allowed value for each vector element, inclusive
+#' @param max The maximum allowed value for each vector element, inclusive
 #'        or exclusive. Inf is accepted.
-#' @param inclusive_min if TRUE (default) the min value is checked inclusive.
+#' @param inclusive_min If TRUE (default) the min value is checked inclusive.
 #'        If FALSE, the min value will be checked exclusive.
-#' @param inclusive_max if TRUE (default) the max value is checked inclusive.
-#'        If FALSE, the max value will be checked exclusive
-#' @param allow_na If TRUE, accept values that are NA. Default FALSE.
+#' @param inclusive_max If TRUE (default) the max value is checked inclusive.
+#'        If FALSE, the max value will be checked exclusive.
+#' @param allow_na_values If TRUE, accept (and disregard) values that are NA.
+#'        Default FALSE.
 #'
 #' @examples
 #' \dontrun{
@@ -552,11 +553,11 @@ inspect_decreasing_vector <- function(
 #' @concept vector
 #' @export
 vector_values_between <- function(v,
-  min, max, inclusive_min = TRUE, inclusive_max = TRUE, allow_na = FALSE
+  min, max, inclusive_min = TRUE, inclusive_max = TRUE, allow_na_values = FALSE
   ) {
 
   res <- inspect_vector_values_between(
-    v, min, max, inclusive_min, inclusive_max, allow_na
+    v, min, max, inclusive_min, inclusive_max, allow_na_values
   )
 
   return(res$valid)
