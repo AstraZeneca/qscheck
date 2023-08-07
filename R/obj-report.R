@@ -6,7 +6,8 @@
 #'        the report of that subcheck
 #'
 #' @export
-failure <- function(reason = NULL, tag = NULL, subreport = NULL) {
+failure <- function(
+    reason = NULL, tag = NULL, subreport = NULL) {
   return(report(FALSE, reason, tag, subreport))
 }
 
