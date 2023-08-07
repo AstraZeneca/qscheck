@@ -16,7 +16,6 @@
 #'
 #' @concept real
 #' @export
-
 is_lt_value <- function(
   value, comparator,
   allow_na = FALSE, allow_null = FALSE) {
@@ -41,14 +40,18 @@ assertthat::on_failure(is_lt_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-  return(paste0(
-    call$value,
-    snippet_must_be(paste0("numerical value")),
-    snippet_comparison(base::`<`, call$comparator),
-    snippet_na(allow_na),
-    snippet_null(allow_null),
-    ". ", res$reason
-  ))
+  if (res$misconfiguration) {
+    return(paste0("Incorrect check invocation. ", res$reason))
+  } else {
+    return(paste0(
+      call$value,
+      snippet_must_be(paste0("numerical value")),
+      snippet_comparison(base::`<`, call$comparator),
+      snippet_na(allow_na),
+      snippet_null(allow_null),
+      ". ", res$reason
+    ))
+  }
 }
 
 #' Check if the passed entity is a single floating point which is
@@ -93,14 +96,18 @@ assertthat::on_failure(is_lte_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-  return(paste0(
-    call$value,
-    snippet_must_be(paste0("numerical value")),
-    snippet_comparison(base::`<=`, call$comparator),
-    snippet_na(allow_na),
-    snippet_null(allow_null),
-    ". ", res$reason
-  ))
+  if (res$misconfiguration) {
+    return(paste0("Incorrect check invocation. ", res$reason))
+  } else {
+    return(paste0(
+      call$value,
+      snippet_must_be(paste0("numerical value")),
+      snippet_comparison(base::`<=`, call$comparator),
+      snippet_na(allow_na),
+      snippet_null(allow_null),
+      ". ", res$reason
+    ))
+  }
 }
 
 #' Check if the passed entity is a single numerical value which is
@@ -145,14 +152,18 @@ assertthat::on_failure(is_gt_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-  return(paste0(
-    call$value,
-    snippet_must_be(paste0("numerical value")),
-    snippet_comparison(base::`>`, call$comparator),
-    snippet_na(allow_na),
-    snippet_null(allow_null),
-    ". ", res$reason
-  ))
+  if (res$misconfiguration) {
+    return(paste0("Incorrect check invocation. ", res$reason))
+  } else {
+    return(paste0(
+      call$value,
+      snippet_must_be(paste0("numerical value")),
+      snippet_comparison(base::`>`, call$comparator),
+      snippet_na(allow_na),
+      snippet_null(allow_null),
+      ". ", res$reason
+    ))
+  }
 }
 #' Check if the passed entity is a single numerical value which is
 #' greater than or equal to another specified value.
@@ -196,19 +207,29 @@ assertthat::on_failure(is_gte_value) <- function(call, env) {
     allow_null = allow_null
   )
 
-  return(paste0(
-    call$value,
-    snippet_must_be(paste0("numerical value")),
-    snippet_comparison(base::`>=`, call$comparator),
-    snippet_na(allow_na),
-    snippet_null(allow_null),
-    ". ", res$reason
-  ))
+  if (res$misconfiguration) {
+    return(paste0("Incorrect check invocation. ", res$reason))
+  } else {
+    return(paste0(
+      call$value,
+      snippet_must_be(paste0("numerical value")),
+      snippet_comparison(base::`>=`, call$comparator),
+      snippet_na(allow_na),
+      snippet_null(allow_null),
+      ". ", res$reason
+    ))
+  }
 }
 
 inspect_comparison <- function(
     value, comparator, operator,
     allow_na = FALSE, allow_null = FALSE) {
+
+  res <- inspect_real_value(comparator)
+
+  if (!res$valid) {
+    return(misconfiguration(paste0("Invalid comparator value: ", res$reason)))
+  }
 
   if (is.null(value)) {
     if (allow_null == TRUE) {
@@ -216,10 +237,6 @@ inspect_comparison <- function(
     } else {
       return(failure("Passed value is NULL"))
     }
-  }
-
-  if (is.null(comparator)) {
-    return(failure("Passed comparator is NULL"))
   }
 
   res <- inspect_real_value(
@@ -240,11 +257,6 @@ inspect_comparison <- function(
     }
   }
 
-  res <- inspect_real_value(comparator)
-
-  if (!res$valid) {
-    return(failure(paste0("Invalid comparator value: ", res$reason)))
-  }
 
   if (!operator(value, comparator)) {
     return(failure(

@@ -33,21 +33,24 @@ test_that("lessThanNotNumericalValue", {
 test_that("lessThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = "hello")),
-    "5 must be a numerical value smaller than hello\\. Invalid comparator value: Passed value is not a numerical"
+    paste0(
+      "Incorrect check invocation. Invalid comparator value: ",
+      "Passed value is not a numerical"
+    )
   )
 })
 
 test_that("lessThanComparatorNULL", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = NULL)),
-    "Passed comparator is NULL"
+    "Incorrect check invocation. Invalid comparator value: Passed value is NULL"
   )
 })
 
 test_that("lessThanComparatorNA", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = NA_real_)),
-    "5 must be a numerical value smaller than NA. Invalid comparator value: Passed value is NA"
+    "Incorrect check invocation. Invalid comparator value: Passed value is NA"
   )
 })
 
@@ -86,7 +89,7 @@ test_that("lessOrEqualThanNotNumericalValue", {
 test_that("lessOrEqualThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lte_value(value = 5, comparator = "hello")),
-    "5 must be a numerical value smaller than or equal to hello. Invalid comparator value: Passed value is not a numerical"
+    "Incorrect check invocation. Invalid comparator value: Passed value is not a numerical"
   )
 })
 
@@ -125,7 +128,7 @@ test_that("greaterThanNotNumericalValue", {
 test_that("greaterThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_gt_value(value = 5, comparator = "hello")),
-    "5 must be a numerical value greater than hello. Invalid comparator value: Passed value is not a numerical"
+    "Incorrect check invocation. Invalid comparator value: Passed value is not a numerical"
   )
 })
 
@@ -164,6 +167,25 @@ test_that("greaterOrEqualThanNotNumericalValue", {
 test_that("greaterOrEqualThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_gte_value(value = 5, comparator = "hello")),
-    "5 must be a numerical value greater than or equal to hello. Invalid comparator value: Passed value is not a numerical"
+    paste0(
+      "Incorrect check invocation. Invalid comparator value: ",
+      "Passed value is not a numerical"
+    )
+  )
+})
+
+test_that("greaterOrEqualThanComparatorNA", {
+  expect_error(
+    assertthat::assert_that(is_gte_value(value = 5, comparator = NA_real_)),
+    paste0(
+      "Incorrect check invocation. Invalid comparator value: ",
+      "Passed value is NA"
+    )
+  )
+})
+test_that("greaterOrEqualThanComparatorNULL", {
+  expect_error(
+    assertthat::assert_that(is_gte_value(value = 5, comparator = NULL)),
+    "Incorrect check invocation. Invalid comparator value: Passed value is NULL"
   )
 })
