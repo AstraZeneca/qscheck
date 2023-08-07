@@ -308,3 +308,60 @@ test_that("variableVectorBinary", {
   )
 
 })
+
+test_that("variableVectorIntegersMinMax", {
+  v <- c(1, 3, 5)
+  expect_true(vector_values_between(v, min = 1, max = Inf))
+  expect_false(vector_values_between(v, min = 1, max = Inf, inclusive_min = FALSE))
+  expect_true(vector_values_between(v, min = -Inf, max = 5))
+  expect_false(vector_values_between(v, min = -Inf, max = 5, inclusive_max = FALSE))
+
+  expect_error(
+    assertthat::assert_that(
+      vector_values_between(v, min = 2, max = Inf, inclusive_min = TRUE)
+    ),
+    paste0(
+      "v must be a vector of values in the range \\[2, Inf\\) ",
+      "with no NAs. Value at position 1 is not complying with the requirement"
+    )
+  )
+
+})
+
+test_that("variableVectorNonNegativeIntegersMinMax", {
+  v <- c(0, 3, 5)
+  expect_true(vector_values_between(v, min = 0, max = Inf))
+  expect_false(vector_values_between(v, min = 0, max = Inf, inclusive_min = FALSE))
+  expect_true(vector_values_between(v, min = -Inf, max = 5))
+  expect_false(vector_values_between(v, min = -Inf, max = 5, inclusive_max = FALSE))
+
+  expect_error(
+    assertthat::assert_that(
+      vector_values_between(v, min = 2, max = Inf, inclusive_min = TRUE)
+    ),
+    paste0(
+      "v must be a vector of values in the range \\[2, Inf\\) ",
+      "with no NAs. Value at position 1 is not complying with the requirement"
+    )
+  )
+
+})
+
+test_that("variableVectorPositiveIntegersMinMax", {
+  v <- c(1, 3, 5)
+  expect_true(vector_values_between(v, min = 1, max = Inf))
+  expect_false(vector_values_between(v, min = 1, max = Inf, inclusive_min = FALSE))
+  expect_true(vector_values_between(v, min = -Inf, max = 5))
+  expect_false(vector_values_between(v, min = -Inf, max = 5, inclusive_max = FALSE))
+
+  expect_error(
+    assertthat::assert_that(
+      vector_values_between(v, min = 2, max = Inf, inclusive_min = TRUE)
+    ),
+    paste0(
+      "v must be a vector of values in the range \\[2, Inf\\) ",
+      "with no NAs. Value at position 1 is not complying with the requirement"
+    )
+  )
+
+})

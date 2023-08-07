@@ -184,9 +184,9 @@ test_that("variableVectorNonNegativeReals", {
 })
 
 test_that("variableVectorNonNegativeRealsMinMax", {
-  v <- c(1.2, 1.3, 3.0)
-  expect_true(vector_values_between(v, min = 1.2, max = Inf))
-  expect_false(vector_values_between(v, min = 1.2, max = Inf, inclusive_min = FALSE))
+  v <- c(0, 1.3, 3.0)
+  expect_true(vector_values_between(v, min = 0, max = Inf))
+  expect_false(vector_values_between(v, min = 0, max = Inf, inclusive_min = FALSE))
   expect_true(vector_values_between(v, min = -Inf, max = 3.0))
   expect_false(vector_values_between(v, min = -Inf, max = 3.0, inclusive_max = FALSE))
 
