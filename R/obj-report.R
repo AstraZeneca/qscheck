@@ -1,12 +1,3 @@
-#' Function to create a misconfiguration. Returns a qscheck::report object.
-#'
-#' @param reason A string explaining the reason for the misconfiguration
-#         to the user.
-#'
-#' @export
-misconfiguration <- function(reason = NULL) {
-  return(report(FALSE, reason = reason, misconfiguration = TRUE))
-}
 #' Function to create a failure. Returns a qscheck::report object.
 #'
 #' @param reason A string explaining the reason for the failure to the user.
@@ -27,17 +18,14 @@ success <- function() {
   return(report(TRUE, NULL, NULL))
 }
 
-report <- function(
-    valid, reason = NULL, tag = NULL, subreport = NULL,
-    misconfiguration = FALSE) {
+report <- function(valid, reason = NULL, tag = NULL, subreport = NULL) {
   return(
     structure(
       list(
         valid = valid,
         reason = reason,
         tag = tag,
-        subreport = subreport,
-        misconfiguration = misconfiguration
+        subreport = subreport
       ),
       class = "qscheck::report"
     )

@@ -34,7 +34,7 @@ test_that("lessThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = "hello")),
     paste0(
-      "Incorrect check invocation. Invalid comparator value: ",
+      "Incorrect invocation\\. Parameter 'comparator' is invalid: ",
       "Passed value is not a numerical"
     )
   )
@@ -43,14 +43,14 @@ test_that("lessThanComparatorNotNumerical", {
 test_that("lessThanComparatorNULL", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = NULL)),
-    "Incorrect check invocation. Invalid comparator value: Passed value is NULL"
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NULL"
   )
 })
 
 test_that("lessThanComparatorNA", {
   expect_error(
     assertthat::assert_that(is_lt_value(value = 5, comparator = NA_real_)),
-    "Incorrect check invocation. Invalid comparator value: Passed value is NA"
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NA"
   )
 })
 
@@ -89,9 +89,24 @@ test_that("lessOrEqualThanNotNumericalValue", {
 test_that("lessOrEqualThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_lte_value(value = 5, comparator = "hello")),
-    "Incorrect check invocation. Invalid comparator value: Passed value is not a numerical"
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is not a numerical"
   )
 })
+
+test_that("lessOrEqualThanComparatorNULL", {
+  expect_error(
+    assertthat::assert_that(is_lte_value(value = 5, comparator = NULL)),
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NULL"
+  )
+})
+
+test_that("lessOrEqualThanComparatorNA", {
+  expect_error(
+    assertthat::assert_that(is_lte_value(value = 5, comparator = NA_real_)),
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NA"
+  )
+})
+
 
 test_that("greaterThanCorrectValue", {
   expect_true(
@@ -128,7 +143,21 @@ test_that("greaterThanNotNumericalValue", {
 test_that("greaterThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_gt_value(value = 5, comparator = "hello")),
-    "Incorrect check invocation. Invalid comparator value: Passed value is not a numerical"
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is not a numerical"
+  )
+})
+
+test_that("greaterThanComparatorNULL", {
+  expect_error(
+    assertthat::assert_that(is_gt_value(value = 5, comparator = NULL)),
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NULL"
+  )
+})
+
+test_that("greaterThanComparatorNA", {
+  expect_error(
+    assertthat::assert_that(is_gt_value(value = 5, comparator = NA_real_)),
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NA"
   )
 })
 
@@ -168,7 +197,7 @@ test_that("greaterOrEqualThanComparatorNotNumerical", {
   expect_error(
     assertthat::assert_that(is_gte_value(value = 5, comparator = "hello")),
     paste0(
-      "Incorrect check invocation. Invalid comparator value: ",
+      "Incorrect invocation\\. Parameter 'comparator' is invalid: ",
       "Passed value is not a numerical"
     )
   )
@@ -178,7 +207,7 @@ test_that("greaterOrEqualThanComparatorNA", {
   expect_error(
     assertthat::assert_that(is_gte_value(value = 5, comparator = NA_real_)),
     paste0(
-      "Incorrect check invocation. Invalid comparator value: ",
+      "Incorrect invocation\\. Parameter 'comparator' is invalid: ",
       "Passed value is NA"
     )
   )
@@ -186,6 +215,6 @@ test_that("greaterOrEqualThanComparatorNA", {
 test_that("greaterOrEqualThanComparatorNULL", {
   expect_error(
     assertthat::assert_that(is_gte_value(value = 5, comparator = NULL)),
-    "Incorrect check invocation. Invalid comparator value: Passed value is NULL"
+    "Incorrect invocation\\. Parameter 'comparator' is invalid: Passed value is NULL"
   )
 })
