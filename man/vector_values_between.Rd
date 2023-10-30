@@ -10,25 +10,26 @@ vector_values_between(
   max,
   inclusive_min = TRUE,
   inclusive_max = TRUE,
-  allow_na = FALSE
+  allow_na_values = FALSE
 )
 }
 \arguments{
-\item{v}{the vector to check}
+\item{v}{The vector to check.}
 
-\item{min}{the minimum allowed value for each vector element, inclusive
+\item{min}{The minimum allowed value for each vector element, inclusive
 or exclusive. -Inf is accepted.}
 
-\item{max}{the maximum allowed value for each vector element, inclusive
+\item{max}{The maximum allowed value for each vector element, inclusive
 or exclusive. Inf is accepted.}
 
-\item{inclusive_min}{if TRUE (default) the min value is checked inclusive.
+\item{inclusive_min}{If TRUE (default) the min value is checked inclusive.
 If FALSE, the min value will be checked exclusive.}
 
-\item{inclusive_max}{if TRUE (default) the max value is checked inclusive.
-If FALSE, the max value will be checked exclusive}
+\item{inclusive_max}{If TRUE (default) the max value is checked inclusive.
+If FALSE, the max value will be checked exclusive.}
 
-\item{allow_na}{If TRUE, accept values that are NA. Default FALSE.}
+\item{allow_na_values}{If TRUE, accept (and disregard) values that are NA.
+Default FALSE.}
 }
 \description{
 The interval by default is intended as inclusive [min, max].

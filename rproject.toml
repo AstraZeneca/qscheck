@@ -6,10 +6,10 @@ url = "https://cloud.r-project.org/"
 
 [tool.roo.dependencies]
 assertthat = "0.2.1"
-R6 = "2.4.1"
+R6 = "2.5.1"
 
 [tool.roo.dev-dependencies]
-testthat = "3.0.1"
+testthat = "3.2.0"
 lintr = "2.0.1"
 devtools = "2.2.2"
 tibble = "3.0.3"
