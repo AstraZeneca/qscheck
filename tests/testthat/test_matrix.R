@@ -351,13 +351,13 @@ test_that("matrixesMultNotCompatible", {
 
 test_that("matrixesMultCompatible", {
   m1 <- matrix(rep(1, 12), 4, 3)
-  m2 <- matrix(rep(1, 24), 3, 6)
+  m2 <- matrix(rep(1, 24), 3, 8)
   expect_true(matrixes_can_multiply(m1, m2))
 })
 
 test_that("matrixesMultIncorrectResult", {
   m1 <- matrix(rep(1, 12), 4, 3)
-  m2 <- matrix(rep(1, 24), 3, 6)
+  m2 <- matrix(rep(1, 24), 3, 8)
   expect_true(matrixes_can_multiply(m1, m2))
   expect_false(matrixes_can_multiply(m1, m2, result_num_cols = 5))
   expect_false(matrixes_can_multiply(m1, m2, result_num_rows = 2))

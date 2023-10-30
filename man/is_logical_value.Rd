@@ -4,10 +4,14 @@
 \alias{is_logical_value}
 \title{Check if the passed entity is a single logical value (TRUE or FALSE)}
 \usage{
-is_logical_value(value)
+is_logical_value(value, allow_na = FALSE, allow_null = FALSE)
 }
 \arguments{
 \item{value}{the value to check}
+
+\item{allow_na}{if TRUE, accepts a NA value}
+
+\item{allow_null}{if TRUE, accepts a null value}
 }
 \description{
 Check if the passed entity is a single logical value (TRUE or FALSE)
