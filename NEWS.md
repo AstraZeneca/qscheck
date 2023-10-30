@@ -1,3 +1,7 @@
+# qscheck 0.27.0
+
+- #133 Added allow_na and allow_null to is_logical_value
+
 # qscheck 0.26.0
 
 - #128 Ensure that some incorrect params are checked
